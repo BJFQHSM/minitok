@@ -1,4 +1,4 @@
-url: url
-driver:
-username: username
-password: password
+url: 82.156.193.217:3306
+username: root
+password: Mxt123456.
+database: miaosha

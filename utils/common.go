@@ -1,4 +1,4 @@
-package config
+package utils
 
 import (
 	"fmt"
@@ -16,11 +16,14 @@ func Parse(path string) map[string]interface{} {
 		return nil
 	}
 	result := make(map[string]interface{})
-	// 执行解析
+
 	err = yaml.Unmarshal(file, &result)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
 	return result
-	//fmt.Printf("%+v\n", result)
+}
+
+func InterfaceToStr(v interface{}) string {
+	return fmt.Sprintf("%v", v)
 }
