@@ -1,4 +1,4 @@
-module github.com/RaymondCode/simple-demo
+module github.com/Bytedance2022/minimal_tiktok
 
 go 1.17
 

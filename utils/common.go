@@ -9,9 +9,9 @@ import (
 )
 
 func Parse(path string) map[string]interface{} {
-	file, err := ioutil.ReadFile(path)
-	pwd, err := os.Getwd()
-	fmt.Println(pwd)
+	dir := os.Getenv("PROJ_DIR")
+	file, err := ioutil.ReadFile(dir + path)
+	fmt.Println(string(file))
 	if err != nil {
 		return nil
 	}

@@ -3,7 +3,7 @@ package mongodb
 import (
 	"context"
 	"fmt"
-	"github.com/RaymondCode/simple-demo/utils"
+	"github.com/Bytedance2022/minimal_tiktok/utils"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
@@ -40,11 +40,14 @@ type mongoUriConfig struct {
 
 func parseMongoConf() string {
 	conf := utils.Parse("config/mongodb.yaml")
+	log.Printf("%+v\n", conf)
 	uri := mongoUriConfig{
 		protocol: "mongodb+srv",
 		user:     utils.InterfaceToStr(conf["user"]),
 		password: utils.InterfaceToStr(conf["password"]),
 		url:      utils.InterfaceToStr(conf["url"]),
 	}
-	return fmt.Sprintf("%s://%s:%s@%s", uri.protocol, uri.user, uri.password, uri.url)
+	URI := fmt.Sprintf("%s://%s:%s@%s", uri.protocol, uri.user, uri.password, uri.url)
+	log.Printf("%s\n", URI)
+	return URI
 }

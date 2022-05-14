@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/RaymondCode/simple-demo/db/mongodb"
-	"github.com/RaymondCode/simple-demo/db/mysql"
+	"github.com/Bytedance2022/minimal_tiktok/db/mongodb"
+	"github.com/Bytedance2022/minimal_tiktok/db/mysql"
 	"go.mongodb.org/mongo-driver/bson"
 	"log"
 	"testing"
