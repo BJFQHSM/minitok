@@ -15,7 +15,7 @@
 
 syntax = "proto3";
 package grpc_user;
-option go_package = "./grpc_gen";
+option go_package = "./grpc_gen/user";
 
 message RegisterRequest {
     string username = 1;
@@ -49,19 +49,8 @@ message User {
     bool is_follow = 5;
 }
 
-message QueryInfoRequest {
-    int64 user_id = 1;
-    string token = 2;
-}
-
-message QueryInfoResponse {
-    User user = 1;
-    int32 status_code = 2;
-    optional string status_msg = 3;
-}
-
 service UserService {
     rpc Register (RegisterRequest) returns (RegisterResponse) {}
     rpc Login (LoginRequest) returns (LoginResponse) {}
-    rpc QueryInfo (QueryInfoRequest) returns (QueryInfoResponse) {}
+
 }

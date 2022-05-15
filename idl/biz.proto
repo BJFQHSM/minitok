@@ -1,0 +1,184 @@
+// Copyright 2021 CloudWeGo Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+syntax = "proto3";
+package grpc_biz;
+option go_package = "./grpc_gen/biz";
+
+
+message User {
+    int64 id = 1;
+    string name = 2;
+    int64 follow_count = 3;
+    int64 follower_count = 4;
+    optional bool is_follow = 5;
+}
+
+message Video {
+    int64 id = 1;
+    User author = 2;
+    string play_url = 3;
+    string cover_url = 4;
+    int64 favorite_count = 5;
+    int64 comment_count = 6;
+    optional bool is_favorite = 7;
+}
+
+message FeedRequest {
+    int64 latest_time = 1;
+}
+
+message FeedResponse {
+    repeated Video video = 1;
+    int64 next_time = 2;
+    int32 status_code = 3;
+    optional string status_msg = 4;
+}
+
+message QueryInfoRequest {
+    int64 user_id = 1;
+    string token = 2;
+}
+
+message QueryInfoResponse {
+    User user = 1;
+    int32 status_code = 2;
+    optional string status_msg = 3;
+}
+
+message PublishActionRequest {
+    int64 user_id = 1;
+    string token = 2;
+    repeated bytes data = 3;
+}
+
+message PublishActionResponse {
+    int32 status_code = 1;
+    optional string status_msg = 2;
+}
+
+message QueryPublishListRequest {
+    int64 user_id = 1;
+    string token = 2;
+}
+
+message QueryPublishListResponse {
+    repeated Video video_list = 1;
+    int32 status_code = 2;
+    optional string status_msg = 3;
+}
+
+message FavoriteActionRequest {
+    int64 user_id = 1;
+    string token = 2;
+    int64 video_id = 3;
+    int32 action_type = 4;
+}
+
+message FavoriteActionResponse {
+    int32 status_code = 1;
+    optional string status_msg = 2;
+}
+
+message QueryFavoriteListRequest {
+    int64 user_id = 1;
+    string token = 2;
+}
+
+message QueryFavoriteListResponse {
+    repeated Video video_list = 1;
+    int32 status_code = 2;
+    optional string status_msg = 3;
+}
+
+message CommentActionRequest {
+    int64 user_id = 1;
+    string token = 2;
+    int64 video_id = 3;
+    int32 action_type = 4;
+    optional string comment_text = 5;
+    optional int64 comment_id = 6;
+}
+
+message CommentActionResponse {
+    int32 status_code = 1;
+    optional string status_msg = 2;
+}
+
+message Comment {
+    int64 id = 1;
+    User user = 2;
+    string content = 3;
+    string create_date = 4;
+}
+
+message QueryCommentListRequest {
+    int64 user_id = 1;
+    string token = 2;
+    int64 video_id = 3;
+}
+
+message QueryCommentListResponse {
+    repeated Comment comment_list = 1;
+    int32 status_code = 2;
+    optional string status_msg = 3;
+}
+
+message RelationActionRequest {
+    int64 user_id = 1;
+    string token = 2;
+    int64 to_user_id = 3;
+    int32 action_type = 4;
+}
+
+message RelationActionResponse {
+    int32 status_code = 1;
+    optional string status_msg = 2;
+}
+
+message QueryFollowListRequest {
+    int64 user_id = 1;
+    string token = 2;
+}
+
+message QueryFollowListResponse {
+    repeated User user_list = 1;
+    int32 status_code = 2;
+    optional string status_msg = 3;
+}
+
+message QueryFollowerListRequest {
+    int64 user_id = 1;
+    string token = 2;
+}
+
+message QueryFollowerListResponse {
+    repeated User user_list = 1;
+    int32 status_code = 2;
+    optional string status_msg = 3;
+}
+
+service BizService {
+    rpc Feed (FeedRequest) returns (FeedResponse) {}
+    rpc QueryInfo (QueryInfoRequest) returns (QueryInfoResponse) {}
+    rpc PublishAction (PublishActionRequest) returns (PublishActionResponse) {}
+    rpc QueryPublishList(QueryPublishListRequest) returns (QueryPublishListResponse) {}
+    rpc FavoriteAction (FavoriteActionRequest) returns (FavoriteActionResponse) {}
+    rpc QueryFavoriteList(QueryFavoriteListRequest) returns (QueryFavoriteListResponse) {}
+    rpc CommentAction(CommentActionRequest) returns (CommentActionResponse) {}
+    rpc QueryCommentList(QueryCommentListRequest) returns (QueryCommentListResponse) {}
+    rpc RelationAction(RelationActionRequest) returns (RelationActionResponse) {}
+    rpc QueryFollowList(QueryFollowListRequest) returns (QueryFollowListResponse) {}
+    rpc QueryFollowerList(QueryFollowerListRequest) returns (QueryFollowerListResponse) {}
+}

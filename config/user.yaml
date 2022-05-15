@@ -1,0 +1,5 @@
+mysql:
+  url: 82.156.193.217:3306
+  username: public
+  password: _Tiktok0
+  database: test

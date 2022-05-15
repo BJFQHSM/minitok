@@ -2,23 +2,23 @@ package rpc
 
 import (
 	"context"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/user"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"grpc_test/grpc_gen"
 	"log"
 )
 
-var UserClient grpc_gen.UserServiceClient
+var UserClient user.UserServiceClient
 
-func InitUser() {
+func initUser() {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	resolver, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2379"})
 	if err != nil {
 		log.Panic(err)
 	}
-	resolve, err := resolver.Resolve(context.Background(), "test_user")
+	resolve, err := resolver.Resolve(context.Background(), "tiktok_user")
 	if err != nil {
 		return
 	}
@@ -31,5 +31,5 @@ func InitUser() {
 	conn, err := grpc.Dial(addr, opts...)
 	if err != nil {
 	}
-	UserClient = grpc_gen.NewUserServiceClient(conn)
+	UserClient = user.NewUserServiceClient(conn)
 }

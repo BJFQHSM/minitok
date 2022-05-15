@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/user"
 	"github.com/cloudwego/kitex/pkg/registry"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"google.golang.org/grpc"
-	"grpc_test/grpc_gen"
 	"log"
 	"net"
 )
@@ -16,10 +16,10 @@ func main() {
 		panic(err)
 	}
 	srv := grpc.NewServer()
-	grpc_gen.RegisterUserServiceServer(srv, &UserServiceImpl{})
+	user.RegisterUserServiceServer(srv, &UserServiceImpl{})
 	r, err := etcd.NewEtcdRegistry([]string{"127.0.0.1:2379"})
 	err = r.Register(&registry.Info{
-		ServiceName: "test_user",
+		ServiceName: "tiktok_user",
 		Addr: &net.TCPAddr{
 			IP:   []byte{127, 0, 0, 1},
 			Port: 8888,
