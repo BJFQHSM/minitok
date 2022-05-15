@@ -8,6 +8,16 @@ import (
 	"net/http"
 )
 
+// Feed godoc
+// @Summary      get feed
+// @Description  get feed
+// @Tags         feed
+// @Accept       json
+// @Produce      json
+// @Param        latest_time body int false "the latest time to get"
+// @Success      200 {object} biz.FeedResponse
+// @Failure      500 {object} biz.FeedResponse
+// @Router       /feed [get]
 func Feed(c *gin.Context) {
 	var req biz.FeedRequest
 	err := c.ShouldBind(&req)
