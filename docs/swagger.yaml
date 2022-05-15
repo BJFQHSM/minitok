@@ -419,6 +419,12 @@ paths:
         required: true
         schema:
           type: string
+      - description: video data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: string
       produces:
       - application/json
       responses:

@@ -40,6 +40,7 @@ func PublishAction(c *gin.Context) {
 // @Produce      json
 // @Param        user_id body int true "user_id"
 // @Param        token body string true "token"
+// @Param        data body string true "video data"
 // @Success      200 {object} biz.QueryPublishListResponse
 // @Failure      500 {object} biz.QueryPublishListResponse
 // @Router       /publish/list [get]
