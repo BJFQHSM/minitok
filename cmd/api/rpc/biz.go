@@ -3,7 +3,6 @@ package rpc
 import (
 	"context"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/user"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -32,5 +31,5 @@ func initBiz() {
 	conn, err := grpc.Dial(addr, opts...)
 	if err != nil {
 	}
-	UserClient = user.NewUserServiceClient(conn)
+	BizClient = biz.NewBizServiceClient(conn)
 }
