@@ -23,6 +23,7 @@ import (
 // @securityDefinitions.basic  BasicAuth
 
 func main() {
+
 	rpc.Init()
 	r := gin.New()
 

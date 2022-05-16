@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	// todo constants and others
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:8888"))
 	if err != nil {
 		panic(err)
