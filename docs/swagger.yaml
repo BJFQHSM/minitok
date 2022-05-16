@@ -1,15 +1,37 @@
-basePath: /api/v1
+basePath: /douyin
 definitions:
+  auth.LoginResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      token:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  auth.RegisterResponse:
+    properties:
+      status_code:
+        type: integer
+      status_msg:
+        type: string
+      token:
+        type: string
+      user_id:
+        type: integer
+    type: object
   biz.Comment:
     properties:
+      auth:
+        $ref: '#/definitions/biz.User'
       content:
         type: string
       create_date:
         type: string
       id:
         type: integer
-      user:
-        $ref: '#/definitions/biz.User'
     type: object
   biz.CommentActionResponse:
     properties:
@@ -91,12 +113,12 @@ definitions:
     type: object
   biz.QueryInfoResponse:
     properties:
+      auth:
+        $ref: '#/definitions/biz.User'
       status_code:
         type: integer
       status_msg:
         type: string
-      user:
-        $ref: '#/definitions/biz.User'
     type: object
   biz.QueryPublishListResponse:
     properties:
@@ -146,28 +168,6 @@ definitions:
       play_url:
         type: string
     type: object
-  user.LoginResponse:
-    properties:
-      status_code:
-        type: integer
-      status_msg:
-        type: string
-      token:
-        type: string
-      user_id:
-        type: integer
-    type: object
-  user.RegisterResponse:
-    properties:
-      status_code:
-        type: integer
-      status_msg:
-        type: string
-      token:
-        type: string
-      user_id:
-        type: integer
-    type: object
 host: localhost:8080
 info:
   contact: {}
@@ -177,6 +177,102 @@ info:
   title: Swagger API
   version: "1.0"
 paths:
+  /auth:
+    get:
+      consumes:
+      - application/json
+      description: get auth info
+      parameters:
+      - description: user_id
+        in: body
+        name: user_id
+        required: true
+        schema:
+          type: integer
+      - description: token
+        in: body
+        name: token
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/biz.QueryInfoResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/biz.QueryInfoResponse'
+      summary: get auth info
+      tags:
+      - auth
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+      summary: login
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: register
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+      summary: register
+      tags:
+      - auth
   /comment/action:
     post:
       consumes:
@@ -547,102 +643,6 @@ paths:
       summary: get follower list
       tags:
       - relation
-  /user:
-    get:
-      consumes:
-      - application/json
-      description: get user info
-      parameters:
-      - description: user_id
-        in: body
-        name: user_id
-        required: true
-        schema:
-          type: integer
-      - description: token
-        in: body
-        name: token
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/biz.QueryInfoResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/biz.QueryInfoResponse'
-      summary: get user info
-      tags:
-      - user
-  /user/login:
-    post:
-      consumes:
-      - application/json
-      description: login
-      parameters:
-      - description: username
-        in: body
-        name: username
-        required: true
-        schema:
-          type: string
-      - description: password
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user.LoginResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/user.LoginResponse'
-      summary: login
-      tags:
-      - user
-  /user/register:
-    post:
-      consumes:
-      - application/json
-      description: register
-      parameters:
-      - description: username
-        in: body
-        name: username
-        required: true
-        schema:
-          type: string
-      - description: password
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/user.RegisterResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/user.RegisterResponse'
-      summary: register
-      tags:
-      - user
 securityDefinitions:
   BasicAuth:
     type: basic

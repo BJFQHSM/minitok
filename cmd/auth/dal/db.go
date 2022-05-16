@@ -32,7 +32,7 @@ func InitMysql() {
 }
 
 func parseConfigToDSN() string {
-	conf := (util.Parse("config/user.yaml")["mysql"]).(map[interface{}]interface{})
+	conf := (util.Parse("config/auth.yaml")["mysql"]).(map[interface{}]interface{})
 	mysqlConf := mysql.Config{
 		User:              util.InterfaceToStr(conf["username"]),
 		Passwd:            util.InterfaceToStr(conf["password"]),

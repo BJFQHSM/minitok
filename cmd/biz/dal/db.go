@@ -43,7 +43,7 @@ func parseMongoConf() string {
 	log.Printf("%+v\n", conf)
 	uri := mongoUriConfig{
 		protocol: "mongodb+srv",
-		user:     util.InterfaceToStr(conf["user"]),
+		user:     util.InterfaceToStr(conf["auth"]),
 		password: util.InterfaceToStr(conf["password"]),
 		url:      util.InterfaceToStr(conf["url"]),
 	}

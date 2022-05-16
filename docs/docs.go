@@ -20,6 +20,153 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/auth": {
+            "get": {
+                "description": "get auth info",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "get auth info",
+                "parameters": [
+                    {
+                        "description": "user_id",
+                        "name": "user_id",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "token",
+                        "name": "token",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/biz.QueryInfoResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/biz.QueryInfoResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/login": {
+            "post": {
+                "description": "login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "login",
+                "parameters": [
+                    {
+                        "description": "username",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "password",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/auth.LoginResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "description": "register",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "register",
+                "parameters": [
+                    {
+                        "description": "username",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "password",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/auth.RegisterResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/auth.RegisterResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/comment/action": {
             "post": {
                 "description": "put comment",
@@ -586,159 +733,49 @@ const docTemplate = `{
                     }
                 }
             }
-        },
-        "/user": {
-            "get": {
-                "description": "get user info",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "get user info",
-                "parameters": [
-                    {
-                        "description": "user_id",
-                        "name": "user_id",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "integer"
-                        }
-                    },
-                    {
-                        "description": "token",
-                        "name": "token",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/biz.QueryInfoResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/biz.QueryInfoResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/login": {
-            "post": {
-                "description": "login",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "login",
-                "parameters": [
-                    {
-                        "description": "username",
-                        "name": "username",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "password",
-                        "name": "password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/user.LoginResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/user.LoginResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/register": {
-            "post": {
-                "description": "register",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "register",
-                "parameters": [
-                    {
-                        "description": "username",
-                        "name": "username",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "password",
-                        "name": "password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/user.RegisterResponse"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/user.RegisterResponse"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
+        "auth.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "auth.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "status_code": {
+                    "type": "integer"
+                },
+                "status_msg": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "biz.Comment": {
             "type": "object",
             "properties": {
+                "auth": {
+                    "$ref": "#/definitions/biz.User"
+                },
                 "content": {
                     "type": "string"
                 },
@@ -747,9 +784,6 @@ const docTemplate = `{
                 },
                 "id": {
                     "type": "integer"
-                },
-                "user": {
-                    "$ref": "#/definitions/biz.User"
                 }
             }
         },
@@ -877,14 +911,14 @@ const docTemplate = `{
         "biz.QueryInfoResponse": {
             "type": "object",
             "properties": {
+                "auth": {
+                    "$ref": "#/definitions/biz.User"
+                },
                 "status_code": {
                     "type": "integer"
                 },
                 "status_msg": {
                     "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/biz.User"
                 }
             }
         },
@@ -961,40 +995,6 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
-        },
-        "user.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "type": "integer"
-                },
-                "status_msg": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "user.RegisterResponse": {
-            "type": "object",
-            "properties": {
-                "status_code": {
-                    "type": "integer"
-                },
-                "status_msg": {
-                    "type": "string"
-                },
-                "token": {
-                    "type": "string"
-                },
-                "user_id": {
-                    "type": "integer"
-                }
-            }
         }
     },
     "securityDefinitions": {
@@ -1008,7 +1008,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "localhost:8080",
-	BasePath:         "/api/v1",
+	BasePath:         "/douyin",
 	Schemes:          []string{},
 	Title:            "Swagger API",
 	Description:      "",

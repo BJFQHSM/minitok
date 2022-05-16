@@ -18,7 +18,7 @@ import (
 // @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host      localhost:8080
-// @BasePath  /api/v1
+// @BasePath  /douyin
 
 // @securityDefinitions.basic  BasicAuth
 
@@ -27,28 +27,28 @@ func main() {
 	rpc.Init()
 	r := gin.New()
 
-	v1 := r.Group("/v1")
-	user1 := v1.Group("/user")
+	douyin := r.Group("/douyin")
+	user1 := douyin.Group("/user")
 	user1.POST("/login", handler.Login)
 	user1.POST("/register", handler.Register)
 	user1.GET("", handler.QueryInfo)
 
-	publish1 := v1.Group("/publish")
+	publish1 := douyin.Group("/publish")
 	publish1.POST("/action", handler.PublishAction)
 	publish1.GET("/list", handler.QueryPublishList)
 
-	favorite1 := v1.Group("/favorite")
+	favorite1 := douyin.Group("/favorite")
 	favorite1.POST("/action", handler.FavoriteAction)
 	favorite1.GET("/list", handler.QueryFavoriteList)
 
-	comment1 := v1.Group("/comment")
+	comment1 := douyin.Group("/comment")
 	comment1.POST("/action", handler.CommentAction)
 	comment1.GET("/list", handler.QueryCommentList)
 
-	feed1 := v1.Group("/feed")
+	feed1 := douyin.Group("/feed")
 	feed1.GET("", handler.Feed)
 
-	relation1 := v1.Group("/relation")
+	relation1 := douyin.Group("/relation")
 	relation1.POST("/action", handler.RelationAction)
 	relation1.GET("/follow/list", handler.QueryFollowList)
 	relation1.GET("/follower/list", handler.QueryFollowerList)
@@ -61,7 +61,7 @@ func main() {
 }
 
 //func login(c *gin.Context) {
-//	resp, err := rpc.UserClient.Login(context.Background(), &user.LoginRequest{})
+//	resp, err := rpc.UserClient.Login(context.Background(), &auth.LoginRequest{})
 //	if err != nil {
 //		fmt.Printf("error %v", err)
 //	}

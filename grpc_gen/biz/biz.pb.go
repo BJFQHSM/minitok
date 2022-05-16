@@ -387,7 +387,7 @@ type QueryInfoResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	User       *User   `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
+	User       *User   `protobuf:"bytes,1,opt,name=auth,proto3" json:"auth,omitempty"`
 	StatusCode int32   `protobuf:"varint,2,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
 	StatusMsg  *string `protobuf:"bytes,3,opt,name=status_msg,json=statusMsg,proto3,oneof" json:"status_msg,omitempty"`
 }
@@ -1073,7 +1073,7 @@ type Comment struct {
 	unknownFields protoimpl.UnknownFields
 
 	Id         int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	User       *User  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
+	User       *User  `protobuf:"bytes,2,opt,name=auth,proto3" json:"auth,omitempty"`
 	Content    string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
 	CreateDate string `protobuf:"bytes,4,opt,name=create_date,json=createDate,proto3" json:"create_date,omitempty"`
 }
@@ -1938,10 +1938,10 @@ var file_idl_biz_proto_goTypes = []interface{}{
 var file_idl_biz_proto_depIdxs = []int32{
 	0,  // 0: grpc_biz.Video.author:type_name -> grpc_biz.User
 	1,  // 1: grpc_biz.FeedResponse.video:type_name -> grpc_biz.Video
-	0,  // 2: grpc_biz.QueryInfoResponse.user:type_name -> grpc_biz.User
+	0,  // 2: grpc_biz.QueryInfoResponse.auth:type_name -> grpc_biz.User
 	1,  // 3: grpc_biz.QueryPublishListResponse.video_list:type_name -> grpc_biz.Video
 	1,  // 4: grpc_biz.QueryFavoriteListResponse.video_list:type_name -> grpc_biz.Video
-	0,  // 5: grpc_biz.Comment.user:type_name -> grpc_biz.User
+	0,  // 5: grpc_biz.Comment.auth:type_name -> grpc_biz.User
 	16, // 6: grpc_biz.QueryCommentListResponse.comment_list:type_name -> grpc_biz.Comment
 	0,  // 7: grpc_biz.QueryFollowListResponse.user_list:type_name -> grpc_biz.User
 	0,  // 8: grpc_biz.QueryFollowerListResponse.user_list:type_name -> grpc_biz.User

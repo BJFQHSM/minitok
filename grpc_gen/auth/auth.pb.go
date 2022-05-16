@@ -17,9 +17,9 @@
 // versions:
 // 	protoc-gen-go v1.28.0
 // 	protoc        v3.19.4
-// source: idl/user.proto
+// source: idl/auth.proto
 
-package user
+package auth
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -47,7 +47,7 @@ type RegisterRequest struct {
 func (x *RegisterRequest) Reset() {
 	*x = RegisterRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_idl_user_proto_msgTypes[0]
+		mi := &file_idl_auth_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -60,7 +60,7 @@ func (x *RegisterRequest) String() string {
 func (*RegisterRequest) ProtoMessage() {}
 
 func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_idl_user_proto_msgTypes[0]
+	mi := &file_idl_auth_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -73,7 +73,7 @@ func (x *RegisterRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterRequest.ProtoReflect.Descriptor instead.
 func (*RegisterRequest) Descriptor() ([]byte, []int) {
-	return file_idl_user_proto_rawDescGZIP(), []int{0}
+	return file_idl_auth_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *RegisterRequest) GetUsername() string {
@@ -104,7 +104,7 @@ type RegisterResponse struct {
 func (x *RegisterResponse) Reset() {
 	*x = RegisterResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_idl_user_proto_msgTypes[1]
+		mi := &file_idl_auth_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -117,7 +117,7 @@ func (x *RegisterResponse) String() string {
 func (*RegisterResponse) ProtoMessage() {}
 
 func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_idl_user_proto_msgTypes[1]
+	mi := &file_idl_auth_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -130,7 +130,7 @@ func (x *RegisterResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RegisterResponse.ProtoReflect.Descriptor instead.
 func (*RegisterResponse) Descriptor() ([]byte, []int) {
-	return file_idl_user_proto_rawDescGZIP(), []int{1}
+	return file_idl_auth_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *RegisterResponse) GetUserId() int64 {
@@ -173,7 +173,7 @@ type LoginRequest struct {
 func (x *LoginRequest) Reset() {
 	*x = LoginRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_idl_user_proto_msgTypes[2]
+		mi := &file_idl_auth_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -186,7 +186,7 @@ func (x *LoginRequest) String() string {
 func (*LoginRequest) ProtoMessage() {}
 
 func (x *LoginRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_idl_user_proto_msgTypes[2]
+	mi := &file_idl_auth_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -199,7 +199,7 @@ func (x *LoginRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginRequest.ProtoReflect.Descriptor instead.
 func (*LoginRequest) Descriptor() ([]byte, []int) {
-	return file_idl_user_proto_rawDescGZIP(), []int{2}
+	return file_idl_auth_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *LoginRequest) GetUsername() string {
@@ -230,7 +230,7 @@ type LoginResponse struct {
 func (x *LoginResponse) Reset() {
 	*x = LoginResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_idl_user_proto_msgTypes[3]
+		mi := &file_idl_auth_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -243,7 +243,7 @@ func (x *LoginResponse) String() string {
 func (*LoginResponse) ProtoMessage() {}
 
 func (x *LoginResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_idl_user_proto_msgTypes[3]
+	mi := &file_idl_auth_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -256,7 +256,7 @@ func (x *LoginResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LoginResponse.ProtoReflect.Descriptor instead.
 func (*LoginResponse) Descriptor() ([]byte, []int) {
-	return file_idl_user_proto_rawDescGZIP(), []int{3}
+	return file_idl_auth_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *LoginResponse) GetUserId() int64 {
@@ -302,7 +302,7 @@ type User struct {
 func (x *User) Reset() {
 	*x = User{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_idl_user_proto_msgTypes[4]
+		mi := &file_idl_auth_proto_msgTypes[4]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -315,7 +315,7 @@ func (x *User) String() string {
 func (*User) ProtoMessage() {}
 
 func (x *User) ProtoReflect() protoreflect.Message {
-	mi := &file_idl_user_proto_msgTypes[4]
+	mi := &file_idl_auth_proto_msgTypes[4]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -328,7 +328,7 @@ func (x *User) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use User.ProtoReflect.Descriptor instead.
 func (*User) Descriptor() ([]byte, []int) {
-	return file_idl_user_proto_rawDescGZIP(), []int{4}
+	return file_idl_auth_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *User) GetId() int64 {
@@ -366,11 +366,11 @@ func (x *User) GetIsFollow() bool {
 	return false
 }
 
-var File_idl_user_proto protoreflect.FileDescriptor
+var File_idl_auth_proto protoreflect.FileDescriptor
 
-var file_idl_user_proto_rawDesc = []byte{
-	0x0a, 0x0e, 0x69, 0x64, 0x6c, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
-	0x12, 0x09, 0x67, 0x72, 0x70, 0x63, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x22, 0x49, 0x0a, 0x0f, 0x52,
+var file_idl_auth_proto_rawDesc = []byte{
+	0x0a, 0x0e, 0x69, 0x64, 0x6c, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f,
+	0x12, 0x09, 0x67, 0x72, 0x70, 0x63, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x22, 0x49, 0x0a, 0x0f, 0x52,
 	0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x1a,
 	0x0a, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x08, 0x75, 0x73, 0x65, 0x72, 0x6e, 0x61, 0x6d, 0x65, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x61,
@@ -408,44 +408,44 @@ var file_idl_user_proto_rawDesc = []byte{
 	0x01, 0x28, 0x03, 0x52, 0x0d, 0x66, 0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x65, 0x72, 0x43, 0x6f, 0x75,
 	0x6e, 0x74, 0x12, 0x1b, 0x0a, 0x09, 0x69, 0x73, 0x5f, 0x66, 0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x18,
 	0x05, 0x20, 0x01, 0x28, 0x08, 0x52, 0x08, 0x69, 0x73, 0x46, 0x6f, 0x6c, 0x6c, 0x6f, 0x77, 0x32,
-	0x92, 0x01, 0x0a, 0x0b, 0x55, 0x73, 0x65, 0x72, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
+	0x92, 0x01, 0x0a, 0x0b, 0x41, 0x75, 0x74, 0x68, 0x53, 0x65, 0x72, 0x76, 0x69, 0x63, 0x65, 0x12,
 	0x45, 0x0a, 0x08, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x12, 0x1a, 0x2e, 0x67, 0x72,
-	0x70, 0x63, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x5f, 0x75,
-	0x73, 0x65, 0x72, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70,
+	0x70, 0x63, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1b, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x5f, 0x61,
+	0x75, 0x74, 0x68, 0x2e, 0x52, 0x65, 0x67, 0x69, 0x73, 0x74, 0x65, 0x72, 0x52, 0x65, 0x73, 0x70,
 	0x6f, 0x6e, 0x73, 0x65, 0x22, 0x00, 0x12, 0x3c, 0x0a, 0x05, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x12,
-	0x17, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x5f, 0x75, 0x73, 0x65, 0x72, 0x2e, 0x4c, 0x6f, 0x67, 0x69,
+	0x17, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x5f, 0x61, 0x75, 0x74, 0x68, 0x2e, 0x4c, 0x6f, 0x67, 0x69,
 	0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x67, 0x72, 0x70, 0x63, 0x5f,
-	0x75, 0x73, 0x65, 0x72, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
+	0x61, 0x75, 0x74, 0x68, 0x2e, 0x4c, 0x6f, 0x67, 0x69, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e,
 	0x73, 0x65, 0x22, 0x00, 0x42, 0x11, 0x5a, 0x0f, 0x2e, 0x2f, 0x67, 0x72, 0x70, 0x63, 0x5f, 0x67,
-	0x65, 0x6e, 0x2f, 0x75, 0x73, 0x65, 0x72, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x65, 0x6e, 0x2f, 0x61, 0x75, 0x74, 0x68, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
-	file_idl_user_proto_rawDescOnce sync.Once
-	file_idl_user_proto_rawDescData = file_idl_user_proto_rawDesc
+	file_idl_auth_proto_rawDescOnce sync.Once
+	file_idl_auth_proto_rawDescData = file_idl_auth_proto_rawDesc
 )
 
-func file_idl_user_proto_rawDescGZIP() []byte {
-	file_idl_user_proto_rawDescOnce.Do(func() {
-		file_idl_user_proto_rawDescData = protoimpl.X.CompressGZIP(file_idl_user_proto_rawDescData)
+func file_idl_auth_proto_rawDescGZIP() []byte {
+	file_idl_auth_proto_rawDescOnce.Do(func() {
+		file_idl_auth_proto_rawDescData = protoimpl.X.CompressGZIP(file_idl_auth_proto_rawDescData)
 	})
-	return file_idl_user_proto_rawDescData
+	return file_idl_auth_proto_rawDescData
 }
 
-var file_idl_user_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-var file_idl_user_proto_goTypes = []interface{}{
-	(*RegisterRequest)(nil),  // 0: grpc_user.RegisterRequest
-	(*RegisterResponse)(nil), // 1: grpc_user.RegisterResponse
-	(*LoginRequest)(nil),     // 2: grpc_user.LoginRequest
-	(*LoginResponse)(nil),    // 3: grpc_user.LoginResponse
-	(*User)(nil),             // 4: grpc_user.User
+var file_idl_auth_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_idl_auth_proto_goTypes = []interface{}{
+	(*RegisterRequest)(nil),  // 0: grpc_auth.RegisterRequest
+	(*RegisterResponse)(nil), // 1: grpc_auth.RegisterResponse
+	(*LoginRequest)(nil),     // 2: grpc_auth.LoginRequest
+	(*LoginResponse)(nil),    // 3: grpc_auth.LoginResponse
+	(*User)(nil),             // 4: grpc_auth.User
 }
-var file_idl_user_proto_depIdxs = []int32{
-	0, // 0: grpc_user.UserService.Register:input_type -> grpc_user.RegisterRequest
-	2, // 1: grpc_user.UserService.Login:input_type -> grpc_user.LoginRequest
-	1, // 2: grpc_user.UserService.Register:output_type -> grpc_user.RegisterResponse
-	3, // 3: grpc_user.UserService.Login:output_type -> grpc_user.LoginResponse
+var file_idl_auth_proto_depIdxs = []int32{
+	0, // 0: grpc_auth.AuthService.Register:input_type -> grpc_auth.RegisterRequest
+	2, // 1: grpc_auth.AuthService.Login:input_type -> grpc_auth.LoginRequest
+	1, // 2: grpc_auth.AuthService.Register:output_type -> grpc_auth.RegisterResponse
+	3, // 3: grpc_auth.AuthService.Login:output_type -> grpc_auth.LoginResponse
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -453,13 +453,13 @@ var file_idl_user_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for field type_name
 }
 
-func init() { file_idl_user_proto_init() }
-func file_idl_user_proto_init() {
-	if File_idl_user_proto != nil {
+func init() { file_idl_auth_proto_init() }
+func file_idl_auth_proto_init() {
+	if File_idl_auth_proto != nil {
 		return
 	}
 	if !protoimpl.UnsafeEnabled {
-		file_idl_user_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
+		file_idl_auth_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterRequest); i {
 			case 0:
 				return &v.state
@@ -471,7 +471,7 @@ func file_idl_user_proto_init() {
 				return nil
 			}
 		}
-		file_idl_user_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
+		file_idl_auth_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*RegisterResponse); i {
 			case 0:
 				return &v.state
@@ -483,7 +483,7 @@ func file_idl_user_proto_init() {
 				return nil
 			}
 		}
-		file_idl_user_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
+		file_idl_auth_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LoginRequest); i {
 			case 0:
 				return &v.state
@@ -495,7 +495,7 @@ func file_idl_user_proto_init() {
 				return nil
 			}
 		}
-		file_idl_user_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+		file_idl_auth_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*LoginResponse); i {
 			case 0:
 				return &v.state
@@ -507,7 +507,7 @@ func file_idl_user_proto_init() {
 				return nil
 			}
 		}
-		file_idl_user_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+		file_idl_auth_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*User); i {
 			case 0:
 				return &v.state
@@ -520,24 +520,24 @@ func file_idl_user_proto_init() {
 			}
 		}
 	}
-	file_idl_user_proto_msgTypes[1].OneofWrappers = []interface{}{}
-	file_idl_user_proto_msgTypes[3].OneofWrappers = []interface{}{}
+	file_idl_auth_proto_msgTypes[1].OneofWrappers = []interface{}{}
+	file_idl_auth_proto_msgTypes[3].OneofWrappers = []interface{}{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: file_idl_user_proto_rawDesc,
+			RawDescriptor: file_idl_auth_proto_rawDesc,
 			NumEnums:      0,
 			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
-		GoTypes:           file_idl_user_proto_goTypes,
-		DependencyIndexes: file_idl_user_proto_depIdxs,
-		MessageInfos:      file_idl_user_proto_msgTypes,
+		GoTypes:           file_idl_auth_proto_goTypes,
+		DependencyIndexes: file_idl_auth_proto_depIdxs,
+		MessageInfos:      file_idl_auth_proto_msgTypes,
 	}.Build()
-	File_idl_user_proto = out.File
-	file_idl_user_proto_rawDesc = nil
-	file_idl_user_proto_goTypes = nil
-	file_idl_user_proto_depIdxs = nil
+	File_idl_auth_proto = out.File
+	file_idl_auth_proto_rawDesc = nil
+	file_idl_auth_proto_goTypes = nil
+	file_idl_auth_proto_depIdxs = nil
 }

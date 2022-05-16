@@ -2,14 +2,14 @@ package rpc
 
 import (
 	"context"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/user"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
 )
 
-var UserClient user.UserServiceClient
+var AuthClient auth.AuthServiceClient
 
 func initUser() {
 	var opts []grpc.DialOption
@@ -31,5 +31,5 @@ func initUser() {
 	conn, err := grpc.Dial(addr, opts...)
 	if err != nil {
 	}
-	UserClient = user.NewUserServiceClient(conn)
+	AuthClient = auth.NewAuthServiceClient(conn)
 }
