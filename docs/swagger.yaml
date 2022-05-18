@@ -177,102 +177,6 @@ info:
   title: Swagger API
   version: "1.0"
 paths:
-  /auth:
-    get:
-      consumes:
-      - application/json
-      description: get auth info
-      parameters:
-      - description: user_id
-        in: body
-        name: user_id
-        required: true
-        schema:
-          type: integer
-      - description: token
-        in: body
-        name: token
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/biz.QueryInfoResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/biz.QueryInfoResponse'
-      summary: get auth info
-      tags:
-      - auth
-  /auth/login:
-    post:
-      consumes:
-      - application/json
-      description: login
-      parameters:
-      - description: username
-        in: body
-        name: username
-        required: true
-        schema:
-          type: string
-      - description: password
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/auth.LoginResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/auth.LoginResponse'
-      summary: login
-      tags:
-      - auth
-  /auth/register:
-    post:
-      consumes:
-      - application/json
-      description: register
-      parameters:
-      - description: username
-        in: body
-        name: username
-        required: true
-        schema:
-          type: string
-      - description: password
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/auth.RegisterResponse'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/auth.RegisterResponse'
-      summary: register
-      tags:
-      - auth
   /comment/action:
     post:
       consumes:
@@ -643,6 +547,102 @@ paths:
       summary: get follower list
       tags:
       - relation
+  /user:
+    get:
+      consumes:
+      - application/json
+      description: get auth info
+      parameters:
+      - description: user_id
+        in: body
+        name: user_id
+        required: true
+        schema:
+          type: integer
+      - description: token
+        in: body
+        name: token
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/biz.QueryInfoResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/biz.QueryInfoResponse'
+      summary: get auth info
+      tags:
+      - user
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: login
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.LoginResponse'
+      summary: login
+      tags:
+      - user
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: register
+      parameters:
+      - description: username
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+      summary: register
+      tags:
+      - user
 securityDefinitions:
   BasicAuth:
     type: basic
