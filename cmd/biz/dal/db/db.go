@@ -1,4 +1,4 @@
-package dal
+package db
 
 import (
 	"context"
@@ -43,7 +43,7 @@ func parseMongoConf() string {
 	log.Printf("%+v\n", conf)
 	uri := mongoUriConfig{
 		protocol: "mongodb+srv",
-		user:     util.InterfaceToStr(conf["auth"]),
+		user:     util.InterfaceToStr(conf["user"]),
 		password: util.InterfaceToStr(conf["password"]),
 		url:      util.InterfaceToStr(conf["url"]),
 	}

@@ -5,12 +5,12 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"os"
 )
 
 func Parse(path string) map[string]interface{} {
-	//dir := os.Getenv("PROJ_DIR")
-	//file, err := ioutil.ReadFile(dir + path)
-	file, err := ioutil.ReadFile(path)
+	dir := os.Getenv("WORK_DIR")
+	file, err := ioutil.ReadFile(dir + path)
 	fmt.Println(string(file))
 	if err != nil {
 		return nil
