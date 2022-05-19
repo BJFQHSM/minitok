@@ -22,7 +22,7 @@ import (
 // @Router       /auth/login [post]
 func Login(c *gin.Context) {
 	var req auth.LoginRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
@@ -46,7 +46,7 @@ func Login(c *gin.Context) {
 // @Router       /auth/register [post]
 func Register(c *gin.Context) {
 	var req auth.RegisterRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
@@ -70,7 +70,7 @@ func Register(c *gin.Context) {
 // @Router       /auth [get]
 func QueryInfo(c *gin.Context) {
 	var req biz.QueryInfoRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}

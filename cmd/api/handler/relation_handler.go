@@ -23,7 +23,7 @@ import (
 // @Router       /relation/action [post]
 func RelationAction(c *gin.Context) {
 	var req biz.RelationActionRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
@@ -47,7 +47,7 @@ func RelationAction(c *gin.Context) {
 // @Router       /relation/follow/list [get]
 func QueryFollowList(c *gin.Context) {
 	var req biz.QueryFollowListRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
@@ -71,7 +71,7 @@ func QueryFollowList(c *gin.Context) {
 // @Router       /relation/follower/list [get]
 func QueryFollowerList(c *gin.Context) {
 	var req biz.QueryFollowerListRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
