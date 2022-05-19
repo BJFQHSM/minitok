@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/service"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -22,7 +23,9 @@ func (s *BizServerImpl) PublishAction(ctx context.Context, req *biz.PublishActio
 }
 
 func (s *BizServerImpl) QueryPublishList(ctx context.Context, req *biz.QueryPublishListRequest) (*biz.QueryPublishListResponse, error) {
-	return nil, nil
+	serv := service.NewQueryPublishListService(req, ctx)
+	serv.DoService()
+	return serv.GetResponse(), nil
 }
 
 func (s *BizServerImpl) FavoriteAction(ctx context.Context, req *biz.FavoriteActionRequest) (*biz.FavoriteActionResponse, error) {
