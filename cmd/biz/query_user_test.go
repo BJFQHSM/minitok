@@ -10,7 +10,7 @@ import (
 
 func TestQueryUserInfo(t *testing.T) {
 	req := &biz.QueryUserInfoRequest{
-		UserId: 2,
+		UserId: 0,
 		Token:  "1.12345",
 	}
 	ser := service.NewQueryUserInfoService(req, nil)

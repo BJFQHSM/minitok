@@ -18,24 +18,18 @@ type Follow struct {
 	FollowUserId int `json:"follow_user_id "`
 }
 
-func QueryUserByUID(ctx context.Context, userId int64) (*User, error) {
-	var res User
-	log.Print(userId)
+func QueryUserByUID(ctx context.Context, userId int64) ([]*User, error) {
+	var res []*User
 	if err := MysqlDB.Table("user_info").WithContext(ctx).Where("user_id = ?", userId).Find(&res).Error; err != nil {
-		log.Printf("Erorr to queryUserInfo %v\n", err)
-		return nil, err
+		log.Panicf("Erorr to queryUserInfo %v\n", err)
 	}
-	return &res, nil
+	return res, nil
 }
 
-func QueryFollowUserByUID(ctx context.Context, tokenUserId int64, userId int64) (bool, error) {
-	var follow Follow
-	if err := MysqlDB.Table("user_follow").WithContext(ctx).Where(&Follow{int(tokenUserId), int(userId)}).Find(&follow).Error; err != nil {
-		log.Printf("Erorr to queryUserInfo %v\n", err)
-		return false, err
+func QueryFollowUserByUID(ctx context.Context, tokenUserId int64, userId int64) ([]*Follow, error) {
+	var follow []*Follow
+	if err := MysqlDB.Table("user_follow").WithContext(ctx).Where("user_id= ? and follow_user_id = ?", tokenUserId, userId).Find(&follow).Error; err != nil {
+		log.Panicf("Erorr to queryFollowUser %v\n", err)
 	}
-	if (Follow{}) == follow {
-		return false, nil
-	}
-	return true, nil
+	return follow, nil
 }

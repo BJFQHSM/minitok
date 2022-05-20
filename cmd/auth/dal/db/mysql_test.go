@@ -8,7 +8,7 @@ import (
 )
 
 func TestQueryUser(t *testing.T) {
-	user, err := QueryUserByUID(context.Background(), 1)
+	user, err := QueryUserByUID(context.Background(), 0)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -16,7 +16,7 @@ func TestQueryUser(t *testing.T) {
 	fmt.Printf("%+v\n", user)
 }
 func TestQueryFollow(t *testing.T) {
-	is_follow, err := QueryFollowUserByUID(context.Background(), 1, 4)
+	is_follow, err := QueryFollowUserByUID(context.Background(), 0, 0)
 	if err != nil {
 		log.Fatal(err)
 		return

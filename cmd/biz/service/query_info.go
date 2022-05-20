@@ -45,7 +45,7 @@ func (s *queryUserInfoServiceImpl) validateParams() error {
 		return errors.New("params: request could not be nil")
 	}
 	if req.UserId < 0 {
-		return errors.New("params: userId could not be negative")
+		return errors.New("params: userId could not be negative number")
 	}
 	return nil
 }
@@ -56,15 +56,24 @@ func (s *queryUserInfoServiceImpl) queryUserInfoByUID() error {
 		return err
 	}
 	uid := s.Req.UserId
-	user, err := db.QueryUserByUID(s.Ctx, uid)
+	users, err := db.QueryUserByUID(s.Ctx, uid)
+	if err != nil {
+		return err
+	}
+	if len(users) == 0 {
+		return errors.New("no data")
+	}
 
+	follows, err := db.QueryFollowUserByUID(s.Ctx, int64(tokenUserId), uid)
 	if err != nil {
 		return err
 	}
-	isFollow, err := db.QueryFollowUserByUID(s.Ctx, int64(tokenUserId), uid)
-	if err != nil {
-		return err
+	var isFollow bool
+	if len(follows) != 0 {
+		isFollow = true
 	}
+
+	user := users[0]
 	respUser := biz.User{
 		Id:            int64(user.UserId),
 		Name:          user.Username,
