@@ -7,6 +7,7 @@ import (
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
 )
 
@@ -70,13 +71,13 @@ func Register(c *gin.Context) {
 // @Failure      1 {object} biz.QueryInfoResponse
 // @Router       /auth [get]
 func QueryInfo(c *gin.Context) {
-	var req auth.QueryUserInfoRequest
+	var req biz.QueryUserInfoRequest
 	err := c.ShouldBind(&req)
 	if err != nil {
 		// todo
 		log.Printf("ERROR: parse from http reqbody %v\n", err)
 	}
-	resp, err := rpc.AuthClient.QueryUserInfo(context.Background(), &req)
+	resp, err := rpc.BizClient.QueryUserInfo(context.Background(), &req)
 	if err != nil {
 		// todo
 		log.Printf("ERROR:  %v\n", err)

@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/service"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -13,8 +15,10 @@ func (s *BizServerImpl) Feed(ctx context.Context, req *biz.FeedRequest) (*biz.Fe
 	return nil, nil
 }
 
-func (s *BizServerImpl) QueryInfo(ctx context.Context, req *biz.QueryInfoRequest) (*biz.QueryInfoResponse, error) {
-	return nil, nil
+func (s *BizServerImpl) QueryUserInfo(ctx context.Context, req *biz.QueryUserInfoRequest) (*biz.QueryUserInfoResponse, error) {
+	ser := service.NewQueryUserInfoService(req, ctx)
+	ser.DoService()
+	return ser.GetResponse(), nil
 }
 
 func (s *BizServerImpl) PublishAction(ctx context.Context, req *biz.PublishActionRequest) (*biz.PublishActionResponse, error) {

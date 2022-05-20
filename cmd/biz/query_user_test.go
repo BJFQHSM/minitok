@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/bytedance2022/minimal_tiktok/cmd/auth/service"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/service"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
 func TestQueryUserInfo(t *testing.T) {
-	req := &auth.QueryUserInfoRequest{
+	req := &biz.QueryUserInfoRequest{
 		UserId: 2,
 		Token:  "1.12345",
 	}

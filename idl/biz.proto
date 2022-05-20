@@ -46,12 +46,12 @@ message FeedResponse {
     optional string status_msg = 4;
 }
 
-message QueryInfoRequest {
+message QueryUserInfoRequest {
     int64 user_id = 1;
     string token = 2;
 }
 
-message QueryInfoResponse {
+message QueryUserInfoResponse {
     User user = 1;
     int32 status_code = 2;
     optional string status_msg = 3;
@@ -171,7 +171,7 @@ message QueryFollowerListResponse {
 
 service BizService {
     rpc Feed (FeedRequest) returns (FeedResponse) {}
-    rpc QueryInfo (QueryInfoRequest) returns (QueryInfoResponse) {}
+    rpc QueryUserInfo (QueryUserInfoRequest) returns (QueryUserInfoResponse) {}
     rpc PublishAction (PublishActionRequest) returns (PublishActionResponse) {}
     rpc QueryPublishList(QueryPublishListRequest) returns (QueryPublishListResponse) {}
     rpc FavoriteAction (FavoriteActionRequest) returns (FavoriteActionResponse) {}
