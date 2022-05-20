@@ -19,6 +19,7 @@ func TestQuery(t *testing.T) {
 	//QueryVideoById(context.Background(), 1)
 	videos, err := QueryVideosByUserId(context.Background(), 1)
 	if err != nil {
+		log.Printf("error to query %v\n", err)
 		return
 	}
 	for _, video := range videos {

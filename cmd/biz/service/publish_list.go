@@ -57,14 +57,6 @@ func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 	videoList := s.Resp.GetVideoList()
 	for _, video := range videos {
 		v := transDoToDto(video)
-		// todo optimize
-		for _, u := range video.Favorites {
-			if u == uid {
-				isFavorite := true
-				v.IsFavorite = &isFavorite
-				break
-			}
-		}
 		videoList = append(videoList, v)
 	}
 	s.Resp.VideoList = videoList
@@ -77,6 +69,7 @@ func (s *queryPublishListServiceImpl) GetResponse() *biz.QueryPublishListRespons
 
 // todo extract to be a public method in other pkg
 func transDoToDto(video *db.Video) *biz.Video {
+	isFavorite := len(video.Favorites) != 0
 	ret := biz.Video{
 		Id: video.VideoId,
 		Author: &biz.User{
@@ -87,6 +80,7 @@ func transDoToDto(video *db.Video) *biz.Video {
 		CoverUrl: video.CoverUrl,
 		FavoriteCount: video.FavoriteCount,
 		CommentCount: video.CommentCount,
+		IsFavorite: &isFavorite,
 	}
 	return &ret
 }

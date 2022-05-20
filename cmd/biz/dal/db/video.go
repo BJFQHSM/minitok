@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"time"
@@ -50,18 +51,73 @@ func QueryVideoByVideoId(ctx context.Context, videoId int64) (*Video, error) {
 	return &video, nil
 }
 
+// QueryVideosByUserId2 deprecated
+//func QueryVideosByUserId2(ctx context.Context, userId int64) ([]*Video, error) {
+//	videoColl := MongoCli.Database("tiktok").Collection("video")
+//	cursor, err := videoColl.Find(ctx, bson.D{{"user_id", userId}})
+//	if err != nil {
+//		return []*Video{}, err
+//	}
+//	var results []bson.D
+//	if err = cursor.All(ctx, &results); err != nil {
+//		return []*Video{}, err
+//	}
+//	var videos []*Video
+//	for _, result := range results {
+//		marshal, err := bson.Marshal(result)
+//		if err != nil {
+//			log.Printf("error to marshal from result %v\n", err)
+//			return []*Video{}, err
+//		}
+//		var video Video
+//		err = bson.Unmarshal(marshal, &video)
+//		if err != nil {
+//			log.Printf("error to unmarshal from result %v\n", err)
+//			return []*Video{}, err
+//		}
+//		videos = append(videos, &video)
+//	}
+//	return videos, nil
+//}
+
+// QueryVideosByUserId
+// favorite_list(favorites filed) only show login userId
+// if not favor favorites is empty
 func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 	videoColl := MongoCli.Database("tiktok").Collection("video")
-	cursor, err := videoColl.Find(ctx, bson.D{{"user_id", userId}})
+
+	matchStage := bson.D{{"$match", bson.D{{"user_id", userId}}}}
+
+	projectStage := bson.D{
+		{
+			"$project",
+			bson.D{
+				{"_id", 0},
+				{"user_id", 1},
+				{"video_id", 1},
+				{"play_url", 1},
+				{"cover_url", 1},
+				{"favorite_count", 1},
+				{"comment_count", 1},
+				{"comments", 1},
+				{"publish_date", 1},
+				// only return element which equals user_id
+				{"favorites", bson.D{{"$filter", bson.D{{"input", "$favorites"}, {"as", "f"}, {"cond",  bson.D{{"$eq", bson.A{"$$f", 5}}}}}}}},
+			},
+		},
+	}
+
+	cursor, err := videoColl.Aggregate(ctx, mongo.Pipeline{matchStage, projectStage})
 	if err != nil {
 		return []*Video{}, err
 	}
 	var results []bson.D
-	if err = cursor.All(context.TODO(), &results); err != nil {
+	if err = cursor.All(ctx, &results); err != nil {
 		return []*Video{}, err
 	}
 	var videos []*Video
 	for _, result := range results {
+		//fmt.Println(result)
 		marshal, err := bson.Marshal(result)
 		if err != nil {
 			log.Printf("error to marshal from result %v\n", err)
