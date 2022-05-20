@@ -108,6 +108,7 @@ func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 	}
 
 	cursor, err := videoColl.Aggregate(ctx, mongo.Pipeline{matchStage, projectStage})
+	defer cursor.Close(ctx)
 	if err != nil {
 		return []*Video{}, err
 	}
