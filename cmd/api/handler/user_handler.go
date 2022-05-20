@@ -2,11 +2,12 @@ package handler
 
 import (
 	"context"
+	"log"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // Login godoc
@@ -65,18 +66,20 @@ func Register(c *gin.Context) {
 // @Produce      json
 // @Param        user_id body int true "user_id"
 // @Param        token body string true "token"
-// @Success      200 {object} biz.QueryInfoResponse
-// @Failure      500 {object} biz.QueryInfoResponse
+// @Success      0 {object} biz.QueryInfoResponse
+// @Failure      1 {object} biz.QueryInfoResponse
 // @Router       /auth [get]
 func QueryInfo(c *gin.Context) {
-	var req biz.QueryInfoRequest
+	var req auth.QueryUserInfoRequest
 	err := c.ShouldBind(&req)
 	if err != nil {
 		// todo
+		log.Printf("ERROR: parse from http reqbody %v\n", err)
 	}
-	resp, err := rpc.BizClient.QueryInfo(context.Background(), &req)
+	resp, err := rpc.AuthClient.QueryUserInfo(context.Background(), &req)
 	if err != nil {
 		// todo
+		log.Printf("ERROR:  %v\n", err)
 	}
-	c.JSON(http.StatusOK, resp)
+	c.JSON(0, resp)
 }

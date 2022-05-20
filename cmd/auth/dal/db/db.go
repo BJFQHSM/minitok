@@ -1,25 +1,17 @@
-package dal
+package db
 
 import (
+	"log"
+	"sync"
+
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"github.com/go-sql-driver/mysql"
 	mysql2 "gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"log"
-	"sync"
 )
 
 var MysqlDB *gorm.DB
 var once sync.Once
-
-//type User struct {
-//	ID        uint           `gorm:"primaryKey"`
-//	Name	string
-//	Age		int
-//}
-//func (User) TableName() string {
-//	return "user_info"
-//}
 
 func InitMysql() {
 	once.Do(func() {

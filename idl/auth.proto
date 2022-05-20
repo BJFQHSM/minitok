@@ -41,6 +41,17 @@ message LoginResponse {
     optional string status_msg = 4;
 }
 
+message QueryUserInfoRequest {
+    int64 user_id = 1;
+    string token = 2;
+}
+
+message QueryUserInfoResponse {
+    User user = 1;
+    int32 status_code = 2;
+    optional string status_msg = 3;
+}
+
 message User {
     int64 id = 1;
     string name = 2;
@@ -52,5 +63,5 @@ message User {
 service AuthService {
     rpc Register (RegisterRequest) returns (RegisterResponse) {}
     rpc Login (LoginRequest) returns (LoginResponse) {}
-
+    rpc QueryUserInfo (QueryUserInfoRequest) returns (QueryUserInfoResponse) {}
 }

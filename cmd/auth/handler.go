@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/auth/service"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 )
 
@@ -17,4 +19,10 @@ func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*a
 	return &auth.LoginResponse{
 		UserId: 11111,
 	}, nil
+}
+
+func (s *AuthServiceImpl) QueryUserInfo(ctx context.Context, req *auth.QueryUserInfoRequest) (*auth.QueryUserInfoResponse, error) {
+	ser := service.NewQueryUserInfoService(req, ctx)
+	ser.DoService()
+	return ser.GetResponse(), nil
 }
