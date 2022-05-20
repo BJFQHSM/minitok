@@ -387,7 +387,7 @@ type QueryInfoResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	User       *User   `protobuf:"bytes,1,opt,name=auth,proto3" json:"auth,omitempty"`
+	User       *User   `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
 	StatusCode int32   `protobuf:"varint,2,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
 	StatusMsg  *string `protobuf:"bytes,3,opt,name=status_msg,json=statusMsg,proto3,oneof" json:"status_msg,omitempty"`
 }
@@ -450,9 +450,9 @@ type PublishActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64    `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token  string   `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
-	Data   [][]byte `protobuf:"bytes,3,rep,name=data,proto3" json:"data,omitempty"`
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	Data   []byte `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 }
 
 func (x *PublishActionRequest) Reset() {
@@ -501,7 +501,7 @@ func (x *PublishActionRequest) GetToken() string {
 	return ""
 }
 
-func (x *PublishActionRequest) GetData() [][]byte {
+func (x *PublishActionRequest) GetData() []byte {
 	if x != nil {
 		return x.Data
 	}
@@ -1073,7 +1073,7 @@ type Comment struct {
 	unknownFields protoimpl.UnknownFields
 
 	Id         int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	User       *User  `protobuf:"bytes,2,opt,name=auth,proto3" json:"auth,omitempty"`
+	User       *User  `protobuf:"bytes,2,opt,name=user,proto3" json:"user,omitempty"`
 	Content    string `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
 	CreateDate string `protobuf:"bytes,4,opt,name=create_date,json=createDate,proto3" json:"create_date,omitempty"`
 }
@@ -1688,7 +1688,7 @@ var file_idl_biz_proto_rawDesc = []byte{
 	0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x03, 0x52,
 	0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x14, 0x0a, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e,
 	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x6f, 0x6b, 0x65, 0x6e, 0x12, 0x12, 0x0a,
-	0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x03, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74,
+	0x04, 0x64, 0x61, 0x74, 0x61, 0x18, 0x03, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x64, 0x61, 0x74,
 	0x61, 0x22, 0x6b, 0x0a, 0x15, 0x50, 0x75, 0x62, 0x6c, 0x69, 0x73, 0x68, 0x41, 0x63, 0x74, 0x69,
 	0x6f, 0x6e, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x1f, 0x0a, 0x0b, 0x73, 0x74,
 	0x61, 0x74, 0x75, 0x73, 0x5f, 0x63, 0x6f, 0x64, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x05, 0x52,
@@ -1938,10 +1938,10 @@ var file_idl_biz_proto_goTypes = []interface{}{
 var file_idl_biz_proto_depIdxs = []int32{
 	0,  // 0: grpc_biz.Video.author:type_name -> grpc_biz.User
 	1,  // 1: grpc_biz.FeedResponse.video:type_name -> grpc_biz.Video
-	0,  // 2: grpc_biz.QueryInfoResponse.auth:type_name -> grpc_biz.User
+	0,  // 2: grpc_biz.QueryInfoResponse.user:type_name -> grpc_biz.User
 	1,  // 3: grpc_biz.QueryPublishListResponse.video_list:type_name -> grpc_biz.Video
 	1,  // 4: grpc_biz.QueryFavoriteListResponse.video_list:type_name -> grpc_biz.Video
-	0,  // 5: grpc_biz.Comment.auth:type_name -> grpc_biz.User
+	0,  // 5: grpc_biz.Comment.user:type_name -> grpc_biz.User
 	16, // 6: grpc_biz.QueryCommentListResponse.comment_list:type_name -> grpc_biz.Comment
 	0,  // 7: grpc_biz.QueryFollowListResponse.user_list:type_name -> grpc_biz.User
 	0,  // 8: grpc_biz.QueryFollowerListResponse.user_list:type_name -> grpc_biz.User
