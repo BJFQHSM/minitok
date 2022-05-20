@@ -21,7 +21,7 @@ import (
 // @Router       /publish/action [post]
 func PublishAction(c *gin.Context) {
 	var req biz.PublishActionRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
@@ -46,7 +46,7 @@ func PublishAction(c *gin.Context) {
 // @Router       /publish/list [get]
 func QueryPublishList(c *gin.Context) {
 	var req biz.QueryPublishListRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}

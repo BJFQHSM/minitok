@@ -25,7 +25,7 @@ import (
 // @Router       /comment/action [post]
 func CommentAction(c *gin.Context) {
 	var req biz.CommentActionRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
@@ -50,7 +50,7 @@ func CommentAction(c *gin.Context) {
 // @Router       /comment/list [get]
 func QueryCommentList(c *gin.Context) {
 	var req biz.QueryCommentListRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}

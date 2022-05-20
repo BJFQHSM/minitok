@@ -20,7 +20,7 @@ import (
 // @Router       /feed [get]
 func Feed(c *gin.Context) {
 	var req biz.FeedRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}

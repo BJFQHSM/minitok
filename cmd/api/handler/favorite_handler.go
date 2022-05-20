@@ -23,7 +23,7 @@ import (
 // @Router       /favorite/action [post]
 func FavoriteAction(c *gin.Context) {
 	var req biz.FavoriteActionRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
@@ -47,7 +47,7 @@ func FavoriteAction(c *gin.Context) {
 // @Router       /favorite/list [get]
 func QueryFavoriteList(c *gin.Context) {
 	var req biz.QueryFavoriteListRequest
-	err := c.ShouldBind(&req)
+	err := c.BindJSON(&req)
 	if err != nil {
 		// todo
 	}
