@@ -13,7 +13,7 @@ import (
 var MysqlDB *gorm.DB
 var once sync.Once
 
-func InitMysql() {
+func init() {
 	once.Do(func() {
 		var err error
 		MysqlDB, err = gorm.Open(mysql2.Open(parseConfigToDSN()), &gorm.Config{})
@@ -33,7 +33,7 @@ func parseConfigToDSN() string {
 		DBName:            util.InterfaceToStr(conf["database"]),
 		InterpolateParams: true,
 	}
-	//dsn := mysqlConf.FormatDSN()
-	//log.Printf("Info: init mysql dsn: %s", dsn)
+	// dsn := mysqlConf.FormatDSN()
+	// log.Printf("Info: init mysql dsn: %s", dsn)
 	return mysqlConf.FormatDSN()
 }

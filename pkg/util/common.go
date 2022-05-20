@@ -2,19 +2,20 @@ package util
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+
+	"gopkg.in/yaml.v2"
 )
 
 func Parse(path string) map[string]interface{} {
-	//dir := os.Getenv("PROJ_DIR")
-	//file, err := ioutil.ReadFile(dir + path)
-	file, err := ioutil.ReadFile(path)
-	fmt.Println(string(file))
+	dir := "D:\\GO\\GOWORK\\src\\minimal_tiktok\\"
+	file, err := ioutil.ReadFile(dir + path)
 	if err != nil {
+		log.Panicf("Failed to read yaml file.\nerr:%v", err)
 		return nil
 	}
+	fmt.Println(string(file))
 	result := make(map[string]interface{})
 
 	err = yaml.Unmarshal(file, &result)
@@ -27,4 +28,3 @@ func Parse(path string) map[string]interface{} {
 func InterfaceToStr(v interface{}) string {
 	return fmt.Sprintf("%v", v)
 }
-

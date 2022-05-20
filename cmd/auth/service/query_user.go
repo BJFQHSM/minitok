@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"errors"
+	"strconv"
+	"strings"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal/db"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
@@ -25,7 +27,6 @@ type queryUserInfoServiceImpl struct {
 
 func (s *queryUserInfoServiceImpl) DoService() {
 	var err error
-
 	for i := 0; i < 1; i++ {
 		if err = s.validateParams(); err != nil {
 			break
@@ -50,18 +51,28 @@ func (s *queryUserInfoServiceImpl) validateParams() error {
 }
 
 func (s *queryUserInfoServiceImpl) queryUserInfoByUID() error {
-	uid := s.Req.UserId
-	user, err := db.QueryUserByUID(s.Ctx, uid)
+	tokenUserId, err := strconv.ParseInt(strings.Split(s.Req.Token, ".")[0], 10, 64)
 	if err != nil {
 		return err
 	}
-	// 没有做isFollow
-	s.Resp.User.Id = int64(user.UserId)
-	s.Resp.User.Name = user.Username
-	s.Resp.User.FollowCount = int64(user.FollowCount)
-	s.Resp.User.FollowerCount = int64(user.FollowerCount)
-	s.Resp.User.IsFollow = true
+	uid := s.Req.UserId
+	user, err := db.QueryUserByUID(s.Ctx, uid)
 
+	if err != nil {
+		return err
+	}
+	isFollow, err := db.QueryFollowUserByUID(s.Ctx, int64(tokenUserId), uid)
+	if err != nil {
+		return err
+	}
+	respUser := auth.User{
+		Id:            int64(user.UserId),
+		Name:          user.Username,
+		FollowCount:   int64(user.FollowCount),
+		FollowerCount: int64(user.FollowerCount),
+		IsFollow:      isFollow,
+	}
+	s.Resp.User = &respUser
 	return nil
 }
 
@@ -73,10 +84,10 @@ func (s *queryUserInfoServiceImpl) buildResponse(err error) {
 	if err != nil {
 		errMsg := err.Error()
 		s.Resp.StatusMsg = &errMsg
-		s.Resp.StatusCode = 1
+		s.Resp.StatusCode = 500
 	} else {
 		errMsg := "SUCCESS"
 		s.Resp.StatusMsg = &errMsg
-		s.Resp.StatusCode = 0
+		s.Resp.StatusCode = 200
 	}
 }
