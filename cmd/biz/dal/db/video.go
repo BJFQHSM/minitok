@@ -91,18 +91,18 @@ func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 	projectStage := bson.D{
 		{
 			"$project",
-			bson.D{
-				{"_id", 0},
-				{"user_id", 1},
-				{"video_id", 1},
-				{"play_url", 1},
-				{"cover_url", 1},
-				{"favorite_count", 1},
-				{"comment_count", 1},
-				{"comments", 1},
-				{"publish_date", 1},
+			bson.M{
+				"_id": 0,
+				"user_id":1,
+				"video_id": 1,
+				"play_url": 1,
+				"cover_url": 1,
+				"favorite_count": 1,
+				"comment_count": 1,
+				"comments": 1,
+				"publish_date": 1,
 				// only return element which equals user_id
-				{"favorites", bson.D{{"$filter", bson.D{{"input", "$favorites"}, {"as", "f"}, {"cond",  bson.D{{"$eq", bson.A{"$$f", 5}}}}}}}},
+				"favorites": bson.D{{"$filter", bson.D{{"input", "$favorites"}, {"as", "f"}, {"cond",  bson.M{"$eq": bson.A{"$$f", userId}}}}}},
 			},
 		},
 	}
@@ -111,7 +111,7 @@ func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 	if err != nil {
 		return []*Video{}, err
 	}
-	var results []bson.D
+	var results []bson.M
 	if err = cursor.All(ctx, &results); err != nil {
 		return []*Video{}, err
 	}

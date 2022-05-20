@@ -23,6 +23,6 @@ func TestQuery(t *testing.T) {
 		return
 	}
 	for _, video := range videos {
-		fmt.Printf("%+v\n", video)
+		fmt.Printf("%+v\n", *video)
 	}
 }
