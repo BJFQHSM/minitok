@@ -31,13 +31,13 @@ func main() {
 	r.Use(logger())
 
 	douyin := r.Group("/douyin")
-	user1 := douyin.Group("/user")
-	user1.POST("/login", handler.Login)
-	user1.POST("/register", handler.Register)
+	user1 := douyin.Group("/user/")
+	user1.POST("/login/", handler.Login)
+	user1.POST("/register/", handler.Register)
 	user1.GET("", handler.QueryInfo)
 
-	publish1 := douyin.Group("/publish")
-	publish1.POST("/action", handler.PublishAction)
+	publish1 := douyin.Group("/publish/")
+	publish1.POST("/action/", handler.PublishAction)
 	publish1.GET("/list", handler.QueryPublishList)
 
 	favorite1 := douyin.Group("/favorite")
