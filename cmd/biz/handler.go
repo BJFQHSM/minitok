@@ -11,15 +11,15 @@ type BizServerImpl struct {
 }
 
 func (s *BizServerImpl) Feed(ctx context.Context, req *biz.FeedRequest) (*biz.FeedResponse, error) {
-	return nil, nil
+	return &biz.FeedResponse{}, nil
 }
 
 func (s *BizServerImpl) QueryInfo(ctx context.Context, req *biz.QueryInfoRequest) (*biz.QueryInfoResponse, error) {
-	return nil, nil
+	return &biz.QueryInfoResponse{}, nil
 }
 
 func (s *BizServerImpl) PublishAction(ctx context.Context, req *biz.PublishActionRequest) (*biz.PublishActionResponse, error) {
-	return nil, nil
+	return &biz.PublishActionResponse{}, nil
 }
 
 func (s *BizServerImpl) QueryPublishList(ctx context.Context, req *biz.QueryPublishListRequest) (*biz.QueryPublishListResponse, error) {
@@ -29,27 +29,27 @@ func (s *BizServerImpl) QueryPublishList(ctx context.Context, req *biz.QueryPubl
 }
 
 func (s *BizServerImpl) FavoriteAction(ctx context.Context, req *biz.FavoriteActionRequest) (*biz.FavoriteActionResponse, error) {
-	return nil, nil
+	return &biz.FavoriteActionResponse{}, nil
 }
 
 func (s *BizServerImpl) QueryFavoriteList(ctx context.Context, req *biz.QueryFavoriteListRequest) (*biz.QueryFavoriteListResponse, error) {
-	return nil, nil
+	return &biz.QueryFavoriteListResponse{}, nil
 }
 func (s *BizServerImpl) CommentAction(ctx context.Context, req *biz.CommentActionRequest) (*biz.CommentActionResponse, error) {
-	return nil, nil
+	return &biz.CommentActionResponse{}, nil
 }
 
 func (s *BizServerImpl) QueryCommentList(ctx context.Context, req *biz.QueryCommentListRequest) (*biz.QueryCommentListResponse, error) {
-	return nil, nil
+	return &biz.QueryCommentListResponse{}, nil
 }
 func (s *BizServerImpl) RelationAction(ctx context.Context, req *biz.RelationActionRequest) (*biz.RelationActionResponse, error) {
-	return nil, nil
+	return &biz.RelationActionResponse{}, nil
 }
 
 func (s *BizServerImpl) QueryFollowList(ctx context.Context, req *biz.QueryFollowListRequest) (*biz.QueryFollowListResponse, error) {
-	return nil, nil
+	return &biz.QueryFollowListResponse{}, nil
 }
 
 func (s *BizServerImpl) QueryFollowerList(ctx context.Context, req *biz.QueryFollowerListRequest) (*biz.QueryFollowerListResponse, error) {
-	return nil, nil
+	return &biz.QueryFollowerListResponse{}, nil
 }

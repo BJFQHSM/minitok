@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"io/ioutil"
 	"log"
 	"net/http"
 )
@@ -26,6 +27,8 @@ func main() {
 
 	rpc.Init()
 	r := gin.New()
+
+	r.Use(logger())
 
 	douyin := r.Group("/douyin")
 	user1 := douyin.Group("/user")
@@ -57,6 +60,20 @@ func main() {
 
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatal(err)
+	}
+}
+
+func logger() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		bytes, err := ioutil.ReadAll(c.Request.Body)
+		if err != nil {
+			return
+		}
+		log.Printf("%v\n", string(bytes))
+
+		//请求处理
+		c.Next()
+		log.Println()
 	}
 }
 

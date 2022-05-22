@@ -10,7 +10,7 @@ type AuthServiceImpl struct {
 }
 
 func (s *AuthServiceImpl) Register(ctx context.Context, req *auth.RegisterRequest) (*auth.RegisterResponse, error) {
-	return nil, nil
+	return &auth.RegisterResponse{}, nil
 }
 
 func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
