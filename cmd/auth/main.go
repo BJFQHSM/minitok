@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// todo constants and others
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:8888"))
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:8890"))
 	if err != nil {
 		panic(err)
 	}
@@ -23,7 +23,7 @@ func main() {
 		ServiceName: "tiktok_auth",
 		Addr: &net.TCPAddr{
 			IP:   []byte{127, 0, 0, 1},
-			Port: 8888,
+			Port: 8890,
 		},
 	})
 	if err != nil {

@@ -6,6 +6,7 @@ import (
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -30,6 +31,7 @@ func Login(c *gin.Context) {
 	if err != nil {
 		// todo
 	}
+	log.Printf("%+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }
 
