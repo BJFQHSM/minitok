@@ -11,7 +11,13 @@ type AuthServiceImpl struct {
 }
 
 func (s *AuthServiceImpl) Register(ctx context.Context, req *auth.RegisterRequest) (*auth.RegisterResponse, error) {
-	return &auth.RegisterResponse{}, nil
+	msg := "success"
+	return &auth.RegisterResponse{
+		UserId: 11,
+		Token: "fsjfs",
+		StatusCode: 200,
+		StatusMsg: &msg,
+	}, nil
 }
 
 func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
