@@ -25,14 +25,16 @@ func Login(c *gin.Context) {
 	var req auth.LoginRequest
 	err := c.ShouldBind(&req)
 	if err != nil {
+		log.Println(err)
 		// todo
 	}
 	resp, err := rpc.AuthClient.Login(context.Background(), &req)
 	if err != nil {
-		// todo
+		log.Println(err)
 	}
 	log.Printf("%+v\n", resp)
 	c.JSON(http.StatusOK, resp)
+	log.Println(c.Errors)
 }
 
 // Register godoc
