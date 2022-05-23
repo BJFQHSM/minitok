@@ -6,6 +6,7 @@ import (
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -22,15 +23,18 @@ import (
 // @Router       /user/login [post]
 func Login(c *gin.Context) {
 	var req auth.LoginRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
 	if err != nil {
+		log.Println(err)
 		// todo
 	}
 	resp, err := rpc.AuthClient.Login(context.Background(), &req)
 	if err != nil {
-		// todo
+		log.Println(err)
 	}
+	log.Printf("%+v\n", *resp)
 	c.JSON(http.StatusOK, resp)
+	log.Println(c.Errors)
 }
 
 // Register godoc
@@ -46,7 +50,7 @@ func Login(c *gin.Context) {
 // @Router       /user/register [post]
 func Register(c *gin.Context) {
 	var req auth.RegisterRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		// todo
 	}
