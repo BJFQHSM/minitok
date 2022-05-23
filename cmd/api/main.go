@@ -32,7 +32,7 @@ func main() {
 
 	douyin := r.Group("/douyin")
 	user1 := douyin.Group("/user")
-	user1.GET("/login/", handler.Login)
+	user1.POST("/login/", handler.Login)
 	user1.POST("/register", handler.Register)
 	user1.GET("", handler.QueryInfo)
 
@@ -70,8 +70,9 @@ func logger() gin.HandlerFunc {
 			return
 		}
 		log.Printf("%v\n", c.Request.RequestURI)
+		log.Println(c.Request.Method)
+		log.Println(c.Request.Header)
 		log.Printf("%v\n", string(bytes))
-
 		//请求处理
 		c.Next()
 	}
