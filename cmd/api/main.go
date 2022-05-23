@@ -32,7 +32,7 @@ func main() {
 
 	douyin := r.Group("/douyin")
 	user1 := douyin.Group("/user")
-	user1.GET("/login", handler.Login)
+	user1.GET("/login/", handler.Login)
 	user1.POST("/register", handler.Register)
 	user1.GET("", handler.QueryInfo)
 
