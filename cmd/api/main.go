@@ -69,11 +69,11 @@ func logger() gin.HandlerFunc {
 		if err != nil {
 			return
 		}
+		log.Printf("%v\n", c.Request.RequestURI)
 		log.Printf("%v\n", string(bytes))
 
 		//请求处理
 		c.Next()
-		log.Println()
 	}
 }
 
