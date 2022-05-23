@@ -50,7 +50,7 @@ func Login(c *gin.Context) {
 // @Router       /user/register [post]
 func Register(c *gin.Context) {
 	var req auth.RegisterRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		// todo
 	}
