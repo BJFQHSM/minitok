@@ -15,7 +15,7 @@ func (s *AuthServiceImpl) Register(ctx context.Context, req *auth.RegisterReques
 	return &auth.RegisterResponse{
 		UserId: 11,
 		Token: "fsjfs",
-		StatusCode: 200,
+		StatusCode: 0,
 		StatusMsg: &msg,
 	}, nil
 }
@@ -26,7 +26,7 @@ func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*a
 	return &auth.LoginResponse{
 		UserId: 11111,
 		Token: "fsjflsjdf",
-		StatusCode: 200,
+		StatusCode: 0,
 		StatusMsg: &msg,
 	}, nil
 }
