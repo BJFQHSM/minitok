@@ -2,15 +2,17 @@ package util
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
+	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 func Parse(path string) map[string]interface{} {
-	//dir := os.Getenv("PROJ_DIR")
-	//file, err := ioutil.ReadFile(dir + path)
-	file, err := ioutil.ReadFile(path)
+	dir := os.Getenv("WORK_DIR")
+	file, err := ioutil.ReadFile(dir + path)
+	//file, err := ioutil.ReadFile(path)
 	fmt.Println(string(file))
 	if err != nil {
 		return nil
@@ -27,4 +29,3 @@ func Parse(path string) map[string]interface{} {
 func InterfaceToStr(v interface{}) string {
 	return fmt.Sprintf("%v", v)
 }
-
