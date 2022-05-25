@@ -332,8 +332,8 @@ type QueryUserInfoRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
 }
 
 func (x *QueryUserInfoRequest) Reset() {

@@ -67,8 +67,8 @@ func Register(c *gin.Context) {
 // @Produce      json
 // @Param        user_id body int true "user_id"
 // @Param        token body string true "token"
-// @Success      0 {object} biz.QueryInfoResponse
-// @Failure      1 {object} biz.QueryInfoResponse
+// @Success      200 {object} biz.QueryInfoResponse
+// @Failure      500 {object} biz.QueryInfoResponse
 // @Router       /auth [get]
 func QueryInfo(c *gin.Context) {
 	var req biz.QueryUserInfoRequest
@@ -82,5 +82,5 @@ func QueryInfo(c *gin.Context) {
 		// todo
 		log.Printf("ERROR:  %v\n", err)
 	}
-	c.JSON(0, resp)
+	c.JSON(http.StatusOK, resp)
 }
