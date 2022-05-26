@@ -25,6 +25,8 @@ import (
 func Login(c *gin.Context) {
 	var req auth.LoginRequest
 	err := c.ShouldBindQuery(&req)
+	log.Printf("reqeust : %+v\n", req)
+
 	if err != nil {
 		log.Println(err)
 		// todo
@@ -33,7 +35,6 @@ func Login(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 	}
-	log.Printf("%+v\n", *resp)
 	c.JSON(http.StatusOK, resp)
 	log.Println(c.Errors)
 }
