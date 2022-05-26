@@ -13,12 +13,27 @@ type BizServerImpl struct {
 
 func (s *BizServerImpl) Feed(ctx context.Context, req *biz.FeedRequest) (*biz.FeedResponse, error) {
 	return &biz.FeedResponse{
+		Video: []*biz.Video{
+			{
+				Id:            1,
+				Author:        &biz.User{Id: 1},
+				PlayUrl:       "fsfs",
+				CommentCount:  10,
+				FavoriteCount: 10,
+			},
+		},
 		StatusCode: 0,
 	}, nil
 }
 
 func (s *BizServerImpl) QueryInfo(ctx context.Context, req *biz.QueryInfoRequest) (*biz.QueryInfoResponse, error) {
 	return &biz.QueryInfoResponse{
+		User: &biz.User{
+			Id:            1,
+			Name:          "dfs",
+			FollowerCount: 10,
+			FollowCount:   20,
+		},
 		StatusCode: 0,
 	}, nil
 }
