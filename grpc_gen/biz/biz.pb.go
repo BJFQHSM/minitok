@@ -262,7 +262,7 @@ type FeedResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Video      []*Video `protobuf:"bytes,1,rep,name=video,proto3" json:"video,omitempty"`
+	Video      []*Video `protobuf:"bytes,1,rep,name=video,proto3" json:"video_list,omitempty"`
 	NextTime   int64    `protobuf:"varint,2,opt,name=next_time,json=nextTime,proto3" json:"next_time,omitempty"`
 	StatusCode int32    `protobuf:"varint,3,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`
 	StatusMsg  *string  `protobuf:"bytes,4,opt,name=status_msg,json=statusMsg,proto3,oneof" json:"status_msg,omitempty"`
