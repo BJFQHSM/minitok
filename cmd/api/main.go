@@ -70,6 +70,7 @@ func logger() gin.HandlerFunc {
 		if err != nil {
 			return
 		}
+		log.Printf("info: request url: %s\n", c.Request.RequestURI)
 		log.Printf("info : request body %v\n", string(bytes))
 
 		//请求处理
