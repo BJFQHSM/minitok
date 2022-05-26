@@ -5,9 +5,10 @@ import (
 	"log"
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson"
+	bson "go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
 
 type Video struct {
 	VideoId       int64     `bson:"video_id"`
@@ -28,25 +29,30 @@ type Comment struct {
 	CreateDate time.Time `bson:"create_date"`
 }
 
-func QueryVideoByVideoId(ctx context.Context, videoId int64) (*Video, error) {
-	videoColl := MongoCli.Database("tiktok").Collection("video")
-	var result bson.D
-	opts := options.FindOne().SetProjection(bson.D{{"_id", 0}})
-	err := videoColl.FindOne(ctx, bson.D{{"video_id", videoId}}, opts).Decode(&result)
+func QueryVideosByTime(t time.Time)([]*Video, error){
+	// 指定获取要操作的数据集
+	collection := MongoCli.Database("tiktok").Collection("video")
+	findOptions := options.Find()
+	findOptions.SetLimit(30)//设置一次获取的最大视频数
+	sort := bson.D{{"publish_date", 1}}
+	findOptions.SetSort(sort)
+	results := []*Video{}
+	cur, err := collection.Find(context.TODO(), bson.M{"publish_date": bson.M{"$gte": t}}, findOptions)
 	if err != nil {
-		log.Printf("Erorr to queryVideoById %v\n", err)
-		return nil, err
+		log.Fatal(err)
 	}
-	marshal, err := bson.Marshal(result)
-	if err != nil {
-		log.Printf("error to marshal from result %v\n", err)
-		return nil, err
+	for cur.Next(context.TODO()) {
+		var elem Video
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, &elem)
 	}
-	var video Video
-	err = bson.Unmarshal(marshal, &video)
-	if err != nil {
-		log.Printf("error to unmarshal from result %v\n", err)
-		return nil, err
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
 	}
-	return &video, nil
+	// 完成后关闭游标
+	cur.Close(context.TODO())
+	return results, nil
 }
