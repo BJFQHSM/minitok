@@ -17,6 +17,7 @@ func (s *BizServerImpl) Feed(ctx context.Context, req *biz.FeedRequest) (*biz.Fe
 			{
 				Id:            1,
 				Author:        &biz.User{Id: 1},
+				CoverUrl:      "https://wallpapercave.com/wp/wp8233069.png",
 				PlayUrl:       "fsfs",
 				CommentCount:  10,
 				FavoriteCount: 10,
@@ -58,6 +59,11 @@ func (s *BizServerImpl) FavoriteAction(ctx context.Context, req *biz.FavoriteAct
 
 func (s *BizServerImpl) QueryFavoriteList(ctx context.Context, req *biz.QueryFavoriteListRequest) (*biz.QueryFavoriteListResponse, error) {
 	return &biz.QueryFavoriteListResponse{
+		VideoList: []*biz.Video{
+			{Id: 2, Author: &biz.User{Id: 1}, CommentCount: 1, FavoriteCount: 2, CoverUrl: "https://wallpapercave.com/wp/wp8233069.png", PlayUrl: "fsfs"},
+			{Id: 3, Author: &biz.User{Id: 1}, CommentCount: 2, FavoriteCount: 3, CoverUrl: "https://wallpapercave.com/wp/wp8233069.png", PlayUrl: "fsfs"},
+			{Id: 3, Author: &biz.User{Id: 1}, CommentCount: 2, FavoriteCount: 3, CoverUrl: "https://wallpapercave.com/wp/wp8233069.png", PlayUrl: "fsfs"},
+		},
 		StatusCode: 0,
 	}, nil
 }
