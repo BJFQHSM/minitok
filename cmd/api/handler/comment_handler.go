@@ -2,10 +2,12 @@ package handler
 
 import (
 	"context"
+	"log"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // CommentAction godoc
@@ -25,7 +27,10 @@ import (
 // @Router       /comment/action [post]
 func CommentAction(c *gin.Context) {
 	var req biz.CommentActionRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
+
 	if err != nil {
 		// todo
 	}
@@ -50,7 +55,10 @@ func CommentAction(c *gin.Context) {
 // @Router       /comment/list [get]
 func QueryCommentList(c *gin.Context) {
 	var req biz.QueryCommentListRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
+
 	if err != nil {
 		// todo
 	}

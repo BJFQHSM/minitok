@@ -1,15 +1,16 @@
 package main
 
 import (
+	"io/ioutil"
+	"log"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/handler"
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	_ "github.com/bytedance2022/minimal_tiktok/docs"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
-	"io/ioutil"
-	"log"
-	"net/http"
 )
 
 // @title           Swagger API
@@ -32,29 +33,29 @@ func main() {
 
 	douyin := r.Group("/douyin")
 	user1 := douyin.Group("/user")
-	user1.POST("/login", handler.Login)
-	user1.POST("/register", handler.Register)
-	user1.GET("", handler.QueryInfo)
+	user1.POST("/login/", handler.Login)
+	user1.POST("/register/", handler.Register)
+	user1.GET("/", handler.QueryInfo)
 
 	publish1 := douyin.Group("/publish")
-	publish1.POST("/action", handler.PublishAction)
-	publish1.GET("/list", handler.QueryPublishList)
+	publish1.POST("/action/", handler.PublishAction)
+	publish1.GET("/list/", handler.QueryPublishList)
 
 	favorite1 := douyin.Group("/favorite")
-	favorite1.POST("/action", handler.FavoriteAction)
-	favorite1.GET("/list", handler.QueryFavoriteList)
+	favorite1.POST("/action/", handler.FavoriteAction)
+	favorite1.GET("/list/", handler.QueryFavoriteList)
 
 	comment1 := douyin.Group("/comment")
-	comment1.POST("/action", handler.CommentAction)
-	comment1.GET("/list", handler.QueryCommentList)
+	comment1.POST("/action/", handler.CommentAction)
+	comment1.GET("/list/", handler.QueryCommentList)
 
 	feed1 := douyin.Group("/feed")
-	feed1.GET("", handler.Feed)
+	feed1.GET("/", handler.Feed)
 
 	relation1 := douyin.Group("/relation")
-	relation1.POST("/action", handler.RelationAction)
-	relation1.GET("/follow/list", handler.QueryFollowList)
-	relation1.GET("/follower/list", handler.QueryFollowerList)
+	relation1.POST("/action/", handler.RelationAction)
+	relation1.GET("/follow/list/", handler.QueryFollowList)
+	relation1.GET("/follower/list/", handler.QueryFollowerList)
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
@@ -69,7 +70,7 @@ func logger() gin.HandlerFunc {
 		if err != nil {
 			return
 		}
-		log.Printf("%v\n", string(bytes))
+		log.Printf("info : request body %v\n", string(bytes))
 
 		//请求处理
 		c.Next()

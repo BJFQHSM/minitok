@@ -2,11 +2,12 @@ package handler
 
 import (
 	"context"
+	"log"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
-	"log"
-	"net/http"
 )
 
 // PublishAction godoc
@@ -22,7 +23,9 @@ import (
 // @Router       /publish/action [post]
 func PublishAction(c *gin.Context) {
 	var req biz.PublishActionRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
@@ -47,7 +50,9 @@ func PublishAction(c *gin.Context) {
 // @Router       /publish/list [get]
 func QueryPublishList(c *gin.Context) {
 	var req biz.QueryPublishListRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		log.Printf("ERROR: parse from http reqbody %v\n", err)
 		// todo

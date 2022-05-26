@@ -2,10 +2,12 @@ package handler
 
 import (
 	"context"
+	"log"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // RelationAction godoc
@@ -47,7 +49,9 @@ func RelationAction(c *gin.Context) {
 // @Router       /relation/follow/list [get]
 func QueryFollowList(c *gin.Context) {
 	var req biz.QueryFollowListRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
@@ -71,7 +75,9 @@ func QueryFollowList(c *gin.Context) {
 // @Router       /relation/follower/list [get]
 func QueryFollowerList(c *gin.Context) {
 	var req biz.QueryFollowerListRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}

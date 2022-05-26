@@ -2,12 +2,13 @@ package handler
 
 import (
 	"context"
+	"log"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
-	"log"
-	"net/http"
 )
 
 // Login godoc
@@ -50,7 +51,9 @@ func Login(c *gin.Context) {
 // @Router       /user/register [post]
 func Register(c *gin.Context) {
 	var req auth.RegisterRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
@@ -74,7 +77,9 @@ func Register(c *gin.Context) {
 // @Router       /user [get]
 func QueryInfo(c *gin.Context) {
 	var req biz.QueryInfoRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
