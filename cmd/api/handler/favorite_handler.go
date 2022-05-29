@@ -23,9 +23,14 @@ import (
 // @Router       /favorite/action [post]
 func FavoriteAction(c *gin.Context) {
 	var req biz.FavoriteActionRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		// todo
+		var resp *biz.FavoriteActionResponse
+		resp.StatusCode=1
+		msg:="Params have errors!"
+		resp.StatusMsg=&msg
+		c.JSON(http.StatusBadRequest, resp)
 	}
 	resp, err := rpc.BizClient.FavoriteAction(context.Background(), &req)
 	if err != nil {
@@ -47,7 +52,7 @@ func FavoriteAction(c *gin.Context) {
 // @Router       /favorite/list [get]
 func QueryFavoriteList(c *gin.Context) {
 	var req biz.QueryFavoriteListRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBind(&req)
 	if err != nil {
 		// todo
 	}
