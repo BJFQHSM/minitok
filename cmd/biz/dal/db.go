@@ -1,14 +1,15 @@
-package db
+package dal
 
 import (
 	"context"
 	"fmt"
-	"github.com/bytedance2022/minimal_tiktok/pkg/util"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"sync"
 	"time"
+
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var MongoCli *mongo.Client

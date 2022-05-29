@@ -3,7 +3,8 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal/db"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -12,21 +13,20 @@ type QueryPublishListService interface {
 	GetResponse() *biz.QueryPublishListResponse
 }
 
-
 func NewQueryPublishListService(r *biz.QueryPublishListRequest, ctx context.Context) QueryPublishListService {
 	return &queryPublishListServiceImpl{Req: r, Ctx: ctx, Resp: &biz.QueryPublishListResponse{}}
 }
 
 type queryPublishListServiceImpl struct {
-	Req *biz.QueryPublishListRequest
+	Req  *biz.QueryPublishListRequest
 	Resp *biz.QueryPublishListResponse
-	Ctx context.Context
+	Ctx  context.Context
 }
 
 func (s *queryPublishListServiceImpl) DoService() {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.validateParams() ; err != nil {
+		if err = s.validateParams(); err != nil {
 			break
 		}
 
@@ -50,7 +50,7 @@ func (s *queryPublishListServiceImpl) validateParams() error {
 
 func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 	uid := s.Req.UserId
-	videos, err := db.QueryVideosByUserId(s.Ctx, uid)
+	videos, err := dal.QueryVideosByUserId(s.Ctx, uid)
 	if err != nil {
 		return err
 	}
@@ -68,7 +68,7 @@ func (s *queryPublishListServiceImpl) GetResponse() *biz.QueryPublishListRespons
 }
 
 // todo extract to be a public method in other pkg
-func transDoToDto(video *db.Video) *biz.Video {
+func transDoToDto(video *dal.Video) *biz.Video {
 	isFavorite := len(video.Favorites) != 0
 	ret := biz.Video{
 		Id: video.VideoId,
@@ -76,11 +76,11 @@ func transDoToDto(video *db.Video) *biz.Video {
 			Id: video.UserId,
 			// todo other info ?
 		},
-		PlayUrl: video.PlayUrl,
-		CoverUrl: video.CoverUrl,
+		PlayUrl:       video.PlayUrl,
+		CoverUrl:      video.CoverUrl,
 		FavoriteCount: video.FavoriteCount,
-		CommentCount: video.CommentCount,
-		IsFavorite: &isFavorite,
+		CommentCount:  video.CommentCount,
+		IsFavorite:    &isFavorite,
 	}
 	return &ret
 }
@@ -96,4 +96,3 @@ func (s *queryPublishListServiceImpl) buildResponse(err error) {
 		s.Resp.StatusCode = 200
 	}
 }
-

@@ -1,12 +1,13 @@
-package db
+package dal
 
 import (
 	"context"
+	"log"
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"log"
-	"time"
 )
 
 type Video struct {
@@ -92,17 +93,17 @@ func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 		{
 			"$project",
 			bson.M{
-				"_id": 0,
-				"user_id":1,
-				"video_id": 1,
-				"play_url": 1,
-				"cover_url": 1,
+				"_id":            0,
+				"user_id":        1,
+				"video_id":       1,
+				"play_url":       1,
+				"cover_url":      1,
 				"favorite_count": 1,
-				"comment_count": 1,
-				"comments": 1,
-				"publish_date": 1,
+				"comment_count":  1,
+				"comments":       1,
+				"publish_date":   1,
 				// only return element which equals user_id
-				"favorites": bson.D{{"$filter", bson.D{{"input", "$favorites"}, {"as", "f"}, {"cond",  bson.M{"$eq": bson.A{"$$f", userId}}}}}},
+				"favorites": bson.D{{"$filter", bson.D{{"input", "$favorites"}, {"as", "f"}, {"cond", bson.M{"$eq": bson.A{"$$f", userId}}}}}},
 			},
 		},
 	}

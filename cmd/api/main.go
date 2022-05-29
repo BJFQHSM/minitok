@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -67,12 +66,7 @@ func main() {
 
 func logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		bytes, err := ioutil.ReadAll(c.Request.Body)
-		if err != nil {
-			return
-		}
 		log.Printf("info: request url: %s\n", c.Request.RequestURI)
-		log.Printf("info : request body %v\n", string(bytes))
 
 		//请求处理
 		c.Next()

@@ -26,7 +26,6 @@ func Login(c *gin.Context) {
 	var req auth.LoginRequest
 	err := c.ShouldBindQuery(&req)
 	log.Printf("reqeust : %+v\n", req)
-
 	if err != nil {
 		log.Println(err)
 		// todo

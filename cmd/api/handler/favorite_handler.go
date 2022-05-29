@@ -25,9 +25,13 @@ import (
 // @Router       /favorite/action [post]
 func FavoriteAction(c *gin.Context) {
 	var req biz.FavoriteActionRequest
+<<<<<<< HEAD
 	err := c.ShouldBindQuery(&req)
 
 	log.Printf("reqeust : %+v\n", req)
+=======
+	err := c.BindJSON(&req)
+>>>>>>> grpc
 	if err != nil {
 		// todo
 	}
@@ -51,9 +55,13 @@ func FavoriteAction(c *gin.Context) {
 // @Router       /favorite/list [get]
 func QueryFavoriteList(c *gin.Context) {
 	var req biz.QueryFavoriteListRequest
+<<<<<<< HEAD
 	err := c.ShouldBindQuery(&req)
 
 	log.Printf("reqeust : %+v\n", req)
+=======
+	err := c.BindJSON(&req)
+>>>>>>> grpc
 	if err != nil {
 		// todo
 	}
