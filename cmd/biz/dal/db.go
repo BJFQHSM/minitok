@@ -3,12 +3,13 @@ package dal
 import (
 	"context"
 	"fmt"
-	"github.com/bytedance2022/minimal_tiktok/pkg/util"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"sync"
 	"time"
+
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var MongoCli *mongo.Client
@@ -43,7 +44,7 @@ func parseMongoConf() string {
 	log.Printf("%+v\n", conf)
 	uri := mongoUriConfig{
 		protocol: "mongodb+srv",
-		user:     util.InterfaceToStr(conf["auth"]),
+		user:     util.InterfaceToStr(conf["user"]),
 		password: util.InterfaceToStr(conf["password"]),
 		url:      util.InterfaceToStr(conf["url"]),
 	}

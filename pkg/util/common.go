@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 
 	"gopkg.in/yaml.v2"
 )
 
 func Parse(path string) map[string]interface{} {
-	dir := "D:\\GO\\GOWORK\\src\\minimal_tiktok\\"
+	dir := os.Getenv("WORK_DIR")
 	file, err := ioutil.ReadFile(dir + path)
 	if err != nil {
 		log.Panicf("Failed to read yaml file.\nerr:%v", err)
