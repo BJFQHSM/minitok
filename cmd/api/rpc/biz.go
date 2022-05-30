@@ -14,7 +14,7 @@ var BizClient biz.BizServiceClient
 func initBiz() {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	resolver, err := etcd.NewEtcdResolver([]string{"etcd:2379"})
+	resolver, err := etcd.NewEtcdResolver([]string{"127.0.0.1:2379"})
 	if err != nil {
 		log.Panic(err)
 	}

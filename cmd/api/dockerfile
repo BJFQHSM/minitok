@@ -1,0 +1,12 @@
+FROM golang:1.18
+MAINTAINER codingdog1412
+WORKDIR /opt/tiktok
+
+RUN go mod init github.com/bytedance2022/minimal_tiktok
+
+COPY cmd/api cmd/api
+COPY grpc_gen grpc_gen
+
+# RUN go env -w GOPROXY="https://goproxy.cn, direct" && go mod download && go mod verify
+RUN go env -w GOPROXY="https://goproxy.cn, direct" && go mod tidy
+RUN go build -v -o /usr/local/bin/api ./cmd/api/*.go

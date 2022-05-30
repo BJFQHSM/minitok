@@ -7,22 +7,8 @@ import (
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/handler"
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
-	_ "github.com/bytedance2022/minimal_tiktok/docs"
 	"github.com/gin-gonic/gin"
-	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
-
-// @title           Swagger API
-// @version         1.0
-
-// @license.name  Apache 2.0
-// @license.url   http://www.apache.org/licenses/LICENSE-2.0.html
-
-// @host      localhost:8080
-// @BasePath  /douyin
-
-// @securityDefinitions.basic  BasicAuth
 
 func main() {
 
@@ -57,8 +43,6 @@ func main() {
 	relation1.POST("/action/", handler.RelationAction)
 	relation1.GET("/follow/list/", handler.QueryFollowList)
 	relation1.GET("/follower/list/", handler.QueryFollowerList)
-
-	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		log.Fatal(err)
