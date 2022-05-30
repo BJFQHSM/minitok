@@ -8,7 +8,7 @@ import (
 )
 
 func TestQueryUser(t *testing.T) {
-	user, err := QueryUserByUID(context.Background(), 0)
+	user, err := QueryUserByUID(context.Background(), 1)
 	if err != nil {
 		log.Fatal(err)
 		return
