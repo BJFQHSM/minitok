@@ -18,7 +18,7 @@ func main() {
 	}
 	srv := grpc.NewServer()
 	auth.RegisterAuthServiceServer(srv, &AuthServiceImpl{})
-	r, err := etcd.NewEtcdRegistry([]string{"127.0.0.1:2379"})
+	r, err := etcd.NewEtcdRegistry([]string{"etcd:2379"})
 	err = r.Register(&registry.Info{
 		ServiceName: "tiktok_auth",
 		Addr: &net.TCPAddr{

@@ -20,7 +20,7 @@ func main() {
 	}
 	srv := grpc.NewServer()
 	biz.RegisterBizServiceServer(srv, &BizServerImpl{})
-	r, err := etcd.NewEtcdRegistry([]string{"127.0.0.1:2379"})
+	r, err := etcd.NewEtcdRegistry([]string{"etcd:2379"})
 	err = r.Register(&registry.Info{
 		ServiceName: "tiktok_biz",
 		Addr: &net.TCPAddr{

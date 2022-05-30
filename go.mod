@@ -18,4 +18,5 @@ require (
 require (
 	github.com/swaggo/gin-swagger v1.4.3
 	github.com/swaggo/swag v1.8.2
+	go.etcd.io/etcd/client/v3 v3.5.1
 )
