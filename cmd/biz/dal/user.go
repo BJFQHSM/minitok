@@ -7,6 +7,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 type User struct {
@@ -73,4 +74,51 @@ func ChangeFollowRelation(ctx context.Context, followee int64, follower int64) e
 		return err
 	}
 	return nil
+}
+
+// opts := options.Find().SetProjection(bson.D{{"type", 1}, {"rating", 1}, {"_id", 0}})
+
+// cursor, err := coll.Find(context.TODO(), bson.D{}, opts)
+// if err != nil {
+//    panic(err)
+// }
+
+// var results []bson.D
+// if err = cursor.All(context.TODO(), &results); err != nil {
+//    panic(err)
+// }
+// for _, result := range results {
+//    fmt.Println(result)
+// }
+
+func QueryUserByIds(ctx context.Context, ids []int64) ([]*User, error) {
+	coll := MongoCli.Database("tiktok").Collection("user")
+	var users []*User
+	cur, err := coll.Find(ctx, bson.D{{"user_id", bson.D{{"$in", bson.A{ids}}}}})
+	if err != nil {
+		log.Printf("%+v", err)
+		return nil, err
+	}
+	if err := cur.All(ctx, &users); err != nil {
+		log.Printf("%+v", err)
+		return nil, err
+	}
+	return users, nil
+}
+func QueryFollowsByUserId(ctx context.Context, userId int64) ([]*User, error) {
+	userColl := MongoCli.Database("tiktok").Collection("user")
+	filter := bson.D{{"user_id", userId}}
+	pro := bson.D{{"user_id", 1}, {"follows", 1}, {"_id", 0}}
+	opts := options.FindOne().SetProjection(pro)
+
+	var follows []int64
+	err := userColl.FindOne(ctx, filter, opts).Decode(&follows)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		log.Printf("%+v", err)
+		return nil, err
+	}
+	return QueryUserByIds(ctx, follows)
 }

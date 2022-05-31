@@ -21,7 +21,7 @@ type Follow struct {
 func QueryUserByUID(ctx context.Context, userId int64) ([]*User, error) {
 	var res []*User
 	if err := MysqlDB.Table("user_info").WithContext(ctx).Where("user_id = ?", userId).Find(&res).Error; err != nil {
-		log.Panicf("Erorr to queryUserInfo %v\n", err)
+		log.Printf("Erorr to queryUserInfo %v\n", err)
 	}
 	return res, nil
 }
@@ -29,7 +29,7 @@ func QueryUserByUID(ctx context.Context, userId int64) ([]*User, error) {
 func QueryFollowUserByUID(ctx context.Context, tokenUserId int64, userId int64) ([]*Follow, error) {
 	var follow []*Follow
 	if err := MysqlDB.Table("user_follow").WithContext(ctx).Where("user_id= ? and follow_user_id = ?", tokenUserId, userId).Find(&follow).Error; err != nil {
-		log.Panicf("Erorr to queryFollowUser %v\n", err)
+		log.Printf("Erorr to queryFollowUser %v\n", err)
 	}
 	return follow, nil
 }

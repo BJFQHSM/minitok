@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/service"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -44,11 +45,21 @@ func (s *BizServerImpl) QueryCommentList(ctx context.Context, req *biz.QueryComm
 	return nil, nil
 }
 func (s *BizServerImpl) RelationAction(ctx context.Context, req *biz.RelationActionRequest) (*biz.RelationActionResponse, error) {
-	return nil, nil
+	resp, err := service.NewRelationActionService(ctx).RelationAction(req)
+	if err != nil {
+		log.Printf("%+v", err)
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (s *BizServerImpl) QueryFollowList(ctx context.Context, req *biz.QueryFollowListRequest) (*biz.QueryFollowListResponse, error) {
-	return nil, nil
+	resp, err := service.NewQueryFollowListService(ctx).QueryFollowList(req)
+	if err != nil {
+		log.Printf("%+v", err)
+		return nil, err
+	}
+	return resp, nil
 }
 
 func (s *BizServerImpl) QueryFollowerList(ctx context.Context, req *biz.QueryFollowerListRequest) (*biz.QueryFollowerListResponse, error) {
