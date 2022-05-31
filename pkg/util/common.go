@@ -11,7 +11,7 @@ import (
 func Parse(path string) map[string]interface{} {
 	dir := os.Getenv("WORK_DIR")
 	file, err := ioutil.ReadFile(dir + path)
-	fmt.Println(string(file))
+	log.Println(string(file))
 	if err != nil {
 		return nil
 	}
@@ -27,4 +27,3 @@ func Parse(path string) map[string]interface{} {
 func InterfaceToStr(v interface{}) string {
 	return fmt.Sprintf("%v", v)
 }
-
