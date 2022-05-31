@@ -42,7 +42,7 @@ func parseMongoConf() string {
 	conf := util.Parse("config/biz.yaml")["mongodb"].(map[interface{}]interface{})
 	log.Printf("%+v\n", conf)
 	uri := mongoUriConfig{
-		protocol: "mongodb+srv",
+		protocol: "mongodb",
 		user:     util.InterfaceToStr(conf["user"]),
 		password: util.InterfaceToStr(conf["password"]),
 		url:      util.InterfaceToStr(conf["url"]),

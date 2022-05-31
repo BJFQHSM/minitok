@@ -1,4 +1,4 @@
 mongodb:
-  url: cluster0.rkgtb.mongodb.net
+  url: "tiktok-mongo-mongodb:27017"
   user: public
   password: mxt123456

@@ -1,4 +1,4 @@
-FROM golang:1.18
+FROM golang:1.18-alpine
 MAINTAINER codingdog1412
 WORKDIR /opt/tiktok
 
