@@ -2,7 +2,6 @@ package db
 
 import (
 	"log"
-	"os"
 	"sync"
 
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
@@ -15,12 +14,6 @@ var MysqlDB *gorm.DB
 var once sync.Once
 
 func init() {
-	pwd, err := os.Getwd()
-	if err != nil {
-		log.Printf("ERROR: fail to get current dir %v\n", err)
-		return
-	}
-	os.Setenv("WORK_DIR", pwd+"/../../../../")
 	once.Do(func() {
 		var err error
 		MysqlDB, err = gorm.Open(mysql2.Open(parseConfigToDSN()), &gorm.Config{})

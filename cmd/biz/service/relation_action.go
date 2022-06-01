@@ -19,16 +19,32 @@ func NewRelationActionService(ctx context.Context) *RelationActionService {
 
 func (s *RelationActionService) RelationAction(req *biz.RelationActionRequest) (*biz.RelationActionResponse, error) {
 	var resp biz.RelationActionResponse
-	err := dal.ChangeFollowRelation(s.ctx, req.ToUserId, req.UserId)
+	if req.ActionType == 1 {
+		err := dal.FollowRelation(s.ctx, req.ToUserId, req.UserId)
 
-	if err != nil {
-		resp.StatusCode = 1
-		errMsg := err.Error()
-		resp.StatusMsg = &errMsg
-		return &resp, err
+		if err != nil {
+			resp.StatusCode = 1
+			errMsg := err.Error()
+			resp.StatusMsg = &errMsg
+			return &resp, err
+		}
+		resp.StatusCode = 0
+		msg := "Follow this user successfully"
+		resp.StatusMsg = &msg
+		return &resp, nil
+	} else {
+		err := dal.UnFollowRelation(s.ctx, req.ToUserId, req.UserId)
+
+		if err != nil {
+			resp.StatusCode = 1
+			errMsg := err.Error()
+			resp.StatusMsg = &errMsg
+			return &resp, err
+		}
+		resp.StatusCode = 0
+		msg := "Unfollow this user successfully"
+		resp.StatusMsg = &msg
+		return &resp, nil
 	}
-	resp.StatusCode = 0
-	msg := "SUCCESS"
-	resp.StatusMsg = &msg
-	return &resp, nil
+
 }
