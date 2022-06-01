@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal/db"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -56,30 +56,21 @@ func (s *queryUserInfoServiceImpl) queryUserInfoByUID() error {
 		return err
 	}
 	uid := s.Req.UserId
-	users, err := db.QueryUserByUID(s.Ctx, uid)
+	user, err := dal.QueryUserById(s.Ctx, uid)
 	if err != nil {
 		return err
 	}
-	if len(users) == 0 {
-		return errors.New("no data")
-	}
 
-	follows, err := db.QueryFollowUserByUID(s.Ctx, int64(tokenUserId), uid)
+	isFollow, err := dal.QueryIsFollow(s.Ctx, uid, int64(tokenUserId))
 	if err != nil {
 		return err
 	}
-	var isFollow bool
-	if len(follows) != 0 {
-		isFollow = true
-	}
-
-	user := users[0]
 	respUser := biz.User{
 		Id:            int64(user.UserId),
 		Name:          user.Username,
 		FollowCount:   int64(user.FollowCount),
 		FollowerCount: int64(user.FollowerCount),
-		IsFollow:      &isFollow,
+		IsFollow:      isFollow,
 	}
 	s.Resp.User = &respUser
 	return nil

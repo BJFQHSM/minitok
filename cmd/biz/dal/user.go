@@ -132,8 +132,43 @@ func UnFollowRelation(ctx context.Context, followee int64, follower int64) error
 	return nil
 }
 
+func QueryUserById(ctx context.Context, id int64) (*User, error) {
+	coll := MongoCli.Database("tiktok").Collection("user")
+	var user *User
+	err := coll.FindOne(ctx, bson.D{{"user_id", id}}).Decode(&user)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.New("no such user")
+		}
+		log.Printf("%+v", err)
+		return nil, err
+	}
+	return user, nil
+}
+
+func QueryIsFollow(ctx context.Context, followeeId int64, followerId int64) (*bool, error) {
+	coll := MongoCli.Database("tiktok").Collection("user")
+	var follower *User
+	err := coll.FindOne(ctx, bson.D{{"user_id", followerId}}).Decode(&follower)
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.New("no such user")
+		}
+		log.Printf("%+v", err)
+		return nil, err
+	}
+	isFollow := false
+	follows := follower.Follows
+	for _, userId := range follows {
+		if userId == followeeId {
+			isFollow = true
+			return &isFollow, nil
+		}
+	}
+	return &isFollow, nil
+}
+
 func QueryUserByIds(ctx context.Context, ids []int64) ([]*User, error) {
-	log.Printf("%+v", ids)
 	coll := MongoCli.Database("tiktok").Collection("user")
 	var users []*User
 	cur, err := coll.Find(ctx, bson.D{{"user_id", bson.D{{"$in", ids}}}})
@@ -150,6 +185,7 @@ func QueryUserByIds(ctx context.Context, ids []int64) ([]*User, error) {
 	}
 	return users, nil
 }
+
 func QueryFollowsByUserId(ctx context.Context, userId int64) ([]*User, error) {
 	userColl := MongoCli.Database("tiktok").Collection("user")
 	filter := bson.D{{"user_id", userId}}
