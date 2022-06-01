@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 
-	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal/db"
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
@@ -44,21 +43,18 @@ func DalUserToBizUser(ctx context.Context, users []*dal.User) ([]*biz.User, erro
 	var result []*biz.User
 	for _, user := range users {
 		//假设登录id为1
-		row, err := db.QueryFollowUserByUID(ctx, 1, user.UserId)
+		isFollow, err := dal.QueryIsFollow(ctx, user.UserId, 1)
 		if err != nil {
 			log.Printf("%+v", err)
 			return nil, err
 		}
-		f := false
-		if len(row) != 0 {
-			f = true
-		}
+
 		bizU := biz.User{
 			Id:            user.UserId,
 			Name:          user.Username,
 			FollowCount:   user.FollowCount,
 			FollowerCount: user.FollowerCount,
-			IsFollow:      &f,
+			IsFollow:      isFollow,
 		}
 
 		result = append(result, &bizU)
