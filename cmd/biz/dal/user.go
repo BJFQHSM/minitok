@@ -21,7 +21,7 @@ type User struct {
 	FavoriteList  []int64 `bson:"favorite_list"`  // 点赞列表
 }
 
-func ChangeFollowRelation(ctx context.Context, followee int64, follower int64) error {
+func FollowRelation(ctx context.Context, followee int64, follower int64) error {
 	userColl := MongoCli.Database("tiktok").Collection("user")
 
 	// 定义事务
@@ -70,32 +70,77 @@ func ChangeFollowRelation(ctx context.Context, followee int64, follower int64) e
 	// 执行事务
 	_, err = session.WithTransaction(ctx, callback)
 	if err != nil {
-		log.Printf("ERROR: fail to ChangeFollowRelation. %v\n", err)
+		log.Printf("ERROR: fail to FollowRelation. %v\n", err)
 		return err
 	}
 	return nil
 }
 
-// opts := options.Find().SetProjection(bson.D{{"type", 1}, {"rating", 1}, {"_id", 0}})
+// 取消关注
+func UnFollowRelation(ctx context.Context, followee int64, follower int64) error {
+	userColl := MongoCli.Database("tiktok").Collection("user")
 
-// cursor, err := coll.Find(context.TODO(), bson.D{}, opts)
-// if err != nil {
-//    panic(err)
-// }
+	// 定义事务
+	callback := func(sessCtx mongo.SessionContext) (interface{}, error) {
+		// 是否关注
+		err := userColl.FindOne(sessCtx, bson.D{{"user_id", followee}, {"followers", bson.D{{"$all", bson.A{follower}}}}}).Err()
+		if err != nil {
+			if err == mongo.ErrNoDocuments {
+				return nil, errors.New("the user is not followed")
+			}
+			log.Printf("%v\n", err)
+			return nil, err
+		}
 
-// var results []bson.D
-// if err = cursor.All(context.TODO(), &results); err != nil {
-//    panic(err)
-// }
-// for _, result := range results {
-//    fmt.Println(result)
-// }
+		filter := bson.D{{"user_id", followee}}
+		update := bson.D{
+			{"$inc", bson.D{{"follower_count", -1}}},
+			{"$pull", bson.D{{"followers", follower}}},
+		}
+		if updateResult, err := userColl.UpdateOne(sessCtx, filter, update); err != nil {
+			return nil, err
+		} else if updateResult.MatchedCount == 0 {
+			return nil, errors.New("no followee was found")
+		}
+		filter = bson.D{{"user_id", follower}}
+		update = bson.D{
+			{"$inc", bson.D{{"follow_count", -1}}},
+			{"$pull", bson.D{{"follows", followee}}},
+		}
+		if updateResult, err := userColl.UpdateOne(sessCtx, filter, update); err != nil {
+			return nil, err
+		} else if updateResult.MatchedCount == 0 {
+			return nil, errors.New("no follower was found")
+		}
+		return nil, nil
+	}
+
+	// 开启会话
+	session, err := MongoCli.StartSession()
+	if err != nil {
+		log.Printf("ERROR: fail to start mongo session. %v\n", err)
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	// 执行事务
+	_, err = session.WithTransaction(ctx, callback)
+	if err != nil {
+		log.Printf("ERROR: fail to UnFollowRelation. %v\n", err)
+		return err
+	}
+	return nil
+}
 
 func QueryUserByIds(ctx context.Context, ids []int64) ([]*User, error) {
+	log.Printf("%+v", ids)
 	coll := MongoCli.Database("tiktok").Collection("user")
 	var users []*User
-	cur, err := coll.Find(ctx, bson.D{{"user_id", bson.D{{"$in", bson.A{ids}}}}})
+	cur, err := coll.Find(ctx, bson.D{{"user_id", bson.D{{"$in", ids}}}})
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, errors.New("no followee was found")
+		}
 		log.Printf("%+v", err)
 		return nil, err
 	}
@@ -108,17 +153,17 @@ func QueryUserByIds(ctx context.Context, ids []int64) ([]*User, error) {
 func QueryFollowsByUserId(ctx context.Context, userId int64) ([]*User, error) {
 	userColl := MongoCli.Database("tiktok").Collection("user")
 	filter := bson.D{{"user_id", userId}}
-	pro := bson.D{{"user_id", 1}, {"follows", 1}, {"_id", 0}}
+	pro := bson.D{{"follows", 1}, {"_id", 0}}
 	opts := options.FindOne().SetProjection(pro)
 
-	var follows []int64
-	err := userColl.FindOne(ctx, filter, opts).Decode(&follows)
+	var user User
+	err := userColl.FindOne(ctx, filter, opts).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return nil, nil
+			return nil, errors.New("no such user")
 		}
 		log.Printf("%+v", err)
 		return nil, err
 	}
-	return QueryUserByIds(ctx, follows)
+	return QueryUserByIds(ctx, user.Follows)
 }
