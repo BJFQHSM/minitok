@@ -44,14 +44,14 @@ func Register(c *gin.Context) {
 }
 
 func QueryInfo(c *gin.Context) {
-	var req biz.QueryInfoRequest
+	var req biz.QueryUserInfoRequest
 	err := c.ShouldBindQuery(&req)
 
 	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
-	resp, err := rpc.BizClient.QueryInfo(context.Background(), &req)
+	resp, err := rpc.BizClient.QueryUserInfo(context.Background(), &req)
 	if err != nil {
 		// todo
 	}

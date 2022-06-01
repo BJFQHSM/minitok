@@ -5,8 +5,8 @@ WORKDIR /opt/tiktok
 RUN go mod init github.com/bytedance2022/minimal_tiktok
 
 COPY cmd/auth cmd/auth
-COPY grpc_gen grpc_gen
-COPY config config
+COPY grpc_gen/auth grpc_gen/auth
+COPY config/auth.yaml config/auth.yaml
 COPY pkg pkg
 
 # RUN go env -w GOPROXY="https://goproxy.cn, direct" && go mod download && go mod verify

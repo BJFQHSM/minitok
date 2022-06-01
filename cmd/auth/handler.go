@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"github.com/bytedance2022/minimal_tiktok/cmd/auth/service"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 )
@@ -11,21 +12,11 @@ type AuthServiceImpl struct {
 }
 
 func (s *AuthServiceImpl) Register(ctx context.Context, req *auth.RegisterRequest) (*auth.RegisterResponse, error) {
-	msg := "success"
-	return &auth.RegisterResponse{
-		UserId:     1,
-		Token:      "fsjfs",
-		StatusCode: 0,
-		StatusMsg:  &msg,
-	}, nil
+	resp := service.NewRegisterService(ctx, req).DoService()
+	return resp, nil
 }
 
 func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
-	msg := "success"
-	return &auth.LoginResponse{
-		UserId:     1,
-		Token:      "fsjflsjdf",
-		StatusCode: 0,
-		StatusMsg:  &msg,
-	}, nil
+	resp := service.NewLoginService(ctx, req).DoService()
+	return resp, nil
 }

@@ -10,19 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// RelationAction godoc
-// @Summary      follow and unfollow
-// @Description  follow and unfollow
-// @Tags         relation
-// @Accept       json
-// @Produce      json
-// @Param        user_id body int true "user_id"
-// @Param        token body string true "token"
-// @Param        to_user_id body int true "to_user_id"
-// @Param        action_type body int true "1 - follow 2 - unfollow"
-// @Success      200 {object} biz.RelationActionResponse
-// @Failure      500 {object} biz.RelationActionResponse
-// @Router       /relation/action [post]
 func RelationAction(c *gin.Context) {
 	var req biz.RelationActionRequest
 	err := c.BindJSON(&req)

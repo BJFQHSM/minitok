@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BizServiceClient interface {
 	Feed(ctx context.Context, in *FeedRequest, opts ...grpc.CallOption) (*FeedResponse, error)
-	QueryInfo(ctx context.Context, in *QueryInfoRequest, opts ...grpc.CallOption) (*QueryInfoResponse, error)
+	QueryUserInfo(ctx context.Context, in *QueryUserInfoRequest, opts ...grpc.CallOption) (*QueryUserInfoResponse, error)
 	PublishAction(ctx context.Context, in *PublishActionRequest, opts ...grpc.CallOption) (*PublishActionResponse, error)
 	QueryPublishList(ctx context.Context, in *QueryPublishListRequest, opts ...grpc.CallOption) (*QueryPublishListResponse, error)
 	FavoriteAction(ctx context.Context, in *FavoriteActionRequest, opts ...grpc.CallOption) (*FavoriteActionResponse, error)
@@ -52,9 +52,9 @@ func (c *bizServiceClient) Feed(ctx context.Context, in *FeedRequest, opts ...gr
 	return out, nil
 }
 
-func (c *bizServiceClient) QueryInfo(ctx context.Context, in *QueryInfoRequest, opts ...grpc.CallOption) (*QueryInfoResponse, error) {
-	out := new(QueryInfoResponse)
-	err := c.cc.Invoke(ctx, "/grpc_biz.BizService/QueryInfo", in, out, opts...)
+func (c *bizServiceClient) QueryUserInfo(ctx context.Context, in *QueryUserInfoRequest, opts ...grpc.CallOption) (*QueryUserInfoResponse, error) {
+	out := new(QueryUserInfoResponse)
+	err := c.cc.Invoke(ctx, "/grpc_biz.BizService/QueryUserInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -147,7 +147,7 @@ func (c *bizServiceClient) QueryFollowerList(ctx context.Context, in *QueryFollo
 // for forward compatibility
 type BizServiceServer interface {
 	Feed(context.Context, *FeedRequest) (*FeedResponse, error)
-	QueryInfo(context.Context, *QueryInfoRequest) (*QueryInfoResponse, error)
+	QueryUserInfo(context.Context, *QueryUserInfoRequest) (*QueryUserInfoResponse, error)
 	PublishAction(context.Context, *PublishActionRequest) (*PublishActionResponse, error)
 	QueryPublishList(context.Context, *QueryPublishListRequest) (*QueryPublishListResponse, error)
 	FavoriteAction(context.Context, *FavoriteActionRequest) (*FavoriteActionResponse, error)
@@ -167,8 +167,8 @@ type UnimplementedBizServiceServer struct {
 func (UnimplementedBizServiceServer) Feed(context.Context, *FeedRequest) (*FeedResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Feed not implemented")
 }
-func (UnimplementedBizServiceServer) QueryInfo(context.Context, *QueryInfoRequest) (*QueryInfoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method QueryInfo not implemented")
+func (UnimplementedBizServiceServer) QueryUserInfo(context.Context, *QueryUserInfoRequest) (*QueryUserInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryUserInfo not implemented")
 }
 func (UnimplementedBizServiceServer) PublishAction(context.Context, *PublishActionRequest) (*PublishActionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PublishAction not implemented")
@@ -228,20 +228,20 @@ func _BizService_Feed_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _BizService_QueryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryInfoRequest)
+func _BizService_QueryUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryUserInfoRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BizServiceServer).QueryInfo(ctx, in)
+		return srv.(BizServiceServer).QueryUserInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/grpc_biz.BizService/QueryInfo",
+		FullMethod: "/grpc_biz.BizService/QueryUserInfo",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BizServiceServer).QueryInfo(ctx, req.(*QueryInfoRequest))
+		return srv.(BizServiceServer).QueryUserInfo(ctx, req.(*QueryUserInfoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -420,8 +420,8 @@ var BizService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _BizService_Feed_Handler,
 		},
 		{
-			MethodName: "QueryInfo",
-			Handler:    _BizService_QueryInfo_Handler,
+			MethodName: "QueryUserInfo",
+			Handler:    _BizService_QueryUserInfo_Handler,
 		},
 		{
 			MethodName: "PublishAction",

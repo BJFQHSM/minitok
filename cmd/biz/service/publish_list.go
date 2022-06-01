@@ -8,8 +8,7 @@ import (
 )
 
 type QueryPublishListService interface {
-	DoService()
-	GetResponse() *biz.QueryPublishListResponse
+	DoService() *biz.QueryPublishListResponse
 }
 
 
@@ -23,7 +22,7 @@ type queryPublishListServiceImpl struct {
 	Ctx context.Context
 }
 
-func (s *queryPublishListServiceImpl) DoService() {
+func (s *queryPublishListServiceImpl) DoService() *biz.QueryPublishListResponse {
 	var err error
 	for i := 0; i < 1; i++ {
 		if err = s.validateParams() ; err != nil {
@@ -35,6 +34,7 @@ func (s *queryPublishListServiceImpl) DoService() {
 		}
 	}
 	s.buildResponse(err)
+	return s.Resp
 }
 
 func (s *queryPublishListServiceImpl) validateParams() error {
@@ -61,10 +61,6 @@ func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 	}
 	s.Resp.VideoList = videoList
 	return nil
-}
-
-func (s *queryPublishListServiceImpl) GetResponse() *biz.QueryPublishListResponse {
-	return s.Resp
 }
 
 // todo extract to be a public method in other pkg
