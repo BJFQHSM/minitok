@@ -5,6 +5,7 @@ import (
 	"github.com/prometheus/common/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"os"
 )
 
 var BizClient biz.BizServiceClient
@@ -26,7 +27,14 @@ func initBiz() {
 	//}
 	//addr := resolve.Instances[0].Address().String()
 	//conn, err := grpc.Dial("127.0.0.1:8888", opts...)
-	conn, err := grpc.Dial("biz:8889", opts...)
+	var conn *grpc.ClientConn
+	var err error
+	isDev := os.Getenv("env") == "dev"
+	if isDev {
+		conn, err = grpc.Dial("127.0.0.1:8889", opts...)
+	} else {
+		conn, err = grpc.Dial("biz:8889", opts...)
+	}
 	if err != nil {
 		log.Error(err)
 	}

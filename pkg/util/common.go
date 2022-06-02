@@ -2,10 +2,11 @@ package util
 
 import (
 	"fmt"
-	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"gopkg.in/yaml.v2"
 )
 
 func Parse(path string) map[string]interface{} {

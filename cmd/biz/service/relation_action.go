@@ -42,11 +42,11 @@ func (s *relationActionServiceImpl) buildResponse(err error) {
 	if err != nil {
 		errMsg := err.Error()
 		s.Resp.StatusMsg = &errMsg
-		s.Resp.StatusCode = 500
+		s.Resp.StatusCode = 1
 	} else {
 		errMsg := "SUCCESS"
 		s.Resp.StatusMsg = &errMsg
-		s.Resp.StatusCode = 200
+		s.Resp.StatusCode = 0
 	}
 }
 

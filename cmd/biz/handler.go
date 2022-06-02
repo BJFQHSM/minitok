@@ -16,7 +16,7 @@ func (s *BizServerImpl) Feed(ctx context.Context, req *biz.FeedRequest) (*biz.Fe
 	return resp, nil
 }
 
-func (s *BizServerImpl) QueryInfo(ctx context.Context, req *biz.QueryUserInfoRequest) (*biz.QueryUserInfoResponse, error) {
+func (s *BizServerImpl) QueryUserInfo(ctx context.Context, req *biz.QueryUserInfoRequest) (*biz.QueryUserInfoResponse, error) {
 	resp := service.NewQueryUserInfoService(ctx, req).DoService()
 	return resp, nil
 }
@@ -40,6 +40,7 @@ func (s *BizServerImpl) QueryFavoriteList(ctx context.Context, req *biz.QueryFav
 	resp := service.NewQueryFavoriteListService(ctx, req).DoService()
 	return resp, nil
 }
+
 func (s *BizServerImpl) CommentAction(ctx context.Context, req *biz.CommentActionRequest) (*biz.CommentActionResponse, error) {
 	resp := service.NewCommentActionService(ctx, req).DoService()
 	return resp, nil

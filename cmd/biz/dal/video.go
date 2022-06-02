@@ -1,13 +1,15 @@
-package db
+package dal
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"time"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
 
 type Video struct {
 	VideoId       int64     `bson:"video_id"`
@@ -19,6 +21,7 @@ type Video struct {
 	CommentCount  int64     `bson:"comment_count"`
 	Comments      []Comment `bson:"comments, inline"`
 	PublishDate   time.Time `bson:"publish_date"`
+	Title		  string	`bson:"title"`
 }
 
 type Comment struct {
@@ -26,6 +29,37 @@ type Comment struct {
 	UserId     int64     `bson:"user_id"`
 	Content    string    `bson:"content"`
 	CreateDate time.Time `bson:"create_date"`
+}
+
+func QueryVideosByTime(t time.Time)([]*Video, error){
+	// 指定获取要操作的数据集
+	collection := MongoCli.Database("tiktok").Collection("video")
+	findOptions := options.Find()
+	findOptions.SetLimit(30)//设置一次获取的最大视频数
+	sort := bson.D{{"publish_date", 1}}
+	findOptions.SetSort(sort)
+	results := []*Video{}
+	cur, err := collection.Find(context.TODO(), bson.M{"publish_date": bson.M{"$gte": t}}, findOptions)
+
+	// 完成后关闭游标
+	defer cur.Close(context.TODO())
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	for cur.Next(context.TODO()) {
+		var elem Video
+		err := cur.Decode(&elem)
+		if err != nil {
+			log.Fatal(err)
+		}
+		results = append(results, &elem)
+	}
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	return results, nil
 }
 
 func QueryVideoByVideoId(ctx context.Context, videoId int64) (*Video, error) {

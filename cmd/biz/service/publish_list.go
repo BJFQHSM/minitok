@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal/db"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -50,7 +50,7 @@ func (s *queryPublishListServiceImpl) validateParams() error {
 
 func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 	uid := s.Req.UserId
-	videos, err := db.QueryVideosByUserId(s.Ctx, uid)
+	videos, err := dal.QueryVideosByUserId(s.Ctx, uid)
 	if err != nil {
 		return err
 	}
@@ -64,7 +64,7 @@ func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 }
 
 // todo extract to be a public method in other pkg
-func transDoToDto(video *db.Video) *biz.Video {
+func transDoToDto(video *dal.Video) *biz.Video {
 	isFavorite := len(video.Favorites) != 0
 	ret := biz.Video{
 		Id: video.VideoId,
@@ -85,11 +85,11 @@ func (s *queryPublishListServiceImpl) buildResponse(err error) {
 	if err != nil {
 		errMsg := err.Error()
 		s.Resp.StatusMsg = &errMsg
-		s.Resp.StatusCode = 500
+		s.Resp.StatusCode = 1
 	} else {
 		errMsg := "SUCCESS"
 		s.Resp.StatusMsg = &errMsg
-		s.Resp.StatusCode = 200
+		s.Resp.StatusCode = 0
 	}
 }
 

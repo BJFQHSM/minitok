@@ -6,6 +6,7 @@ import (
 	mysql2 "gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"log"
+	"os"
 	"sync"
 )
 
@@ -32,7 +33,14 @@ func InitMysql() {
 }
 
 func parseConfigToDSN() string {
-	conf := (util.Parse("config/auth.yaml")["mysql"]).(map[interface{}]interface{})
+	var confFile string
+	env := os.Getenv("env")
+	if env == "dev" {
+		confFile = "config/auth-test.yaml"
+	} else {
+		confFile = "config/auth.yaml"
+	}
+	conf := (util.Parse(confFile)["mysql"]).(map[interface{}]interface{})
 	mysqlConf := mysql.Config{
 		User:              util.InterfaceToStr(conf["username"]),
 		Passwd:            util.InterfaceToStr(conf["password"]),

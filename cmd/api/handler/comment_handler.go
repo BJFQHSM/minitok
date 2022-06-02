@@ -15,7 +15,6 @@ func CommentAction(c *gin.Context) {
 	err := c.ShouldBindQuery(&req)
 
 	log.Printf("reqeust : %+v\n", req)
-
 	if err != nil {
 		// todo
 	}

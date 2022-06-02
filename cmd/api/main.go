@@ -63,12 +63,3 @@ func logger() gin.HandlerFunc {
 		log.Println()
 	}
 }
-
-//func login(c *gin.Context) {
-//	resp, err := rpc.UserClient.Login(context.Background(), &auth.LoginRequest{})
-//	if err != nil {
-//		fmt.Printf("error %v", err)
-//	}
-//	fmt.Printf("%+v\n", resp)
-//	c.JSON(http.StatusOK, resp)
-//}

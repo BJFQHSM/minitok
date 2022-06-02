@@ -5,11 +5,12 @@ import (
 	"github.com/prometheus/common/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"os"
 )
 
 var AuthClient auth.AuthServiceClient
 
-func initUser() {
+func initAuth() {
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	//resolver, err := etcd.NewEtcdResolver([]string{"etcd:2379"})
@@ -25,8 +26,14 @@ func initUser() {
 	//
 	//}
 	//addr := resolve.Instances[0].Address().String()
-	//conn, err := grpc.Dial("127.0.0.1:8888", opts...)
-	conn, err := grpc.Dial("auth:8890", opts...)
+	isDev := os.Getenv("env") == "dev"
+	var conn *grpc.ClientConn
+	var err error
+	if isDev {
+		conn, err = grpc.Dial("127.0.0.1:8890", opts...)
+	} else {
+		conn, err = grpc.Dial("auth:8890", opts...)
+	}
 	if err != nil {
 		log.Error(err)
 	}

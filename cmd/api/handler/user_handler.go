@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+
 func Login(c *gin.Context) {
 	var req auth.LoginRequest
 	err := c.ShouldBindQuery(&req)
@@ -33,6 +34,7 @@ func Register(c *gin.Context) {
 	err := c.ShouldBindQuery(&req)
 
 	log.Printf("reqeust : %+v\n", req)
+
 	if err != nil {
 		// todo
 	}
@@ -48,6 +50,7 @@ func QueryInfo(c *gin.Context) {
 	err := c.ShouldBindQuery(&req)
 
 	log.Printf("reqeust : %+v\n", req)
+
 	if err != nil {
 		// todo
 	}

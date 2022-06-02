@@ -12,7 +12,7 @@ import (
 
 func RelationAction(c *gin.Context) {
 	var req biz.RelationActionRequest
-	err := c.BindJSON(&req)
+	err := c.ShouldBindQuery(&req)
 	if err != nil {
 		// todo
 	}

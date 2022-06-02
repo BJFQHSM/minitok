@@ -1,4 +1,4 @@
-package db
+package dal
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
+	"os"
 	"sync"
 	"time"
 )
@@ -39,10 +40,20 @@ type mongoUriConfig struct {
 }
 
 func parseMongoConf() string {
-	conf := util.Parse("config/biz.yaml")["mongodb"].(map[interface{}]interface{})
+	var confFile string
+	var protocol string
+	env := os.Getenv("env")
+	if env == "dev" {
+		confFile = "config/biz-test.yaml"
+		protocol = "mongodb+srv"
+	} else {
+		confFile = "config/biz.yaml"
+		protocol = "mongodb"
+	}
+	conf := util.Parse(confFile)["mongodb"].(map[interface{}]interface{})
 	log.Printf("%+v\n", conf)
 	uri := mongoUriConfig{
-		protocol: "mongodb",
+		protocol: protocol,
 		user:     util.InterfaceToStr(conf["user"]),
 		password: util.InterfaceToStr(conf["password"]),
 		url:      util.InterfaceToStr(conf["url"]),
