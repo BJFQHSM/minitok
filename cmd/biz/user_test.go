@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/service"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
 func TestQueryUserInfo(t *testing.T) {
+	dal.InitMongoDB()
 	req := &biz.QueryUserInfoRequest{
 		UserId: 0,
 		Token:  "1.12345",

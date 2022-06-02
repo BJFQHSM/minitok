@@ -2,16 +2,19 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"net"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/cloudwego/kitex/pkg/registry"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"google.golang.org/grpc"
-	"log"
-	"net"
 )
 
 func main() {
 	// todo constants and others
+	dal.InitMongoDB()
 	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:8889"))
 	if err != nil {
 		panic(err)

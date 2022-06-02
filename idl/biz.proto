@@ -60,7 +60,8 @@ message QueryUserInfoResponse {
 message PublishActionRequest {
     int64 user_id = 1;
     string token = 2;
-    repeated bytes data = 3;
+    int64 to_user_id = 3;
+    int32 action_type = 4;
 }
 
 message PublishActionResponse {

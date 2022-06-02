@@ -189,7 +189,7 @@ func QueryUserByIds(ctx context.Context, ids []int64) ([]*User, error) {
 func QueryFollowsByUserId(ctx context.Context, userId int64) ([]*User, error) {
 	userColl := MongoCli.Database("tiktok").Collection("user")
 	filter := bson.D{{"user_id", userId}}
-	pro := bson.D{{"follows", 1}, {"_id", 0}}
+	pro := bson.D{{"_id", 0}}
 	opts := options.FindOne().SetProjection(pro)
 
 	var user User
@@ -200,6 +200,9 @@ func QueryFollowsByUserId(ctx context.Context, userId int64) ([]*User, error) {
 		}
 		log.Printf("%+v", err)
 		return nil, err
+	}
+	if user.FollowCount == 0 {
+		return nil, nil
 	}
 	return QueryUserByIds(ctx, user.Follows)
 }

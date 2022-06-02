@@ -17,6 +17,7 @@ func (s *BizServerImpl) Feed(ctx context.Context, req *biz.FeedRequest) (*biz.Fe
 }
 
 func (s *BizServerImpl) QueryUserInfo(ctx context.Context, req *biz.QueryUserInfoRequest) (*biz.QueryUserInfoResponse, error) {
+	log.Printf("用户信息获取的参数为：%+v", req)
 	ser := service.NewQueryUserInfoService(req, ctx)
 	ser.DoService()
 	return ser.GetResponse(), nil
@@ -45,20 +46,14 @@ func (s *BizServerImpl) QueryCommentList(ctx context.Context, req *biz.QueryComm
 	return nil, nil
 }
 func (s *BizServerImpl) RelationAction(ctx context.Context, req *biz.RelationActionRequest) (*biz.RelationActionResponse, error) {
-	resp, err := service.NewRelationActionService(ctx).RelationAction(req)
-	if err != nil {
-		log.Printf("%+v", err)
-		return nil, err
-	}
+	log.Printf("用户关注获取的参数为：%+v", req)
+	resp := service.NewRelationActionService(ctx).RelationAction(req)
 	return resp, nil
 }
 
 func (s *BizServerImpl) QueryFollowList(ctx context.Context, req *biz.QueryFollowListRequest) (*biz.QueryFollowListResponse, error) {
-	resp, err := service.NewQueryFollowListService(ctx).QueryFollowList(req)
-	if err != nil {
-		log.Printf("%+v", err)
-		return nil, err
-	}
+	log.Printf("用户关注列表获取的参数为：%+v", req)
+	resp := service.NewQueryFollowListService(ctx).QueryFollowList(req)
 	return resp, nil
 }
 

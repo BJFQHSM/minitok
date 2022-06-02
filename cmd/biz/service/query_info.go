@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"strconv"
-	"strings"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -51,7 +50,7 @@ func (s *queryUserInfoServiceImpl) validateParams() error {
 }
 
 func (s *queryUserInfoServiceImpl) queryUserInfoByUID() error {
-	tokenUserId, err := strconv.ParseInt(strings.Split(s.Req.Token, ".")[0], 10, 64)
+	tokenUserId, err := strconv.ParseInt(s.Req.Token, 10, 64)
 	if err != nil {
 		return err
 	}
