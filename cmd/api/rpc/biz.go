@@ -2,11 +2,12 @@ package rpc
 
 import (
 	"context"
+	"log"
+
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	etcd "github.com/kitex-contrib/registry-etcd"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"log"
 )
 
 var BizClient biz.BizServiceClient

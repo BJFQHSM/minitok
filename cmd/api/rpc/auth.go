@@ -19,7 +19,7 @@ func initUser() {
 	if err != nil {
 		log.Panic(err)
 	}
-	resolve, err := resolver.Resolve(context.Background(), "tiktok_user")
+	resolve, err := resolver.Resolve(context.Background(), "tiktok_auth")
 	if err != nil {
 		return
 	}

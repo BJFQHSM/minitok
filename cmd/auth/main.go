@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// todo constants and others
-	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:8888"))
+	lis, err := net.Listen("tcp", fmt.Sprintf("localhost:8890"))
 	if err != nil {
 		panic(err)
 	}
@@ -20,10 +20,10 @@ func main() {
 	auth.RegisterAuthServiceServer(srv, &AuthServiceImpl{})
 	r, err := etcd.NewEtcdRegistry([]string{"127.0.0.1:2379"})
 	err = r.Register(&registry.Info{
-		ServiceName: "tiktok_user",
+		ServiceName: "tiktok_auth",
 		Addr: &net.TCPAddr{
 			IP:   []byte{127, 0, 0, 1},
-			Port: 8888,
+			Port: 8890,
 		},
 	})
 	if err != nil {

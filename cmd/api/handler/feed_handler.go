@@ -2,10 +2,12 @@ package handler
 
 import (
 	"context"
+	"log"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // Feed godoc
@@ -20,7 +22,9 @@ import (
 // @Router       /feed [get]
 func Feed(c *gin.Context) {
 	var req biz.FeedRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}

@@ -14,41 +14,46 @@ import (
 // Login godoc
 // @Summary      login
 // @Description  login
-// @Tags         auth
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        username body string true "username"
 // @Param        password body string true "password"
 // @Success      200 {object} auth.LoginResponse
 // @Failure      500 {object} auth.LoginResponse
-// @Router       /auth/login [post]
+// @Router       /user/login [post]
 func Login(c *gin.Context) {
 	var req auth.LoginRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
+		log.Println(err)
 		// todo
 	}
 	resp, err := rpc.AuthClient.Login(context.Background(), &req)
 	if err != nil {
-		// todo
+		log.Println(err)
 	}
 	c.JSON(http.StatusOK, resp)
+	log.Println(c.Errors)
 }
 
 // Register godoc
 // @Summary      register
 // @Description  register
-// @Tags         auth
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        username body string true "username"
 // @Param        password body string true "password"
 // @Success      200 {object} auth.RegisterResponse
 // @Failure      500 {object} auth.RegisterResponse
-// @Router       /auth/register [post]
+// @Router       /user/register [post]
 func Register(c *gin.Context) {
 	var req auth.RegisterRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
+
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
@@ -60,19 +65,20 @@ func Register(c *gin.Context) {
 }
 
 // QueryInfo godoc
-// @Summary      get auth info
-// @Description  get auth info
-// @Tags         auth
+// @Summary      get user info
+// @Description  get user info
+// @Tags         user
 // @Accept       json
 // @Produce      json
 // @Param        user_id body int true "user_id"
 // @Param        token body string true "token"
 // @Success      200 {object} biz.QueryInfoResponse
 // @Failure      500 {object} biz.QueryInfoResponse
-// @Router       /auth [get]
+// @Router       /user [get]
 func QueryInfo(c *gin.Context) {
 	var req biz.QueryUserInfoRequest
 	err := c.ShouldBind(&req)
+	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 		log.Printf("ERROR: parse from http reqbody %v\n", err)
