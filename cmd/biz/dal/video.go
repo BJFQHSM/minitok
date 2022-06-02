@@ -20,6 +20,7 @@ type Video struct {
 	CommentCount  int64     `bson:"comment_count"`
 	Comments      []Comment `bson:"comments, inline"`
 	PublishDate   time.Time `bson:"publish_date"`
+	Title		  string	`bson:"title"`
 }
 
 type Comment struct {

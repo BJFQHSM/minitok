@@ -28,7 +28,7 @@ func (s *BizServerImpl) Feed(ctx context.Context, req *biz.FeedRequest) (*biz.Fe
 	}
 	resp.Video = videos
 	resp.NextTime = nextTime
-	resp.StatusCode = 200
+	resp.StatusCode = 0
 	msg := "Success！"
 	resp.StatusMsg = &msg
 	return resp, nil

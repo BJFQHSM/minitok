@@ -110,13 +110,15 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64) error {
 			video.Favorites = append(video.Favorites, user_id)
 		} else { //已点赞
 			user.FavoriteList = append(user.FavoriteList[:i], user.FavoriteList[i+1:]...)
-			k := 0
-			for ; k < len(video.Favorites); k++ {
+			tmp:=[]int64{}
+			for k:=0; k < len(video.Favorites); k++ {
 				if video.Favorites[k] == user_id {
-					break
+					continue
 				}
+				tmp=append(tmp,video.Favorites[k])
 			}
-			video.Favorites = append(video.Favorites[:k], video.Favorites[k+1:]...)
+			//video.Favorites = append(video.Favorites[:k], video.Favorites[k+1:]...)
+			video.Favorites = tmp
 		}
 
 		//更新用户表和视频表
@@ -159,6 +161,19 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64) error {
 func QueryUserByID(ctx context.Context, id int64) (*User, error) {
 	collection := MongoCli.Database("tiktok").Collection("user")
 	filter := bson.D{{"user_id", id}}
+	var result User
+	err := collection.FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return &result, nil
+}
+
+func QueryUserByToken(ctx context.Context, token string) (*User, error) {
+	collection := MongoCli.Database("tiktok").Collection("user")
+	filter := bson.D{{"username", token}}
+
 	var result User
 	err := collection.FindOne(ctx, filter).Decode(&result)
 	if err != nil {

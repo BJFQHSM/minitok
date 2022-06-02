@@ -9,13 +9,6 @@ import (
 	"net/http"
 )
 
-//type FeedResp struct {
-//	Video      []*biz.Video `json:"video_list"`
-//	NextTime   int64    `json:"next_time"`
-//	StatusCode int32    `json:"status_code"`
-//	StatusMsg *string    `json:"status_msg"`
-//}
-
 // Feed godoc
 // @Summary      get feed
 // @Description  get feed
@@ -36,13 +29,8 @@ func Feed(c *gin.Context) {
 	resp, err := rpc.BizClient.Feed(context.Background(), &req)
 	if err != nil {
 		// todo
-		c.JSON(http.StatusMethodNotAllowed, resp)
-		log.Fatal("Fail to get feed, an error has happened:%v!",err)
+		log.Printf("Fail to get feed, an error has happened:%v!",err)
 	}
-	//res := FeedResp{}
-	//res.Video=resp.Video
-	//res.NextTime=resp.NextTime
-	//res.StatusCode=resp.StatusCode
-	//res.StatusMsg=resp.StatusMsg
-	c.JSON(http.StatusOK, resp)
+
+	c.JSON(http.StatusOK, &resp)
 }

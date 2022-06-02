@@ -58,9 +58,6 @@ func MongoVdoToBizVdo(vdo *dal.Video) *biz.Video {
 	}
 	//校验用户是否已关注
 	f:=false
-	for i:=0;i<len(user.Follows);i++{
-		
-	}
 	u1:=biz.User{
 		Id:            user.UserId,
 		Name:          user.Username,
@@ -73,6 +70,7 @@ func MongoVdoToBizVdo(vdo *dal.Video) *biz.Video {
 	res.CoverUrl=vdo.CoverUrl
 	res.FavoriteCount=vdo.FavoriteCount
 	res.CommentCount=int64(len(vdo.Comments))
+	res.Title = vdo.Title
 	//判断当前用户是否点赞
 	f1:=false
 	for i:=0;i<len(user.FavoriteList);i++{
