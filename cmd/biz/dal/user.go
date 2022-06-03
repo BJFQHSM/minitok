@@ -101,13 +101,13 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64, actionTy
 			err = Favorite(ctx, user_id, video_id)
 			if err!=nil{
 				log.Println(err)
-				return nil, errors.New("更新用户点赞列表报错")
+				return nil, errors.New("点赞报错")
 			}
 		} else { 	//取消点赞
 			err = CancelFavorite(ctx, user_id, video_id)
 			if err!=nil{
 				log.Println(err)
-				return nil, errors.New("更新视频点赞列表报错")
+				return nil, errors.New("取消点赞报错")
 			}
 		}
 		return nil, nil
