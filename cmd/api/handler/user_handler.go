@@ -77,7 +77,7 @@ func Register(c *gin.Context) {
 // @Router       /user [get]
 func QueryInfo(c *gin.Context) {
 	var req biz.QueryUserInfoRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
 	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo

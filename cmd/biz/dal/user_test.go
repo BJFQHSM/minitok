@@ -45,7 +45,7 @@ func TestQueryFollowsByUserId(t *testing.T) {
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
 	InitMongoDB()
-	users, err := QueryFollowsByUserId(context.Background(), 2)
+	users, err := QueryFollowsByUserId(context.Background(), 1)
 	if err != nil {
 		log.Printf("%v\n", err)
 		return

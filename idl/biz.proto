@@ -136,10 +136,9 @@ message QueryCommentListResponse {
 }
 
 message RelationActionRequest {
-    int64 user_id = 1;
-    string token = 2;
-    int64 to_user_id = 3;
-    int32 action_type = 4;
+    string token = 1;
+    int64 to_user_id = 2;
+    int32 action_type = 3;
 }
 
 message RelationActionResponse {

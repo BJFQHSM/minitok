@@ -24,7 +24,7 @@ func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*a
 	msg := "success"
 	return &auth.LoginResponse{
 		UserId:     1,
-		Token:      "fsjflsjdf",
+		Token:      "1",
 		StatusCode: 0,
 		StatusMsg:  &msg,
 	}, nil
