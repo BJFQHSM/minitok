@@ -10,7 +10,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-
 type Video struct {
 	VideoId       int64     `bson:"video_id"`
 	UserId        int64     `bson:"user_id"`
@@ -21,7 +20,7 @@ type Video struct {
 	CommentCount  int64     `bson:"comment_count"`
 	Comments      []Comment `bson:"comments, inline"`
 	PublishDate   time.Time `bson:"publish_date"`
-	Title		  string	`bson:"title"`
+	Title         string    `bson:"title"`
 }
 
 type Comment struct {
@@ -31,11 +30,11 @@ type Comment struct {
 	CreateDate time.Time `bson:"create_date"`
 }
 
-func QueryVideosByTime(t time.Time)([]*Video, error){
+func QueryVideosByTime(t time.Time) ([]*Video, error) {
 	// 指定获取要操作的数据集
 	collection := MongoCli.Database("tiktok").Collection("video")
 	findOptions := options.Find()
-	findOptions.SetLimit(30)//设置一次获取的最大视频数
+	findOptions.SetLimit(30) //设置一次获取的最大视频数
 	sort := bson.D{{"publish_date", 1}}
 	findOptions.SetSort(sort)
 	results := []*Video{}
@@ -126,17 +125,17 @@ func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 		{
 			"$project",
 			bson.M{
-				"_id": 0,
-				"user_id":1,
-				"video_id": 1,
-				"play_url": 1,
-				"cover_url": 1,
+				"_id":            0,
+				"user_id":        1,
+				"video_id":       1,
+				"play_url":       1,
+				"cover_url":      1,
 				"favorite_count": 1,
-				"comment_count": 1,
-				"comments": 1,
-				"publish_date": 1,
+				"comment_count":  1,
+				"comments":       1,
+				"publish_date":   1,
 				// only return element which equals user_id
-				"favorites": bson.D{{"$filter", bson.D{{"input", "$favorites"}, {"as", "f"}, {"cond",  bson.M{"$eq": bson.A{"$$f", userId}}}}}},
+				"favorites": bson.D{{"$filter", bson.D{{"input", "$favorites"}, {"as", "f"}, {"cond", bson.M{"$eq": bson.A{"$$f", userId}}}}}},
 			},
 		},
 	}

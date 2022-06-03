@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
@@ -27,11 +28,17 @@ type relationActionServiceImpl struct {
 func (s *relationActionServiceImpl) DoService() *biz.RelationActionResponse {
 	var err error
 	for i := 0; i < 1; i++ {
+		if err = s.authenticate(); err != nil {
+			break
+		}
+
 		if err = s.validateParams(); err != nil {
 			break
 		}
 
-		// todo
+		if err = s.doFollowAction(); err != nil {
+			break
+		}
 	}
 	s.buildResponse(err)
 	return s.Resp
@@ -50,6 +57,21 @@ func (s *relationActionServiceImpl) authenticate() error {
 }
 
 func (s *relationActionServiceImpl) validateParams() error {
+	return nil
+}
+
+func (s *relationActionServiceImpl) doFollowAction() error {
+	if s.Req.ActionType == 1 {
+		err := dal.FollowRelation(s.Ctx, s.Req.ToUserId, s.userId)
+		if err != nil {
+			return err
+		}
+	} else {
+		err := dal.UnFollowRelation(s.Ctx, s.Req.ToUserId, s.userId)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 

@@ -1,8 +1,9 @@
 package rpc
 
 import (
+	"log"
+
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
-	"github.com/prometheus/common/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
@@ -35,7 +36,7 @@ func initAuth() {
 		conn, err = grpc.Dial("auth:8890", opts...)
 	}
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 	AuthClient = auth.NewAuthServiceClient(conn)
 }

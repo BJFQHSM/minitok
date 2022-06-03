@@ -12,10 +12,12 @@ import (
 func Parse(path string) map[string]interface{} {
 	dir := os.Getenv("WORK_DIR")
 	file, err := ioutil.ReadFile(dir + path)
-	log.Println(string(file))
+
 	if err != nil {
+		log.Panicf("Failed to read yaml file.\nerr:%v", err)
 		return nil
 	}
+	fmt.Println(string(file))
 	result := make(map[string]interface{})
 
 	err = yaml.Unmarshal(file, &result)

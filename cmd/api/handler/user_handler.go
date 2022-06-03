@@ -11,7 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
 func Login(c *gin.Context) {
 	var req auth.LoginRequest
 	err := c.ShouldBindQuery(&req)
@@ -48,15 +47,16 @@ func Register(c *gin.Context) {
 func QueryInfo(c *gin.Context) {
 	var req biz.QueryUserInfoRequest
 	err := c.ShouldBindQuery(&req)
-
 	log.Printf("reqeust : %+v\n", req)
 
 	if err != nil {
 		// todo
+		log.Printf("ERROR: parse from http reqbody %v\n", err)
 	}
 	resp, err := rpc.BizClient.QueryUserInfo(context.Background(), &req)
 	if err != nil {
 		// todo
+		log.Printf("ERROR:  %v\n", err)
 	}
 	c.JSON(http.StatusOK, resp)
 }

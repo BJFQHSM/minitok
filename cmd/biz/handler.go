@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/service"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -17,6 +18,7 @@ func (s *BizServerImpl) Feed(ctx context.Context, req *biz.FeedRequest) (*biz.Fe
 }
 
 func (s *BizServerImpl) QueryUserInfo(ctx context.Context, req *biz.QueryUserInfoRequest) (*biz.QueryUserInfoResponse, error) {
+	log.Printf("用户信息获取的参数为：%+v", req)
 	resp := service.NewQueryUserInfoService(ctx, req).DoService()
 	return resp, nil
 }
@@ -51,11 +53,13 @@ func (s *BizServerImpl) QueryCommentList(ctx context.Context, req *biz.QueryComm
 	return resp, nil
 }
 func (s *BizServerImpl) RelationAction(ctx context.Context, req *biz.RelationActionRequest) (*biz.RelationActionResponse, error) {
+	log.Printf("用户关注获取的参数为：%+v", req)
 	resp := service.NewRelationActionService(ctx, req).DoService()
 	return resp, nil
 }
 
 func (s *BizServerImpl) QueryFollowList(ctx context.Context, req *biz.QueryFollowListRequest) (*biz.QueryFollowListResponse, error) {
+	log.Printf("用户关注列表获取的参数为：%+v", req)
 	resp := service.NewFollowListService(ctx, req).DoService()
 	return resp, nil
 }

@@ -59,6 +59,7 @@ func parseMongoConf() string {
 		url:      util.InterfaceToStr(conf["url"]),
 	}
 	URI := fmt.Sprintf("%s://%s:%s@%s", uri.protocol, uri.user, uri.password, uri.url)
+	// URI := "mongodb://127.0.0.1:27017"
 	log.Printf("%s\n", URI)
 	return URI
 }

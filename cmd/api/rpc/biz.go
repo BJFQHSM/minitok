@@ -1,11 +1,12 @@
 package rpc
 
 import (
+	"log"
+	"os"
+
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
-	"github.com/prometheus/common/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
-	"os"
 )
 
 var BizClient biz.BizServiceClient
@@ -36,7 +37,7 @@ func initBiz() {
 		conn, err = grpc.Dial("biz:8889", opts...)
 	}
 	if err != nil {
-		log.Error(err)
+		log.Fatal(err)
 	}
 	BizClient = biz.NewBizServiceClient(conn)
 }
