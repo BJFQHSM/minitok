@@ -3,6 +3,8 @@ package service
 import (
 	"context"
 	"errors"
+	"log"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
@@ -61,6 +63,8 @@ func (s *queryUserInfoServiceImpl) authenticate() error {
 	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
 	if err != nil {
 		// todo
+		log.Printf("%+v", err)
+		return err
 	}
 	s.userId = resp.UserId
 	return nil
@@ -92,11 +96,13 @@ func (s *queryUserInfoServiceImpl) buildResponse(err error) {
 func QueryUserInfoByUID(ctx context.Context, uid int64, tokenUserId int64) (*biz.User, error) {
 	user, err := dal.QueryUserById(ctx, uid)
 	if err != nil {
+		log.Printf("%+v", err)
 		return nil, err
 	}
 
 	isFollow, err := dal.QueryIsFollow(ctx, uid, tokenUserId)
 	if err != nil {
+		log.Printf("%+v", err)
 		return nil, err
 	}
 	respUser := biz.User{

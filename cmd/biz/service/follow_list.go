@@ -2,11 +2,13 @@ package service
 
 import (
 	"context"
+	"errors"
+	"log"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
-	"log"
 )
 
 type FollowListService interface {
@@ -60,6 +62,13 @@ func (s *followListServiceImpl) authenticate() error {
 }
 
 func (s *followListServiceImpl) validateParams() error {
+	req := s.Req
+	if req == nil {
+		return errors.New("params: request could not be nil")
+	}
+	if req.UserId < 0 {
+		return errors.New("params: userId could not be negative number")
+	}
 	return nil
 }
 
@@ -68,11 +77,13 @@ func (s *followListServiceImpl) queryFollowList() error {
 	users, err := dal.QueryFollowsByUserId(s.Ctx, s.Req.UserId)
 
 	if err != nil {
+		log.Printf("%+v", err)
 		return nil
 	}
 
 	userList, err := DalUserToBizUser(s.Ctx, users, s.userId)
 	if err != nil {
+		log.Printf("%+v", err)
 		return err
 	}
 	s.Resp.UserList = userList
