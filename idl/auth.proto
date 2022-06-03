@@ -41,8 +41,17 @@ message LoginResponse {
     string token = 4;
 }
 
+message AuthenticateRequest {
+    string token = 1;
+}
+
+message AuthenticateResponse {
+    bool isAuthed = 1;
+    int64 user_id = 2;
+}
+
 service AuthService {
     rpc Register (RegisterRequest) returns (RegisterResponse) {}
     rpc Login (LoginRequest) returns (LoginResponse) {}
-
+    rpc Authenticate (AuthenticateRequest) returns (AuthenticateResponse) {}
 }
