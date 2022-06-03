@@ -21,7 +21,7 @@ func FavoriteAction(c *gin.Context) {
 	req.Token = c.Query("token")
 	//根据token获取用户的id
 
-	req.UserId = 1
+	//req.UserId = 1
 	tmp, err := strconv.Atoi(c.Query("video_id"))
 	req.VideoId = int64(tmp)
 	tmp, err = strconv.Atoi(c.Query("action_type"))
