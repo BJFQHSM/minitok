@@ -17,12 +17,12 @@ func Feed(c *gin.Context) {
 	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
-		log.Printf("Fail to get feed, an error has happened:%v!",err)
+		log.Printf("Fail to get feed, an error has happened:%v!", err)
 	}
 	resp, err := rpc.BizClient.Feed(context.Background(), &req)
 	if err != nil {
 		// todo
-		log.Printf("Fail to get feed, an error has happened:%v!",err)
+		log.Printf("Fail to get feed, an error has happened:%v!", err)
 	}
 
 	c.JSON(http.StatusOK, &resp)

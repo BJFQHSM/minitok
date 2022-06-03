@@ -9,21 +9,20 @@ type QueryCommentListService interface {
 	DoService() *biz.QueryCommentListResponse
 }
 
-
 func NewQueryCommentListService(ctx context.Context, r *biz.QueryCommentListRequest) QueryCommentListService {
 	return &queryCommentListServiceImpl{Req: r, Ctx: ctx, Resp: &biz.QueryCommentListResponse{}}
 }
 
 type queryCommentListServiceImpl struct {
-	Req *biz.QueryCommentListRequest
+	Req  *biz.QueryCommentListRequest
 	Resp *biz.QueryCommentListResponse
-	Ctx context.Context
+	Ctx  context.Context
 }
 
 func (s *queryCommentListServiceImpl) DoService() *biz.QueryCommentListResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.validateParams() ; err != nil {
+		if err = s.validateParams(); err != nil {
 			break
 		}
 
@@ -36,7 +35,6 @@ func (s *queryCommentListServiceImpl) DoService() *biz.QueryCommentListResponse 
 func (s *queryCommentListServiceImpl) validateParams() error {
 	return nil
 }
-
 
 func (s *queryCommentListServiceImpl) buildResponse(err error) {
 	if err != nil {

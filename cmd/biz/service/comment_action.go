@@ -9,21 +9,20 @@ type CommentActionService interface {
 	DoService() *biz.CommentActionResponse
 }
 
-
 func NewCommentActionService(ctx context.Context, r *biz.CommentActionRequest) CommentActionService {
 	return &commentActionServiceImpl{Req: r, Ctx: ctx, Resp: &biz.CommentActionResponse{}}
 }
 
 type commentActionServiceImpl struct {
-	Req *biz.CommentActionRequest
+	Req  *biz.CommentActionRequest
 	Resp *biz.CommentActionResponse
-	Ctx context.Context
+	Ctx  context.Context
 }
 
 func (s *commentActionServiceImpl) DoService() *biz.CommentActionResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.validateParams() ; err != nil {
+		if err = s.validateParams(); err != nil {
 			break
 		}
 
@@ -36,7 +35,6 @@ func (s *commentActionServiceImpl) DoService() *biz.CommentActionResponse {
 func (s *commentActionServiceImpl) validateParams() error {
 	return nil
 }
-
 
 func (s *commentActionServiceImpl) buildResponse(err error) {
 	if err != nil {

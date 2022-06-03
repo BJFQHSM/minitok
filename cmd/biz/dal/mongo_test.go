@@ -15,7 +15,7 @@ func TestQuery(t *testing.T) {
 		log.Printf("ERROR: fail to get current dir %v\n", err)
 		return
 	}
-	os.Setenv("WORK_DIR", pwd + "/../../../")
+	os.Setenv("WORK_DIR", pwd+"/../../../")
 	InitMongoDB()
 	//QueryVideoById(context.Background(), 1)
 	videos, err := QueryVideosByUserId(context.Background(), 1)
