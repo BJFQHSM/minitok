@@ -16,8 +16,6 @@ require (
 require (
 	github.com/kr/text v0.2.0 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect
-	github.com/prometheus/common v0.26.0
-	github.com/sirupsen/logrus v1.7.0 // indirect
 	github.com/tidwall/pretty v1.1.0 // indirect
 	go.etcd.io/etcd/client/v3 v3.5.1
 	go.uber.org/atomic v1.8.0 // indirect
