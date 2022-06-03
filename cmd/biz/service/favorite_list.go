@@ -2,9 +2,12 @@ package service
 
 import (
 	"context"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"log"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
 type QueryFavoriteListService interface {
@@ -19,6 +22,8 @@ type queryFavoriteListServiceImpl struct {
 	Req  *biz.QueryFavoriteListRequest
 	Resp *biz.QueryFavoriteListResponse
 	Ctx  context.Context
+
+	userId int64
 }
 
 func (s *queryFavoriteListServiceImpl) DoService() *biz.QueryFavoriteListResponse {
@@ -37,13 +42,29 @@ func (s *queryFavoriteListServiceImpl) DoService() *biz.QueryFavoriteListRespons
 		if err = s.validateParams(); err != nil {
 			break
 		}
-
+		if err = s.authenticate(); err != nil {
+			break
+		}
 		if err = s.queryFavoriteList(); err != nil {
 			break
 		}
 	}
 	s.buildResponse(err)
 	return s.Resp
+}
+
+func (s *queryFavoriteListServiceImpl) authenticate() error {
+	authReq := &auth.AuthenticateRequest{
+		Token: s.Req.Token,
+	}
+	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
+	if err != nil {
+		// todo
+		log.Printf("%+v", err)
+		return err
+	}
+	s.userId = resp.UserId
+	return nil
 }
 
 func (s *queryFavoriteListServiceImpl) validateParams() error {
@@ -59,7 +80,7 @@ func (s *queryFavoriteListServiceImpl) queryFavoriteList() error {
 	}
 
 	for i := 0; i < len(list); i++ {
-		s.Resp.VideoList = append(s.Resp.VideoList, MongoVdoToBizVdo(list[i]))
+		s.Resp.VideoList = append(s.Resp.VideoList, MongoVdoToBizVdo(list[i], s.userId))
 	}
 	return nil
 }

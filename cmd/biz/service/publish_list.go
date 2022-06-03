@@ -3,8 +3,11 @@ package service
 import (
 	"context"
 	"errors"
+	"log"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -20,6 +23,8 @@ type queryPublishListServiceImpl struct {
 	Req  *biz.QueryPublishListRequest
 	Resp *biz.QueryPublishListResponse
 	Ctx  context.Context
+
+	userId int64
 }
 
 func (s *queryPublishListServiceImpl) DoService() *biz.QueryPublishListResponse {
@@ -28,7 +33,9 @@ func (s *queryPublishListServiceImpl) DoService() *biz.QueryPublishListResponse 
 		if err = s.validateParams(); err != nil {
 			break
 		}
-
+		if err = s.authenticate(); err != nil {
+			break
+		}
 		if err = s.queryPublishListByUID(); err != nil {
 			break
 		}
@@ -36,7 +43,19 @@ func (s *queryPublishListServiceImpl) DoService() *biz.QueryPublishListResponse 
 	s.buildResponse(err)
 	return s.Resp
 }
-
+func (s *queryPublishListServiceImpl) authenticate() error {
+	authReq := &auth.AuthenticateRequest{
+		Token: s.Req.Token,
+	}
+	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
+	if err != nil {
+		// todo
+		log.Printf("%+v", err)
+		return err
+	}
+	s.userId = resp.UserId
+	return nil
+}
 func (s *queryPublishListServiceImpl) validateParams() error {
 	req := s.Req
 	if req == nil {
@@ -56,7 +75,7 @@ func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 	}
 	videoList := s.Resp.GetVideoList()
 	for _, video := range videos {
-		v := transDoToDto(video)
+		v := transDoToDto(video, s.userId)
 		videoList = append(videoList, v)
 	}
 	s.Resp.VideoList = videoList
@@ -64,13 +83,16 @@ func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 }
 
 // todo extract to be a public method in other pkg
-func transDoToDto(video *dal.Video) *biz.Video {
+func transDoToDto(video *dal.Video, tokenId int64) *biz.Video {
+	author, err := QueryUserInfoByUID(context.TODO(), video.UserId, tokenId)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
 	ret := biz.Video{
-		Id: video.VideoId,
-		Author: &biz.User{
-			Id: video.UserId,
-			// todo other info ?
-		},
+		Id:            video.VideoId,
+		Author:        author,
 		PlayUrl:       video.PlayUrl,
 		CoverUrl:      video.CoverUrl,
 		FavoriteCount: video.FavoriteCount,

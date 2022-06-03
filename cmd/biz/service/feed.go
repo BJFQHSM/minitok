@@ -6,6 +6,8 @@ import (
 	"time"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -21,6 +23,8 @@ type feedServiceImpl struct {
 	Req  *biz.FeedRequest
 	Resp *biz.FeedResponse
 	Ctx  context.Context
+
+	userId int64
 }
 
 func (s *feedServiceImpl) DoService() *biz.FeedResponse {
@@ -39,13 +43,29 @@ func (s *feedServiceImpl) DoService() *biz.FeedResponse {
 		if err = s.validateParams(); err != nil {
 			break
 		}
-
+		if err = s.authenticate(); err != nil {
+			break
+		}
 		if err = s.feed(); err != nil {
 			break
 		}
 	}
 	s.buildResponse(err)
 	return s.Resp
+}
+
+func (s *feedServiceImpl) authenticate() error {
+	authReq := &auth.AuthenticateRequest{
+		Token: s.Req.Token,
+	}
+	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
+	if err != nil {
+		// todo
+		log.Printf("%+v", err)
+		return err
+	}
+	s.userId = resp.UserId
+	return nil
 }
 
 func (s *feedServiceImpl) validateParams() error {
@@ -73,7 +93,7 @@ func (s *feedServiceImpl) feed() error {
 
 	videos := []*biz.Video{}
 	for i := 0; i < len(vdos); i++ {
-		videos = append(videos, MongoVdoToBizVdo(vdos[i]))
+		videos = append(videos, MongoVdoToBizVdo(vdos[i], s.userId))
 	}
 
 	s.Resp.VideoList = videos
@@ -95,7 +115,8 @@ func (s *feedServiceImpl) buildResponse(err error) {
 }
 
 //将video.go中的Video转化为biz.pb.go中的video类型
-func MongoVdoToBizVdo(vdo *dal.Video) *biz.Video {
+func MongoVdoToBizVdo(vdo *dal.Video, tokenId int64) *biz.Video {
+	var err error
 	res := &biz.Video{}
 	res.Id = vdo.VideoId
 	//查询当前登录用户信息
@@ -104,16 +125,22 @@ func MongoVdoToBizVdo(vdo *dal.Video) *biz.Video {
 		log.Println(err)
 		return nil
 	}
-	//校验用户是否已关注
-	f := false
-	u1 := biz.User{
-		Id:            user.UserId,
-		Name:          user.Username,
-		FollowCount:   user.FollowCount,
-		FollowerCount: user.FollowerCount,
-		IsFollow:      f,
+	// //校验用户是否已关注
+	// f := false
+	// u1 := biz.User{
+	// 	Id:            user.UserId,
+	// 	Name:          user.Username,
+	// 	FollowCount:   user.FollowCount,
+	// 	FollowerCount: user.FollowerCount,
+	// 	IsFollow:      f,
+	// }
+	// res.Author = &u1
+
+	res.Author, err = QueryUserInfoByUID(context.TODO(), vdo.UserId, tokenId)
+	if err != nil {
+		log.Printf("%+v", err)
+		return nil
 	}
-	res.Author = &u1
 	res.PlayUrl = vdo.PlayUrl
 	res.CoverUrl = vdo.CoverUrl
 	res.FavoriteCount = vdo.FavoriteCount

@@ -25,7 +25,7 @@ func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*a
 func (s *AuthServiceImpl) Authenticate(ctx context.Context, req *auth.AuthenticateRequest) (*auth.AuthenticateResponse, error) {
 	resp := &auth.AuthenticateResponse{
 		IsAuthed: true,
-		UserId:   1,
+		UserId:   2,
 	}
 	return resp, nil
 }
