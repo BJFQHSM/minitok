@@ -2,16 +2,20 @@ package main
 
 import (
 	"fmt"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
-	"google.golang.org/grpc"
 	"log"
 	"net"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
+	"google.golang.org/grpc"
 )
 
 func main() {
 	// todo constants and others
 	dal.InitMongoDB()
+	rpc.Init()
+
 	lis, err := net.Listen("tcp", fmt.Sprintf(":8889"))
 	if err != nil {
 		panic(err)

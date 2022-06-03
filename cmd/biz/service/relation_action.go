@@ -2,6 +2,9 @@ package service
 
 import (
 	"context"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -9,21 +12,22 @@ type RelationActionService interface {
 	DoService() *biz.RelationActionResponse
 }
 
-
 func NewRelationActionService(ctx context.Context, r *biz.RelationActionRequest) RelationActionService {
 	return &relationActionServiceImpl{Req: r, Ctx: ctx, Resp: &biz.RelationActionResponse{}}
 }
 
 type relationActionServiceImpl struct {
-	Req *biz.RelationActionRequest
+	Req  *biz.RelationActionRequest
 	Resp *biz.RelationActionResponse
-	Ctx context.Context
+	Ctx  context.Context
+
+	userId int64
 }
 
 func (s *relationActionServiceImpl) DoService() *biz.RelationActionResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.validateParams() ; err != nil {
+		if err = s.validateParams(); err != nil {
 			break
 		}
 
@@ -33,10 +37,21 @@ func (s *relationActionServiceImpl) DoService() *biz.RelationActionResponse {
 	return s.Resp
 }
 
-func (s *relationActionServiceImpl) validateParams() error {
+func (s *relationActionServiceImpl) authenticate() error {
+	authReq := &auth.AuthenticateRequest{
+		Token: s.Req.Token,
+	}
+	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
+	if err != nil {
+		// todo
+	}
+	s.userId = resp.UserId
 	return nil
 }
 
+func (s *relationActionServiceImpl) validateParams() error {
+	return nil
+}
 
 func (s *relationActionServiceImpl) buildResponse(err error) {
 	if err != nil {
@@ -49,5 +64,3 @@ func (s *relationActionServiceImpl) buildResponse(err error) {
 		s.Resp.StatusCode = 0
 	}
 }
-
-

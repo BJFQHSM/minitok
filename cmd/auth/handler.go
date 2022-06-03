@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/auth/service"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
@@ -18,5 +19,13 @@ func (s *AuthServiceImpl) Register(ctx context.Context, req *auth.RegisterReques
 
 func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
 	resp := service.NewLoginService(ctx, req).DoService()
+	return resp, nil
+}
+
+func (s *AuthServiceImpl) Authenticate(ctx context.Context, req *auth.AuthenticateRequest) (*auth.AuthenticateResponse, error) {
+	resp := &auth.AuthenticateResponse{
+		IsAuthed: true,
+		UserId:   1,
+	}
 	return resp, nil
 }

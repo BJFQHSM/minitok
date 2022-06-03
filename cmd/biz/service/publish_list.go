@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
@@ -11,21 +12,20 @@ type QueryPublishListService interface {
 	DoService() *biz.QueryPublishListResponse
 }
 
-
 func NewQueryPublishListService(r *biz.QueryPublishListRequest, ctx context.Context) QueryPublishListService {
 	return &queryPublishListServiceImpl{Req: r, Ctx: ctx, Resp: &biz.QueryPublishListResponse{}}
 }
 
 type queryPublishListServiceImpl struct {
-	Req *biz.QueryPublishListRequest
+	Req  *biz.QueryPublishListRequest
 	Resp *biz.QueryPublishListResponse
-	Ctx context.Context
+	Ctx  context.Context
 }
 
 func (s *queryPublishListServiceImpl) DoService() *biz.QueryPublishListResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.validateParams() ; err != nil {
+		if err = s.validateParams(); err != nil {
 			break
 		}
 
@@ -65,18 +65,17 @@ func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 
 // todo extract to be a public method in other pkg
 func transDoToDto(video *dal.Video) *biz.Video {
-	isFavorite := len(video.Favorites) != 0
 	ret := biz.Video{
 		Id: video.VideoId,
 		Author: &biz.User{
 			Id: video.UserId,
 			// todo other info ?
 		},
-		PlayUrl: video.PlayUrl,
-		CoverUrl: video.CoverUrl,
+		PlayUrl:       video.PlayUrl,
+		CoverUrl:      video.CoverUrl,
 		FavoriteCount: video.FavoriteCount,
-		CommentCount: video.CommentCount,
-		IsFavorite: &isFavorite,
+		CommentCount:  video.CommentCount,
+		IsFavorite:    len(video.Favorites) != 0,
 	}
 	return &ret
 }
@@ -92,4 +91,3 @@ func (s *queryPublishListServiceImpl) buildResponse(err error) {
 		s.Resp.StatusCode = 0
 	}
 }
-

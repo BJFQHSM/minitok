@@ -2,25 +2,25 @@ package service
 
 import (
 	"context"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"log"
 	"time"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
 type FeedService interface {
 	DoService() *biz.FeedResponse
 }
 
-
 func NewFeedService(ctx context.Context, r *biz.FeedRequest) FeedService {
 	return &feedServiceImpl{Req: r, Ctx: ctx, Resp: &biz.FeedResponse{}}
 }
 
 type feedServiceImpl struct {
-	Req *biz.FeedRequest
+	Req  *biz.FeedRequest
 	Resp *biz.FeedResponse
-	Ctx context.Context
+	Ctx  context.Context
 }
 
 func (s *feedServiceImpl) DoService() *biz.FeedResponse {
@@ -36,11 +36,11 @@ func (s *feedServiceImpl) DoService() *biz.FeedResponse {
 
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.validateParams() ; err != nil {
+		if err = s.validateParams(); err != nil {
 			break
 		}
 
-		if err = s.feed() ; err != nil {
+		if err = s.feed(); err != nil {
 			break
 		}
 	}
@@ -59,21 +59,21 @@ func (s *feedServiceImpl) feed() error {
 	}
 
 	//从数据库查找数据
-	t:=TimeStampToTime(latestTime)
+	t := TimeStampToTime(latestTime)
 	vdos, err := dal.QueryVideosByTime(t)
-	if err!=nil{
+	if err != nil {
 		return err
 	}
 
 	//获取下次的最新时间
 	nextTime := time.Now().Unix()
-	if len(vdos)>0{
+	if len(vdos) > 0 {
 		nextTime = vdos[len(vdos)-1].PublishDate.Unix()
 	}
 
 	videos := []*biz.Video{}
-	for i:=0;i<len(vdos);i++{
-		videos=append(videos,MongoVdoToBizVdo(vdos[i]))
+	for i := 0; i < len(vdos); i++ {
+		videos = append(videos, MongoVdoToBizVdo(vdos[i]))
 	}
 
 	s.Resp.VideoList = videos
@@ -81,7 +81,6 @@ func (s *feedServiceImpl) feed() error {
 
 	return nil
 }
-
 
 func (s *feedServiceImpl) buildResponse(err error) {
 	if err != nil {
@@ -97,46 +96,46 @@ func (s *feedServiceImpl) buildResponse(err error) {
 
 //将video.go中的Video转化为biz.pb.go中的video类型
 func MongoVdoToBizVdo(vdo *dal.Video) *biz.Video {
-	res:=&biz.Video{}
-	res.Id=vdo.VideoId
+	res := &biz.Video{}
+	res.Id = vdo.VideoId
 	//查询当前登录用户信息
-	user, err:=dal.QueryUserByID(context.TODO(),vdo.UserId)
-	if err!=nil{
+	user, err := dal.QueryUserByID(context.TODO(), vdo.UserId)
+	if err != nil {
 		log.Println(err)
 		return nil
 	}
 	//校验用户是否已关注
-	f:=false
-	u1:=biz.User{
+	f := false
+	u1 := biz.User{
 		Id:            user.UserId,
 		Name:          user.Username,
 		FollowCount:   user.FollowCount,
 		FollowerCount: user.FollowerCount,
-		IsFollow:      &f,
+		IsFollow:      f,
 	}
-	res.Author=&u1
-	res.PlayUrl=vdo.PlayUrl
-	res.CoverUrl=vdo.CoverUrl
-	res.FavoriteCount=vdo.FavoriteCount
-	res.CommentCount=int64(len(vdo.Comments))
+	res.Author = &u1
+	res.PlayUrl = vdo.PlayUrl
+	res.CoverUrl = vdo.CoverUrl
+	res.FavoriteCount = vdo.FavoriteCount
+	res.CommentCount = int64(len(vdo.Comments))
 	res.Title = vdo.Title
 	//判断当前用户是否点赞
-	f1:=false
-	for i:=0;i<len(user.FavoriteList);i++{
-		if vdo.VideoId==user.FavoriteList[i]{
-			f1=true
+	f1 := false
+	for i := 0; i < len(user.FavoriteList); i++ {
+		if vdo.VideoId == user.FavoriteList[i] {
+			f1 = true
 			break
 		}
 	}
-	res.IsFavorite=&f1
+	res.IsFavorite = f1
 	return res
 }
 
-func TimeStampToTime(stamp int64) time.Time{
+func TimeStampToTime(stamp int64) time.Time {
 	tm := time.Unix(stamp, 0)
 	t := tm.Format("2006-01-02 15:04:05")
-	timeLayout := "2006-01-02 15:04:05"                             //转化所需模板
-	loc, _ := time.LoadLocation("Local")                            //重要：获取时区
+	timeLayout := "2006-01-02 15:04:05"                    //转化所需模板
+	loc, _ := time.LoadLocation("Local")                   //重要：获取时区
 	theTime, _ := time.ParseInLocation(timeLayout, t, loc) //使用模板在对应时区转化为time.time类型
 	return theTime
 }

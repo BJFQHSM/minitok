@@ -4,7 +4,7 @@ WORKDIR /opt/tiktok
 
 RUN go mod init github.com/bytedance2022/minimal_tiktok
 
-COPY grpc_gen/biz grpc_gen/biz
+COPY grpc_gen grpc_gen
 COPY config/biz.yaml config/biz.yaml
 COPY pkg pkg
 COPY cmd/biz cmd/biz
