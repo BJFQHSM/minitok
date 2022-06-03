@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"log"
+	"strconv"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -20,8 +21,15 @@ func NewRelationActionService(ctx context.Context) *RelationActionService {
 
 func (s *RelationActionService) RelationAction(req *biz.RelationActionRequest) *biz.RelationActionResponse {
 	resp := &biz.RelationActionResponse{}
+	tokenId, err := strconv.ParseInt(req.Token, 10, 64)
+	if err != nil {
+		resp.StatusCode = 1
+		errMsg := err.Error()
+		resp.StatusMsg = &errMsg
+		return resp
+	}
 	if req.ActionType == 1 {
-		err := dal.FollowRelation(s.ctx, req.ToUserId, req.UserId)
+		err := dal.FollowRelation(s.ctx, req.ToUserId, tokenId)
 		if err != nil {
 			log.Printf("关注运行到这了---%+v", err)
 			resp.StatusCode = 1
@@ -35,7 +43,7 @@ func (s *RelationActionService) RelationAction(req *biz.RelationActionRequest) *
 		resp.StatusMsg = &msg
 		return resp
 	} else {
-		err := dal.UnFollowRelation(s.ctx, req.ToUserId, req.UserId)
+		err := dal.UnFollowRelation(s.ctx, req.ToUserId, tokenId)
 
 		if err != nil {
 			log.Printf("运行到这了---%+v", err)

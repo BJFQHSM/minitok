@@ -72,7 +72,7 @@ func Register(c *gin.Context) {
 // @Router       /auth [get]
 func QueryInfo(c *gin.Context) {
 	var req biz.QueryUserInfoRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
 	if err != nil {
 		// todo
 		log.Printf("ERROR: parse from http reqbody %v\n", err)

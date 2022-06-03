@@ -31,7 +31,12 @@ func (s *queryUserInfoServiceImpl) DoService() {
 			break
 		}
 
-		if err = s.queryUserInfoByUID(); err != nil {
+		var tokenUserId int64
+		tokenUserId, err = strconv.ParseInt(s.Req.Token, 10, 64)
+		if err != nil {
+			break
+		}
+		if s.Resp.User, err = QueryUserInfoByUID(s.Ctx, s.Req.UserId, tokenUserId); err != nil {
 			break
 		}
 	}
@@ -49,20 +54,15 @@ func (s *queryUserInfoServiceImpl) validateParams() error {
 	return nil
 }
 
-func (s *queryUserInfoServiceImpl) queryUserInfoByUID() error {
-	tokenUserId, err := strconv.ParseInt(s.Req.Token, 10, 64)
+func QueryUserInfoByUID(ctx context.Context, uid int64, tokenUserId int64) (*biz.User, error) {
+	user, err := dal.QueryUserById(ctx, uid)
 	if err != nil {
-		return err
-	}
-	uid := s.Req.UserId
-	user, err := dal.QueryUserById(s.Ctx, uid)
-	if err != nil {
-		return err
+		return nil, err
 	}
 
-	isFollow, err := dal.QueryIsFollow(s.Ctx, uid, int64(tokenUserId))
+	isFollow, err := dal.QueryIsFollow(ctx, uid, tokenUserId)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	respUser := biz.User{
 		Id:            int64(user.UserId),
@@ -71,8 +71,7 @@ func (s *queryUserInfoServiceImpl) queryUserInfoByUID() error {
 		FollowerCount: int64(user.FollowerCount),
 		IsFollow:      isFollow,
 	}
-	s.Resp.User = &respUser
-	return nil
+	return &respUser, nil
 }
 
 func (s *queryUserInfoServiceImpl) GetResponse() *biz.QueryUserInfoResponse {

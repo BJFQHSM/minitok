@@ -2,10 +2,11 @@ package handler
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // RelationAction godoc
@@ -23,7 +24,7 @@ import (
 // @Router       /relation/action [post]
 func RelationAction(c *gin.Context) {
 	var req biz.RelationActionRequest
-	err := c.ShouldBind(&req)
+	err := c.ShouldBindQuery(&req)
 	if err != nil {
 		// todo
 	}
