@@ -23,8 +23,8 @@ func (s *AuthServiceImpl) Register(ctx context.Context, req *auth.RegisterReques
 func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*auth.LoginResponse, error) {
 	msg := "success"
 	return &auth.LoginResponse{
-		UserId:     1,
-		Token:      "1",
+		UserId:     2,
+		Token:      "2",
 		StatusCode: 0,
 		StatusMsg:  &msg,
 	}, nil

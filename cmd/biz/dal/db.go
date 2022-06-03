@@ -2,10 +2,12 @@ package dal
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"sync"
 	"time"
 
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -38,16 +40,16 @@ type mongoUriConfig struct {
 }
 
 func parseMongoConf() string {
-	// conf := util.Parse("config/biz.yaml")["mongodb"].(map[interface{}]interface{})
-	// log.Printf("%+v\n", conf)
-	// uri := mongoUriConfig{
-	// 	protocol: "mongodb+srv",
-	// 	user:     util.InterfaceToStr(conf["user"]),
-	// 	password: util.InterfaceToStr(conf["password"]),
-	// 	url:      util.InterfaceToStr(conf["url"]),
-	// }
-	// URI := fmt.Sprintf("%s://%s:%s@%s", uri.protocol, uri.user, uri.password, uri.url)
-	URI := "mongodb://127.0.0.1:27017"
+	conf := util.Parse("config/biz.yaml")["mongodb"].(map[interface{}]interface{})
+	log.Printf("%+v\n", conf)
+	uri := mongoUriConfig{
+		protocol: "mongodb+srv",
+		user:     util.InterfaceToStr(conf["user"]),
+		password: util.InterfaceToStr(conf["password"]),
+		url:      util.InterfaceToStr(conf["url"]),
+	}
+	URI := fmt.Sprintf("%s://%s:%s@%s", uri.protocol, uri.user, uri.password, uri.url)
+	// URI := "mongodb://127.0.0.1:27017"
 	log.Printf("%s\n", URI)
 	return URI
 }
