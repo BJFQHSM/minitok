@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"log"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
@@ -62,16 +63,15 @@ func (s *favoriteActionServiceImpl) validateParams() error {
 }
 
 func (s *favoriteActionServiceImpl) doFavoriteAction() error {
-
-	////获取用户的ID
-	//user,err := dal.QueryUserByToken(s.Ctx, s.Req.Token)
-	//if err!=nil{
-	//	log.Printf("获取不到用户信息：%v", err)
-	//	return err
-	//}
-
+	//获取用户的ID
+	user, err := dal.QueryUserByToken(s.Ctx, s.Req.Token)
+	if err != nil {
+		log.Printf("获取不到用户信息：%v", err)
+		return err
+	}
+	//userId := s.Req.UserId
 	//点赞或取消点赞
-	err := dal.FavoriteAction(s.Ctx, s.userId, s.Req.VideoId)
+	err = dal.FavoriteAction(s.Ctx, user.UserId, s.Req.VideoId, s.Req.ActionType)
 	return err
 }
 

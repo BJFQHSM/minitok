@@ -75,10 +75,8 @@ func FollowRelation(ctx context.Context, followee int64, follower int64) error {
 	}
 	return nil
 }
-
 // 赞操作
-// 需要更新用户表的点赞列表和视频表的点赞用户id列表
-func FavoriteAction(ctx context.Context, user_id int64, video_id int64) error {
+func FavoriteAction(ctx context.Context, user_id int64, video_id int64, actionType int32) error {
 	userColl := MongoCli.Database("tiktok").Collection("user")
 	videoColl := MongoCli.Database("tiktok").Collection("video")
 	// 定义事务
@@ -99,43 +97,18 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64) error {
 			return nil, errors.New("video_id not exist")
 		}
 
-		//校验用户是否已经点赞
-		i := 0
-		for ; i < len(user.FavoriteList); i++ {
-			if user.FavoriteList[i] == video_id {
-				break
+		if actionType==1 {		//点赞
+			err = Favorite(ctx, user_id, video_id)
+			if err!=nil{
+				log.Println(err)
+				return nil, errors.New("点赞报错")
 			}
-		}
-		if i >= len(user.FavoriteList) { //未点赞
-			user.FavoriteList = append(user.FavoriteList, video_id)
-			video.Favorites = append(video.Favorites, user_id)
-		} else { //已点赞
-			user.FavoriteList = append(user.FavoriteList[:i], user.FavoriteList[i+1:]...)
-			tmp := []int64{}
-			for k := 0; k < len(video.Favorites); k++ {
-				if video.Favorites[k] == user_id {
-					continue
-				}
-				tmp = append(tmp, video.Favorites[k])
+		} else { 	//取消点赞
+			err = CancelFavorite(ctx, user_id, video_id)
+			if err!=nil{
+				log.Println(err)
+				return nil, errors.New("取消点赞报错")
 			}
-			//video.Favorites = append(video.Favorites[:k], video.Favorites[k+1:]...)
-			video.Favorites = tmp
-		}
-
-		//更新用户表和视频表
-		filter = bson.D{{"user_id", user_id}}
-		update := bson.D{{"$set", bson.D{{"favorite_list", user.FavoriteList}}}}
-		_, err = userColl.UpdateOne(ctx, filter, update)
-		if err != nil {
-			log.Println(err)
-			return nil, errors.New("failed to update user table")
-		}
-		filter = bson.D{{"video_id", video_id}}
-		update = bson.D{{"$set", bson.D{{"favorites", video.Favorites}}}}
-		_, err = videoColl.UpdateOne(ctx, filter, update)
-		if err != nil {
-			log.Println(err)
-			return nil, errors.New("failed to update video table")
 		}
 		return nil, nil
 	}
@@ -151,7 +124,7 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64) error {
 	// 执行事务
 	_, err = session.WithTransaction(ctx, callback)
 	if err != nil {
-		log.Printf("ERROR: fail to doFavorite. %v\n", err)
+		log.Printf("ERROR: fail to ChangeFollowRelation. %v\n", err)
 		return err
 	}
 	return nil
@@ -226,18 +199,18 @@ func QueryUserByID(ctx context.Context, id int64) (*User, error) {
 	return &result, nil
 }
 
-//func QueryUserByToken(ctx context.Context, token string) (*User, error) {
-//	collection := MongoCli.Database("tiktok").Collection("user")
-//	filter := bson.D{{"username", token}}
-//
-//	var result User
-//	err := collection.FindOne(ctx, filter).Decode(&result)
-//	if err != nil {
-//		log.Println(err)
-//		return nil, err
-//	}
-//	return &result, nil
-//}
+func QueryUserByToken(ctx context.Context, token string) (*User, error) {
+	collection := MongoCli.Database("tiktok").Collection("user")
+	filter := bson.D{{"username", token}}
+
+	var result User
+	err := collection.FindOne(ctx, filter).Decode(&result)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+	return &result, nil
+}
 
 //获取用户点赞列表
 func GetFavoriteList(ctx context.Context, user_id int64) ([]*Video, error) {
@@ -340,3 +313,45 @@ func QueryFollowsByUserId(ctx context.Context, userId int64) ([]*User, error) {
 	}
 	return QueryUserByIds(ctx, user.Follows)
 }
+
+//点赞
+func Favorite(ctx context.Context, userId, videoId int64) error {
+	collection := MongoCli.Database("tiktok").Collection("user")
+	query := bson.M{"user_id": userId}
+	update := bson.M{"$push": bson.M{"favorite_list": videoId}}
+	_, err := collection.UpdateOne(ctx, query, update)
+	if err != nil {
+		return err
+	}
+
+	collection = MongoCli.Database("tiktok").Collection("video")
+	query = bson.M{"video_id": videoId}
+	update = bson.M{"$push": bson.M{"favorites": userId}}
+	_, err = collection.UpdateOne(ctx, query, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+//取消点赞
+func CancelFavorite(ctx context.Context, userId, videoId int64) error {
+	collection := MongoCli.Database("tiktok").Collection("user")
+	query := bson.M{"user_id": userId}
+	update := bson.M{"$pull": bson.M{"favorite_list": videoId}}
+	_, err := collection.UpdateOne(ctx, query, update)
+	if err != nil {
+		return err
+	}
+
+	collection = MongoCli.Database("tiktok").Collection("video")
+	query = bson.M{"video_id": videoId}
+	update = bson.M{"$pull": bson.M{"favorites": userId}}
+	_, err = collection.UpdateOne(ctx, query, update)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+
