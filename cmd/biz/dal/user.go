@@ -325,8 +325,21 @@ func Favorite(ctx context.Context, userId, videoId int64) error {
 	}
 
 	collection = MongoCli.Database("tiktok").Collection("video")
+	//获取点赞数量
+	vdo, err := QueryVideoByVideoId(ctx, videoId)
+	if err != nil {
+		return err
+	}
+	count := vdo.FavoriteCount
+	//更新点赞列表
 	query = bson.M{"video_id": videoId}
 	update = bson.M{"$push": bson.M{"favorites": userId}}
+	_, err = collection.UpdateOne(ctx, query, update)
+	if err != nil {
+		return err
+	}
+	//更新点赞数量
+	update = bson.M{"$set": bson.M{"favorite_count": count+1}}
 	_, err = collection.UpdateOne(ctx, query, update)
 	if err != nil {
 		return err
@@ -345,8 +358,24 @@ func CancelFavorite(ctx context.Context, userId, videoId int64) error {
 	}
 
 	collection = MongoCli.Database("tiktok").Collection("video")
+	//获取点赞数量
+	vdo, err := QueryVideoByVideoId(ctx, videoId)
+	if err != nil {
+		return err
+	}
+	count := vdo.FavoriteCount
+	//更新点赞列表
 	query = bson.M{"video_id": videoId}
 	update = bson.M{"$pull": bson.M{"favorites": userId}}
+	_, err = collection.UpdateOne(ctx, query, update)
+	if err != nil {
+		return err
+	}
+	//更新点赞数量
+	if count>0{
+		count--
+	}
+	update = bson.M{"$set": bson.M{"favorite_count": count}}
 	_, err = collection.UpdateOne(ctx, query, update)
 	if err != nil {
 		return err
