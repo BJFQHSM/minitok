@@ -6,10 +6,11 @@ import (
 	"net/http"
 
 	"fmt"
+	"strconv"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 func FavoriteAction(c *gin.Context) {
@@ -20,10 +21,10 @@ func FavoriteAction(c *gin.Context) {
 	req.Token = c.Query("token")
 	//根据token获取用户的id
 
-	req.UserId = 1001
-	tmp,err := strconv.Atoi(c.Query("video_id"))
+	req.UserId = 1
+	tmp, err := strconv.Atoi(c.Query("video_id"))
 	req.VideoId = int64(tmp)
-	tmp,err = strconv.Atoi(c.Query("action_type"))
+	tmp, err = strconv.Atoi(c.Query("action_type"))
 	req.ActionType = int32(tmp)
 	fmt.Printf("req=%#v\n", req)
 	if err != nil {

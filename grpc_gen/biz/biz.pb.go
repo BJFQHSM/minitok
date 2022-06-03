@@ -22,10 +22,11 @@
 package biz
 
 import (
-	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
 	sync "sync"
+
+	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 )
 
 const (
@@ -40,11 +41,11 @@ type User struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count,omitempty"`
-	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count,omitempty"`
-	IsFollow      *bool  `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3,oneof" json:"is_follow,omitempty"`
+	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" form:"id"`
+	Name          string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" form:"name"`
+	FollowCount   int64  `protobuf:"varint,3,opt,name=follow_count,json=followCount,proto3" json:"follow_count,omitempty" form:"follow_count"`
+	FollowerCount int64  `protobuf:"varint,4,opt,name=follower_count,json=followerCount,proto3" json:"follower_count,omitempty" form:"follower_count"`
+	IsFollow      *bool  `protobuf:"varint,5,opt,name=is_follow,json=isFollow,proto3,oneof" json:"is_follow,omitempty" form:"is_follow""`
 }
 
 func (x *User) Reset() {
@@ -119,14 +120,14 @@ type Video struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Author        *User  `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty"`
-	PlayUrl       string `protobuf:"bytes,3,opt,name=play_url,json=playUrl,proto3" json:"play_url,omitempty"`
-	CoverUrl      string `protobuf:"bytes,4,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url,omitempty"`
-	FavoriteCount int64  `protobuf:"varint,5,opt,name=favorite_count,json=favoriteCount,proto3" json:"favorite_count,omitempty"`
-	CommentCount  int64  `protobuf:"varint,6,opt,name=comment_count,json=commentCount,proto3" json:"comment_count,omitempty"`
-	IsFavorite    *bool  `protobuf:"varint,7,opt,name=is_favorite,json=isFavorite,proto3,oneof" json:"is_favorite,omitempty"`
-	Title         string `protobuf:"bytes,8,opt,name=title,proto3" json:"title,omitempty"`
+	Id            int64  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" form:"id"`
+	Author        *User  `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty" form:"author"`
+	PlayUrl       string `protobuf:"bytes,3,opt,name=play_url,json=playUrl,proto3" json:"play_url,omitempty" form:"play_url"`
+	CoverUrl      string `protobuf:"bytes,4,opt,name=cover_url,json=coverUrl,proto3" json:"cover_url,omitempty" form:"cover_url"`
+	FavoriteCount int64  `protobuf:"varint,5,opt,name=favorite_count,json=favoriteCount,proto3" json:"favorite_count,omitempty" form:"favorite_count"`
+	CommentCount  int64  `protobuf:"varint,6,opt,name=comment_count,json=commentCount,proto3" json:"comment_count,omitempty" form:"comment_count"`
+	IsFavorite    *bool  `protobuf:"varint,7,opt,name=is_favorite,json=isFavorite,proto3,oneof" json:"is_favorite,omitempty" form:"is_favorite"`
+	Title         string `protobuf:"bytes,8,opt,name=title,proto3" json:"title,omitempty" form:"title"`
 }
 
 func (x *Video) Reset() {
@@ -222,8 +223,8 @@ type FeedRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	LatestTime int64  `protobuf:"varint,1,opt,name=latest_time,json=latestTime,proto3" json:"latest_time,omitempty"`
-	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	LatestTime int64  `protobuf:"varint,1,opt,name=latest_time,json=latestTime,proto3" json:"latest_time,omitempty" form:"latest_time"`
+	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
 }
 
 func (x *FeedRequest) Reset() {
@@ -348,8 +349,8 @@ type QueryUserInfoRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
 }
 
 func (x *QueryUserInfoRequest) Reset() {
@@ -466,9 +467,9 @@ type PublishActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Token string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
-	Data  []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
-	Title string `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Token string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty" form:"token"`
+	Data  []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty" form:"data"`
+	Title string `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty" form:"title"`
 }
 
 func (x *PublishActionRequest) Reset() {
@@ -584,8 +585,8 @@ type QueryPublishListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
 }
 
 func (x *QueryPublishListRequest) Reset() {
@@ -702,10 +703,10 @@ type FavoriteActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId     int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
-	VideoId    int64  `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
-	ActionType int32  `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
+	UserId     int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
+	VideoId    int64  `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty" form:"video_id"`
+	ActionType int32  `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty" form:"action_type"`
 }
 
 func (x *FavoriteActionRequest) Reset() {
@@ -828,8 +829,8 @@ type QueryFavoriteListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
 }
 
 func (x *QueryFavoriteListRequest) Reset() {
@@ -946,12 +947,12 @@ type CommentActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId      int64   `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token       string  `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
-	VideoId     int64   `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
-	ActionType  int32   `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
-	CommentText *string `protobuf:"bytes,5,opt,name=comment_text,json=commentText,proto3,oneof" json:"comment_text,omitempty"`
-	CommentId   *int64  `protobuf:"varint,6,opt,name=comment_id,json=commentId,proto3,oneof" json:"comment_id,omitempty"`
+	UserId      int64   `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token       string  `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
+	VideoId     int64   `protobuf:"varint,3,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty" form:"video_id"`
+	ActionType  int32   `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty" form:"action_type"`
+	CommentText *string `protobuf:"bytes,5,opt,name=comment_text,json=commentText,proto3,oneof" json:"comment_text,omitempty" form:"comment_text"`
+	CommentId   *int64  `protobuf:"varint,6,opt,name=comment_id,json=commentId,proto3,oneof" json:"comment_id,omitempty" form:"comment_id"`
 }
 
 func (x *CommentActionRequest) Reset() {
@@ -1167,8 +1168,8 @@ type QueryCommentListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Token   string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
-	VideoId int64  `protobuf:"varint,2,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty"`
+	Token   string `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty" form:"token"`
+	VideoId int64  `protobuf:"varint,2,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty" form:"video_id"`
 }
 
 func (x *QueryCommentListRequest) Reset() {
@@ -1285,10 +1286,10 @@ type RelationActionRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId     int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
-	ToUserId   int64  `protobuf:"varint,3,opt,name=to_user_id,json=toUserId,proto3" json:"to_user_id,omitempty"`
-	ActionType int32  `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty"`
+	UserId     int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token      string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
+	ToUserId   int64  `protobuf:"varint,3,opt,name=to_user_id,json=toUserId,proto3" json:"to_user_id,omitempty" form:"to_user_id"`
+	ActionType int32  `protobuf:"varint,4,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty" form:"action_type"`
 }
 
 func (x *RelationActionRequest) Reset() {
@@ -1411,8 +1412,8 @@ type QueryFollowListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
 }
 
 func (x *QueryFollowListRequest) Reset() {
@@ -1529,8 +1530,8 @@ type QueryFollowerListRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
+	UserId int64  `protobuf:"varint,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" form:"user_id"`
+	Token  string `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty" form:"token"`
 }
 
 func (x *QueryFollowerListRequest) Reset() {

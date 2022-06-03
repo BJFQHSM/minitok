@@ -85,14 +85,14 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64) error {
 		//根据id获取对应的用户和视频数据
 		filter := bson.D{{"user_id", user_id}}
 		var user User
-		err := userColl.FindOne(context.TODO(), filter).Decode(&user)
+		err := userColl.FindOne(ctx, filter).Decode(&user)
 		if err != nil {
 			log.Println(err)
 			return nil, errors.New("user_id not exist")
 		}
 		filter = bson.D{{"video_id", video_id}}
 		var video Video
-		err = videoColl.FindOne(context.TODO(), filter).Decode(&video)
+		err = videoColl.FindOne(ctx, filter).Decode(&video)
 		if err != nil {
 			log.Println(err)
 			return nil, errors.New("video_id not exist")
@@ -110,12 +110,12 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64) error {
 			video.Favorites = append(video.Favorites, user_id)
 		} else { //已点赞
 			user.FavoriteList = append(user.FavoriteList[:i], user.FavoriteList[i+1:]...)
-			tmp:=[]int64{}
-			for k:=0; k < len(video.Favorites); k++ {
+			tmp := []int64{}
+			for k := 0; k < len(video.Favorites); k++ {
 				if video.Favorites[k] == user_id {
 					continue
 				}
-				tmp=append(tmp,video.Favorites[k])
+				tmp = append(tmp, video.Favorites[k])
 			}
 			//video.Favorites = append(video.Favorites[:k], video.Favorites[k+1:]...)
 			video.Favorites = tmp
@@ -124,14 +124,14 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64) error {
 		//更新用户表和视频表
 		filter = bson.D{{"user_id", user_id}}
 		update := bson.D{{"$set", bson.D{{"favorite_list", user.FavoriteList}}}}
-		_, err = userColl.UpdateOne(context.TODO(), filter, update)
+		_, err = userColl.UpdateOne(ctx, filter, update)
 		if err != nil {
 			log.Println(err)
 			return nil, errors.New("failed to update user table")
 		}
 		filter = bson.D{{"video_id", video_id}}
 		update = bson.D{{"$set", bson.D{{"favorites", video.Favorites}}}}
-		_, err = videoColl.UpdateOne(context.TODO(), filter, update)
+		_, err = videoColl.UpdateOne(ctx, filter, update)
 		if err != nil {
 			log.Println(err)
 			return nil, errors.New("failed to update video table")
@@ -170,18 +170,18 @@ func QueryUserByID(ctx context.Context, id int64) (*User, error) {
 	return &result, nil
 }
 
-func QueryUserByToken(ctx context.Context, token string) (*User, error) {
-	collection := MongoCli.Database("tiktok").Collection("user")
-	filter := bson.D{{"username", token}}
-
-	var result User
-	err := collection.FindOne(ctx, filter).Decode(&result)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-	return &result, nil
-}
+//func QueryUserByToken(ctx context.Context, token string) (*User, error) {
+//	collection := MongoCli.Database("tiktok").Collection("user")
+//	filter := bson.D{{"username", token}}
+//
+//	var result User
+//	err := collection.FindOne(ctx, filter).Decode(&result)
+//	if err != nil {
+//		log.Println(err)
+//		return nil, err
+//	}
+//	return &result, nil
+//}
 
 //获取用户点赞列表
 func GetFavoriteList(ctx context.Context, user_id int64) ([]*Video, error) {
