@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 )
 
@@ -9,22 +10,21 @@ type LoginService interface {
 	DoService() *auth.LoginResponse
 }
 
-
 func NewLoginService(ctx context.Context, r *auth.LoginRequest) LoginService {
 	return &loginServiceImpl{Req: r, Ctx: ctx, Resp: &auth.LoginResponse{}}
 }
 
 type loginServiceImpl struct {
-	Req *auth.LoginRequest
+	Req  *auth.LoginRequest
 	Resp *auth.LoginResponse
-	Ctx context.Context
+	Ctx  context.Context
 }
 
 func (s *loginServiceImpl) DoService() *auth.LoginResponse {
 	// mock
 	msg := "success"
 	s.Resp = &auth.LoginResponse{
-		UserId:     1,
+		UserId:     2,
 		Token:      "fsjflsjdf",
 		StatusCode: 0,
 		StatusMsg:  &msg,
@@ -32,7 +32,7 @@ func (s *loginServiceImpl) DoService() *auth.LoginResponse {
 
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.validateParams() ; err != nil {
+		if err = s.validateParams(); err != nil {
 			break
 		}
 
@@ -46,15 +46,14 @@ func (s *loginServiceImpl) validateParams() error {
 	return nil
 }
 
-
 func (s *loginServiceImpl) buildResponse(err error) {
 	if err != nil {
 		errMsg := err.Error()
 		s.Resp.StatusMsg = &errMsg
-		s.Resp.StatusCode = 500
+		s.Resp.StatusCode = 1
 	} else {
 		errMsg := "SUCCESS"
 		s.Resp.StatusMsg = &errMsg
-		s.Resp.StatusCode = 200
+		s.Resp.StatusCode = 0
 	}
 }

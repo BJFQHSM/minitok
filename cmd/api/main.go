@@ -37,7 +37,7 @@ func main() {
 
 	feed1 := douyin.Group("/feed")
 	//feed1.GET("/", handler.Feed)
-	feed1.GET("", handler.Feed)
+	feed1.GET("/", handler.Feed)
 
 	relation1 := douyin.Group("/relation")
 	relation1.POST("/action/", handler.RelationAction)
