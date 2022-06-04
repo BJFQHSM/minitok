@@ -124,7 +124,7 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64, actionTy
 	// 执行事务
 	_, err = session.WithTransaction(ctx, callback)
 	if err != nil {
-		log.Printf("ERROR: fail to ChangeFollowRelation. %v\n", err)
+		log.Printf("ERROR: fail to favorite. %v\n", err)
 		return err
 	}
 	return nil
