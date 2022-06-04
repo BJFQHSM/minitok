@@ -32,8 +32,6 @@ func Register(c *gin.Context) {
 	var req auth.RegisterRequest
 	err := c.ShouldBindQuery(&req)
 
-	log.Printf("reqeust : %+v\n", req)
-
 	if err != nil {
 		// todo
 	}
@@ -41,13 +39,14 @@ func Register(c *gin.Context) {
 	if err != nil {
 		// todo
 	}
+
+	log.Printf("Resp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }
 
 func QueryInfo(c *gin.Context) {
 	var req biz.QueryUserInfoRequest
 	err := c.ShouldBindQuery(&req)
-	log.Printf("reqeust : %+v\n", req)
 
 	if err != nil {
 		// todo
@@ -58,5 +57,7 @@ func QueryInfo(c *gin.Context) {
 		// todo
 		log.Printf("ERROR:  %v\n", err)
 	}
+
+	log.Printf("Resp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }

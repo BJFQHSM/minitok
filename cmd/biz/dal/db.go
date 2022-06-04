@@ -58,7 +58,9 @@ func parseMongoConf() string {
 		password: util.InterfaceToStr(conf["password"]),
 		url:      util.InterfaceToStr(conf["url"]),
 	}
-	URI := fmt.Sprintf("%s://%s:%s@%s", uri.protocol, uri.user, uri.password, uri.url)
+
+	//URI := fmt.Sprintf("%s://%s:%s@%s/?connect=direct", uri.protocol, uri.user, uri.password, uri.url)
+	URI := fmt.Sprintf("%s://%s:%s@%s/?replicaSet=tiktok&connect=direct", uri.protocol, uri.user, uri.password, uri.url)
 	// URI := "mongodb://127.0.0.1:27017"
 	log.Printf("%s\n", URI)
 	return URI

@@ -14,7 +14,6 @@ func CommentAction(c *gin.Context) {
 	var req biz.CommentActionRequest
 	err := c.ShouldBindQuery(&req)
 
-	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
@@ -22,6 +21,8 @@ func CommentAction(c *gin.Context) {
 	if err != nil {
 		// todo
 	}
+
+	log.Printf("INFO: Resp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }
 
@@ -37,5 +38,6 @@ func QueryCommentList(c *gin.Context) {
 	if err != nil {
 		// todo
 	}
+	log.Printf("INFO: Resp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }

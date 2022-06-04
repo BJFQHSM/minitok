@@ -20,6 +20,8 @@ func RelationAction(c *gin.Context) {
 	if err != nil {
 		// todo
 	}
+
+	log.Printf("Resp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }
 
@@ -27,7 +29,6 @@ func QueryFollowList(c *gin.Context) {
 	var req biz.QueryFollowListRequest
 	err := c.ShouldBindQuery(&req)
 
-	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
@@ -35,6 +36,8 @@ func QueryFollowList(c *gin.Context) {
 	if err != nil {
 		// todo
 	}
+
+	log.Printf("Resp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }
 
@@ -42,7 +45,6 @@ func QueryFollowerList(c *gin.Context) {
 	var req biz.QueryFollowerListRequest
 	err := c.ShouldBindQuery(&req)
 
-	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 	}
@@ -50,5 +52,7 @@ func QueryFollowerList(c *gin.Context) {
 	if err != nil {
 		// todo
 	}
+
+	log.Printf("Resp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }

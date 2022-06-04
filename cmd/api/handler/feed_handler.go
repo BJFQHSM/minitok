@@ -14,7 +14,6 @@ func Feed(c *gin.Context) {
 	var req biz.FeedRequest
 	err := c.ShouldBindQuery(&req)
 
-	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		// todo
 		log.Printf("Fail to get feed, an error has happened:%v!", err)
@@ -25,5 +24,6 @@ func Feed(c *gin.Context) {
 		log.Printf("Fail to get feed, an error has happened:%v!", err)
 	}
 
+	log.Printf("Resp: %+v\n", resp)
 	c.JSON(http.StatusOK, &resp)
 }

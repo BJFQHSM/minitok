@@ -44,16 +44,15 @@ func main() {
 	relation1.GET("/follower/list/", handler.QueryFollowerList)
 
 	if err := http.ListenAndServe(":8080", r); err != nil {
-		log.Fatal(err)
+		log.Fatalf("FATAL: api bind error, err = %+v\n", err)
 	}
 }
 
 func logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		log.Printf("info: request url: %s\n", c.Request.RequestURI)
-
+		log.Printf("INFO: request url: %s\n", c.Request.RequestURI)
 		//请求处理
 		c.Next()
-		log.Println()
+
 	}
 }

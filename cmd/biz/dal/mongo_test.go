@@ -3,7 +3,6 @@ package dal
 import (
 	"context"
 	"fmt"
-
 	"log"
 	"os"
 	"testing"

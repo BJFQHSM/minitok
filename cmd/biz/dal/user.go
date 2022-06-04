@@ -75,6 +75,7 @@ func FollowRelation(ctx context.Context, followee int64, follower int64) error {
 	}
 	return nil
 }
+
 // 赞操作
 func FavoriteAction(ctx context.Context, user_id int64, video_id int64, actionType int32) error {
 	userColl := MongoCli.Database("tiktok").Collection("user")
@@ -97,15 +98,15 @@ func FavoriteAction(ctx context.Context, user_id int64, video_id int64, actionTy
 			return nil, errors.New("video_id not exist")
 		}
 
-		if actionType==1 {		//点赞
+		if actionType == 1 { //点赞
 			err = Favorite(ctx, user_id, video_id)
-			if err!=nil{
+			if err != nil {
 				log.Println(err)
 				return nil, errors.New("点赞报错")
 			}
-		} else { 	//取消点赞
+		} else { //取消点赞
 			err = CancelFavorite(ctx, user_id, video_id)
-			if err!=nil{
+			if err != nil {
 				log.Println(err)
 				return nil, errors.New("取消点赞报错")
 			}
@@ -339,7 +340,7 @@ func Favorite(ctx context.Context, userId, videoId int64) error {
 		return err
 	}
 	//更新点赞数量
-	update = bson.M{"$set": bson.M{"favorite_count": count+1}}
+	update = bson.M{"$set": bson.M{"favorite_count": count + 1}}
 	_, err = collection.UpdateOne(ctx, query, update)
 	if err != nil {
 		return err
@@ -372,7 +373,7 @@ func CancelFavorite(ctx context.Context, userId, videoId int64) error {
 		return err
 	}
 	//更新点赞数量
-	if count>0{
+	if count > 0 {
 		count--
 	}
 	update = bson.M{"$set": bson.M{"favorite_count": count}}
@@ -382,5 +383,3 @@ func CancelFavorite(ctx context.Context, userId, videoId int64) error {
 	}
 	return nil
 }
-
-
