@@ -22,7 +22,7 @@ func PublishAction(c *gin.Context) {
 		// todo
 	}
 
-	log.Printf("Resp: %+v\n", resp)
+	log.Printf("PublishActionResp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }
 
@@ -30,7 +30,6 @@ func QueryPublishList(c *gin.Context) {
 	var req biz.QueryPublishListRequest
 	err := c.ShouldBindQuery(&req)
 
-	log.Printf("reqeust : %+v\n", req)
 	if err != nil {
 		log.Printf("ERROR: parse from http reqbody %v\n", err)
 		// todo
@@ -41,6 +40,6 @@ func QueryPublishList(c *gin.Context) {
 		// todo
 	}
 
-	log.Printf("Resp: %+v\n", resp)
+	log.Printf("PublishListResp: %+v\n", resp)
 	c.JSON(http.StatusOK, resp)
 }

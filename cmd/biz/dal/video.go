@@ -2,6 +2,8 @@ package dal
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"time"
@@ -166,4 +168,46 @@ func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 		videos = append(videos, &video)
 	}
 	return videos, nil
+}
+
+func PublishVideo(ctx context.Context, video Video) error {
+	userColl := MongoCli.Database("tiktok").Collection("user")
+	videoColl := MongoCli.Database("tiktok").Collection("video")
+
+	// 定义事务
+	callback := func(sessCtx mongo.SessionContext) (interface{}, error) {
+
+		filter := bson.M{"user_id": video.UserId}
+		update := bson.M{
+			"addToSet": bson.M{"publish_list": video.VideoId},
+		}
+		if updateResult, err := userColl.UpdateOne(sessCtx, filter, update); err != nil {
+			return nil, err
+		} else if updateResult.MatchedCount == 0 {
+			return nil, errors.New(fmt.Sprintf("user_id was found where user_id = %+v\n", video.UserId))
+		}
+
+		if insertOneResult, err := videoColl.InsertOne(sessCtx, video); err != nil {
+			return nil, err
+		} else if insertOneResult.InsertedID == 0 {
+			return nil, errors.New("fail to insert video")
+		}
+		return nil, nil
+	}
+
+	// 开启会话
+	session, err := MongoCli.StartSession()
+	if err != nil {
+		log.Printf("ERROR: fail to start mongo session. %v\n", err)
+		return err
+	}
+	defer session.EndSession(ctx)
+
+	// 执行事务
+	_, err = session.WithTransaction(ctx, callback)
+	if err != nil {
+		log.Printf("ERROR: fail to publish video. %v\n", err)
+		return err
+	}
+	return nil
 }

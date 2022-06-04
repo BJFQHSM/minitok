@@ -42,13 +42,16 @@ type mongoUriConfig struct {
 func parseMongoConf() string {
 	var confFile string
 	var protocol string
+	var suffix string
 	env := os.Getenv("env")
 	if env == "dev" {
 		confFile = "config/biz-test.yaml"
 		protocol = "mongodb+srv"
+		suffix = "/"
 	} else {
 		confFile = "config/biz.yaml"
 		protocol = "mongodb"
+		suffix = "/?replicaSet=tiktok&connect=direct"
 	}
 	conf := util.Parse(confFile)["mongodb"].(map[interface{}]interface{})
 	log.Printf("%+v\n", conf)
@@ -60,7 +63,7 @@ func parseMongoConf() string {
 	}
 
 	//URI := fmt.Sprintf("%s://%s:%s@%s/?connect=direct", uri.protocol, uri.user, uri.password, uri.url)
-	URI := fmt.Sprintf("%s://%s:%s@%s/?replicaSet=tiktok&connect=direct", uri.protocol, uri.user, uri.password, uri.url)
+	URI := fmt.Sprintf("%s://%s:%s@%s%s", uri.protocol, uri.user, uri.password, uri.url, suffix)
 	// URI := "mongodb://127.0.0.1:27017"
 	log.Printf("%s\n", URI)
 	return URI
