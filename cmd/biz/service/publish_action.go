@@ -6,6 +6,7 @@ import (
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"io/ioutil"
+	"os"
 	"time"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -55,12 +56,16 @@ func (s *publishActionServiceImpl) validateParams() error {
 func (s *publishActionServiceImpl) doPublish() error {
 	req := s.Req
 	var err error
+	path, err := os.Getwd()
+	if err != nil {
+		return err
+	}
 	filename := util.GenerateRandomStr(20) + ".mp4"
-	if err = ioutil.WriteFile(filename, req.Data, 0666); err != nil {
+	if err = ioutil.WriteFile(path + filename, req.Data, 0666); err != nil {
 		return err
 	}
 	videoId := req.UserId << 31 + int64(util.GenerateRandomInt32())
-	url := "http:127.0.0.1:8080/video/" + filename
+	url := "http:127.0.0.1:8080/static/" + filename
 	video := &dal.Video{
 		VideoId: videoId,
 		UserId: req.UserId,

@@ -43,6 +43,8 @@ func main() {
 	relation1.GET("/follow/list/", handler.QueryFollowList)
 	relation1.GET("/follower/list/", handler.QueryFollowerList)
 
+	douyin.GET("/static/", handler.Video)
+
 	if err := http.ListenAndServe(":8080", r); err != nil {
 		util.LogFatalf("API bind error, err = %+v\n", err)
 	}
