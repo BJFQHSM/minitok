@@ -15,7 +15,7 @@ import (
 var Cli *mongo.Client
 var once sync.Once
 
-func initMongoDB() {
+func InitDB() {
 	once.Do(func() {
 		util.LogInfo("MongoDB initiation starting...")
 

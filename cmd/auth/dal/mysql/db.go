@@ -12,7 +12,7 @@ import (
 var DB *gorm.DB
 var once sync.Once
 
-func InitMysql() {
+func InitDB() {
 	once.Do(func() {
 		util.LogInfo("MySQL initiation starting...")
 		var err error

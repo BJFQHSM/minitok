@@ -18,7 +18,7 @@ type Video struct {
 	FavoriteCount int64     `bson:"favorite_count"`
 	Favorites     []int64   `bson:"favorites"`
 	CommentCount  int64     `bson:"comment_count"`
-	Comments      []Comment `bson:"comments, inline"`
+	Comments      []*Comment `bson:"comments, inline"`
 	PublishDate   time.Time `bson:"publish_date"`
 	Title         string    `bson:"title"`
 }

@@ -76,10 +76,10 @@ func QueryUserInfoByUID(ctx context.Context, uid int64, tokenUserId int64) (*biz
 		return nil, err
 	}
 	respUser := biz.User{
-		Id:            int64(user.UserId),
+		Id:            user.UserId,
 		Name:          user.Username,
-		FollowCount:   int64(user.FollowCount),
-		FollowerCount: int64(user.FollowerCount),
+		FollowCount:   user.FollowCount,
+		FollowerCount: user.FollowerCount,
 		IsFollow:      isFollow,
 	}
 	return &respUser, nil

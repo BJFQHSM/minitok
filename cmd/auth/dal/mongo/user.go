@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 )
 
 type User struct {
@@ -16,10 +17,12 @@ type User struct {
 }
 
 func InsertUser(ctx context.Context, user *User) error {
+	util.LogInfof("start to insert into mongo %+v\n", user)
 	coll := Cli.Database("tiktok").Collection("user")
 	_, err := coll.InsertOne(ctx, user)
 	if err != nil {
 		return err
 	}
+	util.LogInfof("success to insert into mongo %+v\n", user)
 	return nil
 }
