@@ -4,11 +4,9 @@ WORKDIR /opt/tiktok
 
 RUN go mod init github.com/bytedance2022/minimal_tiktok
 
-COPY grpc_gen grpc_gen
-COPY config/biz.yaml config/biz.yaml
+COPY grpc_gen/biz grpc_gen/biz
 COPY pkg pkg
 COPY cmd/biz cmd/biz
 
-# RUN go env -w GOPROXY="https://goproxy.cn, direct" && go mod download && go mod verify
 RUN go env -w GOPROXY="https://goproxy.cn, direct" && go mod tidy
 RUN go build -v -o /usr/local/bin/biz ./cmd/biz/*.go

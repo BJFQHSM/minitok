@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"context"
-	"log"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"net/http"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
@@ -12,18 +12,35 @@ import (
 
 func Feed(c *gin.Context) {
 	var req biz.FeedRequest
+	resp := &biz.FeedResponse{StatusCode: 1}
 	err := c.ShouldBindQuery(&req)
 
 	if err != nil {
-		// todo
-		log.Printf("Fail to get feed, an error has happened:%v!", err)
+		msg := "invalid request params"
+		resp.StatusMsg = &msg
+		c.JSON(http.StatusBadRequest, resp)
+	} else {
+		util.LogInfof("Feed request: %+v\n", &req)
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if err != nil || authResp == nil {
+			c.JSON(http.StatusInternalServerError, resp)
+			return
+		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp = &biz.FeedResponse{
+				StatusCode: 1,
+				StatusMsg:  &msg,
+			}
+		} else {
+			req.UserId = authResp.UserId
+			resp, err = rpc.BizClient.Feed(c, &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+		}
+		util.LogInfof("Feed response: %+v\n", resp)
+		c.JSON(http.StatusOK, &resp)
 	}
-	resp, err := rpc.BizClient.Feed(context.Background(), &req)
-	if err != nil {
-		// todo
-		log.Printf("Fail to get feed, an error has happened:%v!", err)
-	}
-
-	log.Printf("Resp: %+v\n", resp)
-	c.JSON(http.StatusOK, &resp)
 }

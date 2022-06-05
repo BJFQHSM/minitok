@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"context"
-	"log"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"net/http"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
@@ -12,46 +12,54 @@ import (
 
 func FavoriteAction(c *gin.Context) {
 	var req biz.FavoriteActionRequest
+	resp := &biz.FavoriteActionResponse{StatusCode: 1}
 	err := c.ShouldBindQuery(&req)
 
 	if err != nil {
-		log.Printf("ERROR: 请求参数匹配错误 err = %v:", err)
-		var resp *biz.FavoriteActionResponse
-		resp.StatusCode = 1
-		msg := "Params have errors!"
+		msg := "invalid request params"
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
-	}
-	resp, err := rpc.BizClient.FavoriteAction(context.Background(), &req)
-	if err != nil {
-		// todo
-		log.Printf("ERROR: 点赞操作报错 err = %v:", err)
-	}
-	log.Printf("Resp: %+v\n", resp)
-	c.JSON(http.StatusOK, resp)
-}
+	} else {
+		util.LogInfof("FavoriteAction response: %+v\n", &req)
 
-//
-//type ListResponse struct {
-//	VideoList  []*biz.Video `protobuf:"bytes,1,rep,name=video_list,json=videoList,proto3" json:"video_list,omitempty"`
-//	StatusCode int32        `protobuf:"varint,2,opt,name=status_code,json=statusCode,proto3" json:"status_code"`
-//	StatusMsg  string
-//}
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if authResp == nil || err != nil {
+			c.JSON(http.StatusInternalServerError, resp)
+			return
+		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp.StatusMsg = &msg
+		} else {
+			req.UserId = authResp.UserId
+			resp, err = rpc.BizClient.FavoriteAction(c, &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+		}
+		util.LogInfof("FavoriteAction response: %+v\n", resp)
+		c.JSON(http.StatusOK, resp)
+	}
+}
 
 func QueryFavoriteList(c *gin.Context) {
 	var req biz.QueryFavoriteListRequest
+	resp := &biz.QueryFavoriteListResponse{StatusCode: 1}
 	err := c.ShouldBindQuery(&req)
 
 	if err != nil {
-		// todo
-		log.Printf("ERROR: 参数列表错误 err = %+v:", err)
+		msg := "invalid request params"
+		resp.StatusMsg = &msg
+		c.JSON(http.StatusBadRequest, resp)
+	} else {
+		util.LogInfof("QueryFavoriteList response: %+v\n", &req)
+		resp, err = rpc.BizClient.QueryFavoriteList(c, &req)
+		if err != nil || resp == nil {
+			c.JSON(http.StatusInternalServerError, resp)
+		} else {
+			util.LogInfof("QueryFavoriteList response: %+v\n", resp)
+			c.JSON(http.StatusOK, resp)
+		}
 	}
-	resp, err := rpc.BizClient.QueryFavoriteList(context.Background(), &req)
-	if err != nil {
-		// todo
-		log.Printf("ERROR: 点赞列表报错 err = %v:", err)
-	}
-
-	log.Printf("INFO: Resp: %+v\n", resp)
-	c.JSON(http.StatusOK, resp)
 }

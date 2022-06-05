@@ -7,8 +7,6 @@ import (
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -24,16 +22,11 @@ type relationActionServiceImpl struct {
 	Req  *biz.RelationActionRequest
 	Resp *biz.RelationActionResponse
 	Ctx  context.Context
-
-	userId int64
 }
 
 func (s *relationActionServiceImpl) DoService() *biz.RelationActionResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.authenticate(); err != nil {
-			break
-		}
 
 		if err = s.validateParams(); err != nil {
 			break
@@ -47,38 +40,26 @@ func (s *relationActionServiceImpl) DoService() *biz.RelationActionResponse {
 	return s.Resp
 }
 
-func (s *relationActionServiceImpl) authenticate() error {
-	authReq := &auth.AuthenticateRequest{
-		Token: s.Req.Token,
-	}
-	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
-	if err != nil {
-		// todo
-	}
-	s.userId = resp.UserId
-	return nil
-}
-
 func (s *relationActionServiceImpl) validateParams() error {
 	req := s.Req
 	if req == nil {
 		return errors.New("params: request could not be nil")
 	}
 	if req.ToUserId < 0 {
-		return errors.New("params: userId could not be negative number")
+		return errors.New("illegal params: to_user_id could not lower than 0")
 	}
 	return nil
 }
 
 func (s *relationActionServiceImpl) doFollowAction() error {
 	if s.Req.ActionType == 1 {
-		err := dal.FollowRelation(s.Ctx, s.Req.ToUserId, s.userId)
+		err := dal.FollowRelation(s.Ctx, s.Req.ToUserId, s.Req.UserId)
 		if err != nil {
 			log.Printf("%+v", err)
 			return err
 		}
 	} else {
-		err := dal.UnFollowRelation(s.Ctx, s.Req.ToUserId, s.userId)
+		err := dal.UnFollowRelation(s.Ctx, s.Req.ToUserId, s.Req.UserId)
 		if err != nil {
 			log.Printf("%+v", err)
 			return err

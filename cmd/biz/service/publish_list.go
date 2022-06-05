@@ -6,8 +6,6 @@ import (
 	"log"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -33,9 +31,7 @@ func (s *queryPublishListServiceImpl) DoService() *biz.QueryPublishListResponse 
 		if err = s.validateParams(); err != nil {
 			break
 		}
-		if err = s.authenticate(); err != nil {
-			break
-		}
+
 		if err = s.queryPublishListByUID(); err != nil {
 			break
 		}
@@ -43,26 +39,14 @@ func (s *queryPublishListServiceImpl) DoService() *biz.QueryPublishListResponse 
 	s.buildResponse(err)
 	return s.Resp
 }
-func (s *queryPublishListServiceImpl) authenticate() error {
-	authReq := &auth.AuthenticateRequest{
-		Token: s.Req.Token,
-	}
-	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
-	if err != nil {
-		// todo
-		log.Printf("%+v", err)
-		return err
-	}
-	s.userId = resp.UserId
-	return nil
-}
+
 func (s *queryPublishListServiceImpl) validateParams() error {
 	req := s.Req
 	if req == nil {
-		return errors.New("params: request could not be nil")
+		return errors.New("request could not be nil")
 	}
 	if req.UserId < 0 {
-		return errors.New("params: userId could not be negative")
+		return errors.New("illegal params: user_id could not be negative")
 	}
 	return nil
 }

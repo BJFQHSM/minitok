@@ -1,7 +1,7 @@
 package rpc
 
 import (
-	"log"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"os"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -12,6 +12,7 @@ import (
 var BizClient biz.BizServiceClient
 
 func initBiz() {
+	util.LogInfo("BizClient initiation starting...")
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	//resolver, err := etcd.NewEtcdResolver([]string{"etcd:2379"})
@@ -36,8 +37,9 @@ func initBiz() {
 	} else {
 		conn, err = grpc.Dial("biz:8889", opts...)
 	}
-	if err != nil {
-		log.Fatal(err)
+	if BizClient = biz.NewBizServiceClient(conn); err != nil || BizClient == nil {
+		util.LogFatalf("BizClient dial error : %+v\n", err)
 	}
-	BizClient = biz.NewBizServiceClient(conn)
+
+	util.LogInfo("BizClient initiate success!")
 }

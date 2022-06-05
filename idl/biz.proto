@@ -39,6 +39,7 @@ message Video {
 message FeedRequest {
     int64 latest_time = 1;
     string token = 2;
+    int64 user_id = 3;
 }
 
 message FeedResponse {
@@ -63,6 +64,7 @@ message PublishActionRequest {
     string token = 1;
     bytes data = 2;
     string title = 3;
+    int64 user_id = 4;
 }
 
 message PublishActionResponse {
@@ -85,6 +87,7 @@ message FavoriteActionRequest {
     string token = 1;
     int64 video_id = 2;
     int32 action_type = 3;
+    int64 user_id = 4;
 }
 
 message FavoriteActionResponse {
@@ -109,6 +112,7 @@ message CommentActionRequest {
     int32 action_type = 3;
     optional string comment_text = 4;
     optional int64 comment_id = 5;
+    int64 user_id = 6;
 }
 
 message CommentActionResponse {
@@ -139,6 +143,7 @@ message RelationActionRequest {
     string token = 1;
     int64 to_user_id = 2;
     int32 action_type = 3;
+    int64 user_id = 4;
 }
 
 message RelationActionResponse {

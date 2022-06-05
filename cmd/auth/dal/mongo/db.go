@@ -1,4 +1,4 @@
-package dal
+package mongo
 
 import (
 	"context"
@@ -12,10 +12,10 @@ import (
 	"time"
 )
 
-var MongoCli *mongo.Client
+var Cli *mongo.Client
 var once sync.Once
 
-func InitMongoDB() {
+func initMongoDB() {
 	once.Do(func() {
 		util.LogInfo("MongoDB initiation starting...")
 
@@ -27,8 +27,8 @@ func InitMongoDB() {
 		defer cancel()
 
 		var err error
-		MongoCli, err = mongo.Connect(ctx, clientOptions)
-		if err != nil || MongoCli == nil {
+		Cli, err = mongo.Connect(ctx, clientOptions)
+		if err != nil || Cli == nil {
 			util.LogFatalf("MongoDB initiate error : %+v\n", err)
 		}
 

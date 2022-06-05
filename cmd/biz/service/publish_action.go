@@ -2,9 +2,8 @@ package service
 
 import (
 	"context"
+	"errors"
 
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -20,16 +19,11 @@ type publishActionServiceImpl struct {
 	Req  *biz.PublishActionRequest
 	Resp *biz.PublishActionResponse
 	Ctx  context.Context
-
-	userId int64
 }
 
 func (s *publishActionServiceImpl) DoService() *biz.PublishActionResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.authenticate(); err != nil {
-			break
-		}
 
 		if err = s.validateParams(); err != nil {
 			break
@@ -41,19 +35,11 @@ func (s *publishActionServiceImpl) DoService() *biz.PublishActionResponse {
 	return s.Resp
 }
 
-func (s *publishActionServiceImpl) authenticate() error {
-	authReq := &auth.AuthenticateRequest{
-		Token: s.Req.Token,
-	}
-	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
-	if err != nil {
-		// todo
-	}
-	s.userId = resp.UserId
-	return nil
-}
-
 func (s *publishActionServiceImpl) validateParams() error {
+	req := s.Req
+	if req == nil {
+		return errors.New("request could not be nil")
+	}
 	return nil
 }
 

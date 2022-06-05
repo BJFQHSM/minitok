@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -33,6 +34,10 @@ func (s *followerListServiceImpl) DoService() *biz.QueryFollowerListResponse {
 }
 
 func (s *followerListServiceImpl) validateParams() error {
+	req := s.Req
+	if req == nil {
+		return errors.New("params: request could not be nil")
+	}
 	return nil
 }
 

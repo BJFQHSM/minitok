@@ -6,8 +6,6 @@ import (
 	"log"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -28,24 +26,10 @@ type queryUserInfoServiceImpl struct {
 }
 
 func (s *queryUserInfoServiceImpl) DoService() *biz.QueryUserInfoResponse {
-	// mock
-	//s.Resp = &biz.QueryUserInfoResponse{
-	//	User: &biz.User{
-	//		Id:            1,
-	//		Name:          "dfs",
-	//		FollowerCount: 10,
-	//		FollowCount:   20,
-	//	},
-	//	StatusCode: 0,
-	//}
 
 	var err error
 	for i := 0; i < 1; i++ {
 		if err = s.validateParams(); err != nil {
-			break
-		}
-
-		if err = s.authenticate(); err != nil {
 			break
 		}
 		if s.Resp.User, err = QueryUserInfoByUID(s.Ctx, s.Req.UserId, s.userId); err != nil {
@@ -56,27 +40,13 @@ func (s *queryUserInfoServiceImpl) DoService() *biz.QueryUserInfoResponse {
 	return s.Resp
 }
 
-func (s *queryUserInfoServiceImpl) authenticate() error {
-	authReq := &auth.AuthenticateRequest{
-		Token: s.Req.Token,
-	}
-	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
-	if err != nil {
-		// todo
-		log.Printf("%+v", err)
-		return err
-	}
-	s.userId = resp.UserId
-	return nil
-}
-
 func (s *queryUserInfoServiceImpl) validateParams() error {
 	req := s.Req
 	if req == nil {
 		return errors.New("params: request could not be nil")
 	}
 	if req.UserId < 0 {
-		return errors.New("params: userId could not be negative number")
+		return errors.New("illegal params: user_id could not be negative number")
 	}
 	return nil
 }

@@ -22,7 +22,7 @@ func Parse(path string) map[string]interface{} {
 		log.Panicf("Failed to read yaml file.\nerr:%v", err)
 		return nil
 	}
-	fmt.Println(string(file))
+	//fmt.Println(string(file))
 	result := make(map[string]interface{})
 
 	err = yaml.Unmarshal(file, &result)
@@ -69,4 +69,9 @@ func MD5Encrypt(str string, salt string) string {
 	h.Write(s) // 先写盐值
 	h.Write(b)
 	return hex.EncodeToString(h.Sum(nil))
+}
+
+func GenerateRandomInt32() uint32 {
+	src := rand.NewSource(time.Now().UnixNano())
+	return uint32(src.Int63())
 }
