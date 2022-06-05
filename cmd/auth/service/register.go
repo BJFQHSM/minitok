@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"regexp"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
@@ -22,6 +23,7 @@ type registerServiceImpl struct {
 	Ctx  context.Context
 
 	encryptSalt string
+	encryptPwd  string
 }
 
 func (s *registerServiceImpl) DoService() *auth.RegisterResponse {
@@ -70,7 +72,8 @@ func (s *registerServiceImpl) doRegister() {
 }
 
 func (s *registerServiceImpl) encrypt() {
-
+	s.encryptSalt = util.GenerateRandomStr(10)
+	s.encryptPwd = util.MD5Encrypt(s.Req.Password, s.encryptSalt)
 }
 
 func (s *registerServiceImpl) buildResponse(err error) {
