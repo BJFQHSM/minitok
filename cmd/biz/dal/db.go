@@ -8,28 +8,24 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"log"
 	"os"
-	"sync"
 	"time"
 )
 
 var MongoCli *mongo.Client
-var once sync.Once
 
-func InitMongoDB() {
-	once.Do(func() {
-		serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
-		clientOptions := options.Client().
-			ApplyURI(parseMongoConf()).
-			SetServerAPIOptions(serverAPIOptions)
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
+func initMongoDB() {
+	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+	clientOptions := options.Client().
+		ApplyURI(parseMongoConf()).
+		SetServerAPIOptions(serverAPIOptions)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-		var err error
-		MongoCli, err = mongo.Connect(ctx, clientOptions)
-		if err != nil {
-			log.Fatal(err)
-		}
-	})
+	var err error
+	MongoCli, err = mongo.Connect(ctx, clientOptions)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 type mongoUriConfig struct {

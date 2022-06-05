@@ -13,7 +13,7 @@ import (
 
 func main() {
 	// todo constants and others
-	dal.InitMongoDB()
+	dal.Init()
 	rpc.Init()
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":8889"))
