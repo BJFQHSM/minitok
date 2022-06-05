@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"errors"
+	"regexp"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 )
@@ -18,6 +20,8 @@ type registerServiceImpl struct {
 	Req  *auth.RegisterRequest
 	Resp *auth.RegisterResponse
 	Ctx  context.Context
+
+	encryptSalt string
 }
 
 func (s *registerServiceImpl) DoService() *auth.RegisterResponse {
@@ -43,7 +47,30 @@ func (s *registerServiceImpl) DoService() *auth.RegisterResponse {
 }
 
 func (s *registerServiceImpl) validateParams() error {
+	req := s.Req
+	if len(req.Username) < 5 && len(req.Password) < 8 {
+		return errors.New("request params length illegal")
+	}
+	if match, err := regexp.Match("^[\\u4E00-\\u9FA5A-Za-z\\d]+$", []byte(req.Username)); err != nil {
+		return errors.New("fail to validate username")
+	} else if !match {
+		return errors.New("username can only contains nums, English letters and Chinese")
+	}
+	if match, err := regexp.Match("^[A-Za-z\\d]+$", []byte(req.Password)); err != nil {
+		return errors.New("fail to validate password")
+	} else if !match {
+		return errors.New("password can only contains nums, English letters and underline character")
+	}
+
 	return nil
+}
+
+func (s *registerServiceImpl) doRegister() {
+
+}
+
+func (s *registerServiceImpl) encrypt() {
+
 }
 
 func (s *registerServiceImpl) buildResponse(err error) {
