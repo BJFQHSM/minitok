@@ -63,7 +63,7 @@ func (s *publishActionServiceImpl) doPublish() error {
 		return err
 	}
 	videoId := req.UserIdFromToken<<31 + int64(util.GenerateRandomInt32())
-	url := "http:127.0.0.1:8080/static/" + filename
+	url := "http:127.0.0.1:8080/douyin/static/" + filename
 	video := &dal.Video{
 		VideoId:       videoId,
 		UserId:        req.UserIdFromToken,

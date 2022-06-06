@@ -1,6 +1,9 @@
 package handler
 
 import (
+	"bytes"
+	"io"
+	"log"
 	"net/http"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
@@ -12,11 +15,28 @@ import (
 )
 
 func PublishAction(c *gin.Context) {
-	var req biz.PublishActionRequest
+	// var req biz.PublishActionRequest
 	resp := &biz.PublishActionResponse{StatusCode: 1}
-	err := c.ShouldBindQuery(&req)
-
+	// err := c.ShouldBindQuery(&req)
+	file, _, err := c.Request.FormFile("data")
+	token := c.Request.FormValue("token")
+	title := c.Request.FormValue("title")
+	defer file.Close()
 	if err != nil {
+		log.Printf("获取文件错误%+v", err)
+	}
+	buf := bytes.NewBuffer(nil)
+	if _, err := io.Copy(buf, file); err != nil {
+		log.Printf("错误%+v", err)
+	}
+	req := &biz.PublishActionRequest{
+		Token: token,
+		Title: title,
+		Data:  buf.Bytes(),
+	}
+	// log.Printf("视频发布的参数信息：------%+v", req)
+	if err != nil {
+		log.Printf("%+v", err)
 		msg := "invalid request"
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
@@ -32,7 +52,8 @@ func PublishAction(c *gin.Context) {
 			resp.StatusMsg = &msg
 		} else {
 			req.UserIdFromToken = authResp.UserId
-			resp, err = rpc.BizClient.PublishAction(c, &req)
+			log.Printf("视频发布的参数信息：------%v", req.UserIdFromToken)
+			resp, err = rpc.BizClient.PublishAction(c, req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)
 				return
