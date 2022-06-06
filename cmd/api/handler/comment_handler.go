@@ -32,7 +32,7 @@ func CommentAction(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
-			req.UserId = authResp.UserId
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.CommentAction(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)
@@ -64,6 +64,7 @@ func QueryCommentList(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.QueryCommentList(context.Background(), &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)

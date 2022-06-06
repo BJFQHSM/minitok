@@ -71,7 +71,7 @@ func (s *feedServiceImpl) feed() error {
 
 	videos := []*biz.Video{}
 	for i := 0; i < len(vdos); i++ {
-		videos = append(videos, MongoVdoToBizVdo(vdos[i], s.Req.UserId))
+		videos = append(videos, MongoVdoToBizVdo(vdos[i], s.Req.UserIdFromToken))
 	}
 
 	s.Resp.VideoList = videos

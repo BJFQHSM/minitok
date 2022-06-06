@@ -3,11 +3,12 @@ package service
 import (
 	"context"
 	"errors"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
-	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"io/ioutil"
 	"os"
 	"time"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
@@ -47,9 +48,6 @@ func (s *publishActionServiceImpl) validateParams() error {
 	if req == nil {
 		return errors.New("request could not be nil")
 	}
-	if req.UserId < 0 {
-		return errors.New("illegal params: user_id could not be negative")
-	}
 	return nil
 }
 
@@ -61,23 +59,23 @@ func (s *publishActionServiceImpl) doPublish() error {
 		return err
 	}
 	filename := util.GenerateRandomStr(20) + ".mp4"
-	if err = ioutil.WriteFile(path + filename, req.Data, 0666); err != nil {
+	if err = ioutil.WriteFile(path+filename, req.Data, 0666); err != nil {
 		return err
 	}
-	videoId := req.UserId << 31 + int64(util.GenerateRandomInt32())
+	videoId := req.UserIdFromToken<<31 + int64(util.GenerateRandomInt32())
 	url := "http:127.0.0.1:8080/static/" + filename
 	video := &dal.Video{
-		VideoId: videoId,
-		UserId: req.UserId,
-		PlayUrl: url,
-		Favorites: []int64{},
+		VideoId:       videoId,
+		UserId:        req.UserIdFromToken,
+		PlayUrl:       url,
+		Favorites:     []int64{},
 		FavoriteCount: 0,
-		Comments: []*dal.Comment{},
-		CommentCount: 0,
-		PublishDate: time.Now(),
-		Title: req.Title,
+		Comments:      []*dal.Comment{},
+		CommentCount:  0,
+		PublishDate:   time.Now(),
+		Title:         req.Title,
 	}
-	return dal.PublishVideo(s.Ctx, s.Req.UserId, video)
+	return dal.PublishVideo(s.Ctx, s.Req.UserIdFromToken, video)
 }
 
 func (s *publishActionServiceImpl) buildResponse(err error) {

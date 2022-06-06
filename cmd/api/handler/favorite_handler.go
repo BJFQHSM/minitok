@@ -32,7 +32,7 @@ func FavoriteAction(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
-			req.UserId = authResp.UserId
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.FavoriteAction(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)
@@ -64,6 +64,7 @@ func QueryFavoriteList(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.QueryFavoriteList(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)

@@ -3,11 +3,12 @@ package service
 import (
 	"context"
 	"errors"
+	"regexp"
+	"time"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal"
 	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal/mysql"
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
-	"regexp"
-	"time"
 
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 )
@@ -94,7 +95,7 @@ func (s *loginServiceImpl) doLogin() error {
 }
 
 func (s *loginServiceImpl) generateToken() error {
-	token, err := dal.JwtGenerateToken(s.user.UserId, 24*time.Hour)
+	token, err := dal.JwtGenerateToken(s.user, 24*time.Hour)
 	if err != nil {
 		return err
 	}

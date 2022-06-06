@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
-	"net/http"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -33,7 +34,7 @@ func Feed(c *gin.Context) {
 				StatusMsg:  &msg,
 			}
 		} else {
-			req.UserId = authResp.UserId
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.Feed(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)

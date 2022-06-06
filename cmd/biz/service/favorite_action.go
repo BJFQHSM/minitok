@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
@@ -51,7 +52,7 @@ func (s *favoriteActionServiceImpl) validateParams() error {
 }
 
 func (s *favoriteActionServiceImpl) doFavoriteAction() error {
-	return dal.FavoriteAction(s.Ctx, s.Req.UserId, s.Req.VideoId, s.Req.ActionType)
+	return dal.FavoriteAction(s.Ctx, s.Req.UserIdFromToken, s.Req.VideoId, s.Req.ActionType)
 }
 
 func (s *favoriteActionServiceImpl) buildResponse(err error) {

@@ -75,7 +75,7 @@ func QueryUserInfo(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
-			req.UserId = authResp.UserId
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.QueryUserInfo(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)

@@ -30,7 +30,7 @@ func RelationAction(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
-			req.UserId = authResp.UserId
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.RelationAction(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)
@@ -63,7 +63,7 @@ func QueryFollowList(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
-			req.UserId = authResp.UserId
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.QueryFollowList(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)
@@ -95,7 +95,7 @@ func QueryFollowerList(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
-			req.UserId = authResp.UserId
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.QueryFollowerList(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)

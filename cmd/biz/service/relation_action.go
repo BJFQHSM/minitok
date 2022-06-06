@@ -53,13 +53,13 @@ func (s *relationActionServiceImpl) validateParams() error {
 
 func (s *relationActionServiceImpl) doFollowAction() error {
 	if s.Req.ActionType == 1 {
-		err := dal.FollowRelation(s.Ctx, s.Req.ToUserId, s.Req.UserId)
+		err := dal.FollowRelation(s.Ctx, s.Req.ToUserId, s.Req.UserIdFromToken)
 		if err != nil {
 			log.Printf("%+v", err)
 			return err
 		}
 	} else {
-		err := dal.UnFollowRelation(s.Ctx, s.Req.ToUserId, s.Req.UserId)
+		err := dal.UnFollowRelation(s.Ctx, s.Req.ToUserId, s.Req.UserIdFromToken)
 		if err != nil {
 			log.Printf("%+v", err)
 			return err

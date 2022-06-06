@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal"
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 
@@ -29,12 +30,12 @@ func (s *AuthServiceImpl) Login(ctx context.Context, req *auth.LoginRequest) (*a
 }
 
 func (s *AuthServiceImpl) Authenticate(ctx context.Context, req *auth.AuthenticateRequest) (*auth.AuthenticateResponse, error) {
-	userId, err := dal.JwtParseUser(req.Token)
+	user, err := dal.JwtParseUser(req.Token)
 	resp := &auth.AuthenticateResponse{}
 	if err != nil {
 		resp.IsAuthed = false
 	} else {
-		resp.UserId = userId
+		resp.UserId = user.UserId
 		resp.IsAuthed = true
 	}
 	return resp, nil

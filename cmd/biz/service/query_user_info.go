@@ -32,7 +32,7 @@ func (s *queryUserInfoServiceImpl) DoService() *biz.QueryUserInfoResponse {
 		if err = s.validateParams(); err != nil {
 			break
 		}
-		if s.Resp.User, err = QueryUserInfoByUID(s.Ctx, s.Req.UserId, s.userId); err != nil {
+		if s.Resp.User, err = QueryUserInfoByUID(s.Ctx, s.Req.UserId, s.Req.UserIdFromToken); err != nil {
 			break
 		}
 	}

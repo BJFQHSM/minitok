@@ -31,7 +31,7 @@ func PublishAction(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
-			req.UserId = authResp.UserId
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.PublishAction(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)
@@ -63,6 +63,7 @@ func QueryPublishList(c *gin.Context) {
 			msg := "token invalid"
 			resp.StatusMsg = &msg
 		} else {
+			req.UserIdFromToken = authResp.UserId
 			resp, err = rpc.BizClient.QueryPublishList(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)

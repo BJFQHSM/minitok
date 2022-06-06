@@ -3,14 +3,15 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal"
-	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal/mysql"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"log"
 	"os"
 	"regexp"
 	"testing"
 	"time"
+
+	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal"
+	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal/mysql"
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 )
 
 func TestRegister(t *testing.T) {
@@ -20,7 +21,7 @@ func TestRegister(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	mysql.InitMysql()
+	mysql.InitDB()
 	s := &registerServiceImpl{
 		Req: &auth.RegisterRequest{
 			Username: "testUser",
@@ -41,7 +42,7 @@ func TestLogin(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	mysql.InitMysql()
+	mysql.InitDB()
 	s := &loginServiceImpl{
 		Req: &auth.LoginRequest{
 			Username: "testUser",
@@ -63,11 +64,11 @@ func TestTokenGenerate(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	mysql.InitMysql()
+	mysql.InitDB()
 	s := &loginServiceImpl{
 		Req: &auth.LoginRequest{
-			Username: "testUser",
-			Password: "testPassword",
+			Username: "slfjs",
+			Password: "dfslsaahj",
 		},
 		Ctx: context.Background(),
 	}
@@ -75,7 +76,7 @@ func TestTokenGenerate(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	token, err := dal.JwtGenerateToken(s.user.UserId, time.Hour)
+	token, err := dal.JwtGenerateToken(s.user, time.Hour)
 	if err != nil {
 		log.Fatal(err)
 	}
