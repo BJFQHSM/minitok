@@ -28,7 +28,7 @@ func (c userStdClaims) Valid() (err error) {
 	if !c.VerifyIssuer(AppIss, true) {
 		return errors.New("token's issuer is wrong")
 	}
-	if c.User.Id < 1 {
+	if c.User.UserId < 1 {
 		return errors.New("invalid user in jwt")
 	}
 	return
