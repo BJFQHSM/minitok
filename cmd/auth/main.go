@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/bytedance2022/minimal_tiktok/cmd/auth/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"google.golang.org/grpc"
 	"log"
@@ -10,6 +11,7 @@ import (
 
 func main() {
 	// todo constants and others
+	dal.Init()
 	lis, err := net.Listen("tcp", fmt.Sprintf(":8890"))
 	if err != nil {
 		panic(err)

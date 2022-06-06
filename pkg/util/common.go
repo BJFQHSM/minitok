@@ -1,6 +1,8 @@
 package util
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -60,7 +62,16 @@ func GenerateRandomStr(targetLen int64) string {
 	return *(*string)(unsafe.Pointer(&b))
 }
 
-func GenerateRandomInt32() int32 {
+func MD5Encrypt(str string, salt string) string {
+	b := []byte(str)
+	s := []byte(salt)
+	h := md5.New()
+	h.Write(s) // 先写盐值
+	h.Write(b)
+	return hex.EncodeToString(h.Sum(nil))
+}
+
+func GenerateRandomInt32() uint32 {
 	src := rand.NewSource(time.Now().UnixNano())
-	return int32(src.Int63())
+	return uint32(src.Int63())
 }

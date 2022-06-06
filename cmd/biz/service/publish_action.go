@@ -2,11 +2,17 @@ package service
 
 import (
 	"context"
+<<<<<<< HEAD
+=======
+	"errors"
+	"io/ioutil"
+	"os"
+	"time"
+
+>>>>>>> cloud_deploy
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -22,23 +28,24 @@ type publishActionServiceImpl struct {
 	Req  *biz.PublishActionRequest
 	Resp *biz.PublishActionResponse
 	Ctx  context.Context
+<<<<<<< HEAD
 
 	userId int64
 	video  dal.Video
 	ossUrl string
+=======
+>>>>>>> cloud_deploy
 }
 
 func (s *publishActionServiceImpl) DoService() *biz.PublishActionResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.authenticate(); err != nil {
-			break
-		}
 
 		if err = s.validateParams(); err != nil {
 			break
 		}
 
+<<<<<<< HEAD
 		if err = s.publishToOss(); err != nil {
 			break
 		}
@@ -48,25 +55,49 @@ func (s *publishActionServiceImpl) DoService() *biz.PublishActionResponse {
 			break
 		}
 
+=======
+		if err = s.doPublish(); err != nil {
+			break
+		}
+>>>>>>> cloud_deploy
 	}
 	s.buildResponse(err)
 	return s.Resp
 }
 
-func (s *publishActionServiceImpl) authenticate() error {
-	authReq := &auth.AuthenticateRequest{
-		Token: s.Req.Token,
+func (s *publishActionServiceImpl) validateParams() error {
+	req := s.Req
+	if req == nil {
+		return errors.New("request could not be nil")
 	}
-	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
-	if err != nil {
-		// todo
-	}
-	s.userId = resp.UserId
 	return nil
 }
 
-func (s *publishActionServiceImpl) validateParams() error {
-	return nil
+func (s *publishActionServiceImpl) doPublish() error {
+	req := s.Req
+	var err error
+	path, err := os.Getwd()
+	if err != nil {
+		return err
+	}
+	filename := util.GenerateRandomStr(20) + ".mp4"
+	if err = ioutil.WriteFile(path+filename, req.Data, 0666); err != nil {
+		return err
+	}
+	videoId := req.UserIdFromToken<<31 + int64(util.GenerateRandomInt32())
+	url := "http:127.0.0.1:8080/static/" + filename
+	video := &dal.Video{
+		VideoId:       videoId,
+		UserId:        req.UserIdFromToken,
+		PlayUrl:       url,
+		Favorites:     []int64{},
+		FavoriteCount: 0,
+		Comments:      []*dal.Comment{},
+		CommentCount:  0,
+		PublishDate:   time.Now(),
+		Title:         req.Title,
+	}
+	return dal.PublishVideo(s.Ctx, s.Req.UserIdFromToken, video)
 }
 
 func (s *publishActionServiceImpl) publishToOss() error {

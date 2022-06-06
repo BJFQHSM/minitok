@@ -1,9 +1,10 @@
 package handler
 
 import (
-	"context"
-	"log"
 	"net/http"
+
+	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -12,47 +13,96 @@ import (
 
 func RelationAction(c *gin.Context) {
 	var req biz.RelationActionRequest
+	resp := &biz.RelationActionResponse{StatusCode: 1}
 	err := c.ShouldBindQuery(&req)
 	if err != nil {
-		// todo
-	}
-	resp, err := rpc.BizClient.RelationAction(context.Background(), &req)
-	if err != nil {
-		// todo
+		msg := "invalid request"
+		resp.StatusMsg = &msg
+		c.JSON(http.StatusBadRequest, resp)
+	} else {
+		util.LogInfof("RelationAction response: %+v\n", &req)
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if err != nil || authResp == nil {
+			c.JSON(http.StatusInternalServerError, resp)
+			return
+		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp.StatusMsg = &msg
+		} else {
+			req.UserIdFromToken = authResp.UserId
+			resp, err = rpc.BizClient.RelationAction(c, &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+		}
+		util.LogInfof("RelationAction response: %+v\n", resp)
+		c.JSON(http.StatusOK, resp)
 	}
 
-	log.Printf("Resp: %+v\n", resp)
-	c.JSON(http.StatusOK, resp)
 }
 
 func QueryFollowList(c *gin.Context) {
 	var req biz.QueryFollowListRequest
+	resp := &biz.QueryFollowListResponse{StatusCode: 1}
 	err := c.ShouldBindQuery(&req)
 
 	if err != nil {
-		// todo
+		msg := "invalid request"
+		resp.StatusMsg = &msg
+		c.JSON(http.StatusBadRequest, resp)
+	} else {
+		util.LogInfof("QueryFollowList request: %+v\n", &req)
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if authResp == nil || err != nil {
+			c.JSON(http.StatusInternalServerError, resp)
+			return
+		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp.StatusMsg = &msg
+		} else {
+			req.UserIdFromToken = authResp.UserId
+			resp, err = rpc.BizClient.QueryFollowList(c, &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+		}
+		util.LogInfof("QueryFollowList response: %+v\n", resp)
+		c.JSON(http.StatusOK, resp)
 	}
-	resp, err := rpc.BizClient.QueryFollowList(context.Background(), &req)
-	if err != nil {
-		// todo
-	}
-
-	log.Printf("Resp: %+v\n", resp)
-	c.JSON(http.StatusOK, resp)
 }
 
 func QueryFollowerList(c *gin.Context) {
 	var req biz.QueryFollowerListRequest
+	resp := &biz.QueryFollowerListResponse{StatusCode: 1}
 	err := c.ShouldBindQuery(&req)
 
 	if err != nil {
-		// todo
+		msg := "invalid request"
+		resp.StatusMsg = &msg
+		c.JSON(http.StatusBadRequest, resp)
+	} else {
+		util.LogInfof("QueryFollowerList request: %+v\n", &req)
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if authResp == nil || err != nil {
+			c.JSON(http.StatusInternalServerError, resp)
+			return
+		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp.StatusMsg = &msg
+		} else {
+			req.UserIdFromToken = authResp.UserId
+			resp, err = rpc.BizClient.QueryFollowerList(c, &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+		}
+		util.LogInfof("QueryFollowerList response: %+v\n", resp)
+		c.JSON(http.StatusOK, resp)
 	}
-	resp, err := rpc.BizClient.QueryFollowerList(context.Background(), &req)
-	if err != nil {
-		// todo
-	}
-
-	log.Printf("Resp: %+v\n", resp)
-	c.JSON(http.StatusOK, resp)
 }

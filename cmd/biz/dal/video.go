@@ -2,8 +2,6 @@ package dal
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"time"
@@ -13,16 +11,16 @@ import (
 )
 
 type Video struct {
-	VideoId       int64     `bson:"video_id"`
-	UserId        int64     `bson:"user_id"`
-	PlayUrl       string    `bson:"play_url"`
-	CoverUrl      string    `bson:"cover_url"`
-	FavoriteCount int64     `bson:"favorite_count"`
-	Favorites     []int64   `bson:"favorites"`
-	CommentCount  int64     `bson:"comment_count"`
-	Comments      []Comment `bson:"comments, inline"`
-	PublishDate   time.Time `bson:"publish_date"`
-	Title         string    `bson:"title"`
+	VideoId       int64      `bson:"video_id"`
+	UserId        int64      `bson:"user_id"`
+	PlayUrl       string     `bson:"play_url"`
+	CoverUrl      string     `bson:"cover_url"`
+	FavoriteCount int64      `bson:"favorite_count"`
+	Favorites     []int64    `bson:"favorites"`
+	CommentCount  int64      `bson:"comment_count"`
+	Comments      []*Comment `bson:"comments, inline"`
+	PublishDate   time.Time  `bson:"publish_date"`
+	Title         string     `bson:"title"`
 }
 
 type Comment struct {
@@ -170,44 +168,44 @@ func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 	return videos, nil
 }
 
-func PublishVideo(ctx context.Context, video Video) error {
-	userColl := MongoCli.Database("tiktok").Collection("user")
-	videoColl := MongoCli.Database("tiktok").Collection("video")
-
-	// 定义事务
-	callback := func(sessCtx mongo.SessionContext) (interface{}, error) {
-
-		filter := bson.M{"user_id": video.UserId}
-		update := bson.M{
-			"addToSet": bson.M{"publish_list": video.VideoId},
-		}
-		if updateResult, err := userColl.UpdateOne(sessCtx, filter, update); err != nil {
-			return nil, err
-		} else if updateResult.MatchedCount == 0 {
-			return nil, errors.New(fmt.Sprintf("user_id was found where user_id = %+v\n", video.UserId))
-		}
-
-		if insertOneResult, err := videoColl.InsertOne(sessCtx, video); err != nil {
-			return nil, err
-		} else if insertOneResult.InsertedID == 0 {
-			return nil, errors.New("fail to insert video")
-		}
-		return nil, nil
-	}
-
-	// 开启会话
-	session, err := MongoCli.StartSession()
-	if err != nil {
-		log.Printf("ERROR: fail to start mongo session. %v\n", err)
-		return err
-	}
-	defer session.EndSession(ctx)
-
-	// 执行事务
-	_, err = session.WithTransaction(ctx, callback)
-	if err != nil {
-		log.Printf("ERROR: fail to publish video. %v\n", err)
-		return err
-	}
-	return nil
-}
+//func PublishVideo(ctx context.Context, video Video) error {
+//	userColl := MongoCli.Database("tiktok").Collection("user")
+//	videoColl := MongoCli.Database("tiktok").Collection("video")
+//
+//	// 定义事务
+//	callback := func(sessCtx mongo.SessionContext) (interface{}, error) {
+//
+//		filter := bson.M{"user_id": video.UserId}
+//		update := bson.M{
+//			"addToSet": bson.M{"publish_list": video.VideoId},
+//		}
+//		if updateResult, err := userColl.UpdateOne(sessCtx, filter, update); err != nil {
+//			return nil, err
+//		} else if updateResult.MatchedCount == 0 {
+//			return nil, errors.New(fmt.Sprintf("user_id was found where user_id = %+v\n", video.UserId))
+//		}
+//
+//		if insertOneResult, err := videoColl.InsertOne(sessCtx, video); err != nil {
+//			return nil, err
+//		} else if insertOneResult.InsertedID == 0 {
+//			return nil, errors.New("fail to insert video")
+//		}
+//		return nil, nil
+//	}
+//
+//	// 开启会话
+//	session, err := MongoCli.StartSession()
+//	if err != nil {
+//		log.Printf("ERROR: fail to start mongo session. %v\n", err)
+//		return err
+//	}
+//	defer session.EndSession(ctx)
+//
+//	// 执行事务
+//	_, err = session.WithTransaction(ctx, callback)
+//	if err != nil {
+//		log.Printf("ERROR: fail to publish video. %v\n", err)
+//		return err
+//	}
+//	return nil
+//}

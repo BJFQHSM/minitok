@@ -6,8 +6,6 @@ import (
 	"log"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -30,15 +28,10 @@ type followListServiceImpl struct {
 func (s *followListServiceImpl) DoService() *biz.QueryFollowListResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.authenticate(); err != nil {
-			break
-		}
 
 		if err = s.validateParams(); err != nil {
 			break
 		}
-
-		// todo
 
 		if err = s.queryFollowList(); err != nil {
 			break
@@ -49,25 +42,13 @@ func (s *followListServiceImpl) DoService() *biz.QueryFollowListResponse {
 	return s.Resp
 }
 
-func (s *followListServiceImpl) authenticate() error {
-	req := &auth.AuthenticateRequest{
-		Token: s.Req.Token,
-	}
-	resp, err := rpc.AuthClient.Authenticate(s.Ctx, req)
-	if err != nil {
-		return nil
-	}
-	s.userId = resp.UserId
-	return nil
-}
-
 func (s *followListServiceImpl) validateParams() error {
 	req := s.Req
 	if req == nil {
 		return errors.New("params: request could not be nil")
 	}
 	if req.UserId < 0 {
-		return errors.New("params: userId could not be negative number")
+		return errors.New("illegal params: user_id cannot lower than 0")
 	}
 	return nil
 }
@@ -77,13 +58,11 @@ func (s *followListServiceImpl) queryFollowList() error {
 	users, err := dal.QueryFollowsByUserId(s.Ctx, s.Req.UserId)
 
 	if err != nil {
-		log.Printf("%+v", err)
 		return nil
 	}
 
 	userList, err := DalUserToBizUser(s.Ctx, users, s.userId)
 	if err != nil {
-		log.Printf("%+v", err)
 		return err
 	}
 	s.Resp.UserList = userList

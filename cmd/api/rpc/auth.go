@@ -1,9 +1,8 @@
 package rpc
 
 import (
-	"log"
-
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"os"
@@ -12,6 +11,7 @@ import (
 var AuthClient auth.AuthServiceClient
 
 func initAuth() {
+	util.LogInfo("AuthClient initiation starting...")
 	var opts []grpc.DialOption
 	opts = append(opts, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	//resolver, err := etcd.NewEtcdResolver([]string{"etcd:2379"})
@@ -35,8 +35,9 @@ func initAuth() {
 	} else {
 		conn, err = grpc.Dial("auth:8890", opts...)
 	}
-	if err != nil {
-		log.Fatal(err)
+	if AuthClient = auth.NewAuthServiceClient(conn); err != nil || AuthClient == nil {
+		util.LogFatalf("AuthClient dial error : %+v\n", err)
 	}
-	AuthClient = auth.NewAuthServiceClient(conn)
+
+	util.LogInfo("AuthClient initiate success!")
 }

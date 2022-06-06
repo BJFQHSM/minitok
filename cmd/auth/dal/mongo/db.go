@@ -1,4 +1,4 @@
-package dal
+package mongo
 
 import (
 	"context"
@@ -6,13 +6,16 @@ import (
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
 	"os"
+	"sync"
 	"time"
 )
 
-var MongoCli *mongo.Client
+var Cli *mongo.Client
+var once sync.Once
 
-func initMongoDB() {
+func InitDB() {
 	once.Do(func() {
 		util.LogInfo("MongoDB initiation starting...")
 
@@ -24,8 +27,8 @@ func initMongoDB() {
 		defer cancel()
 
 		var err error
-		MongoCli, err = mongo.Connect(ctx, clientOptions)
-		if err != nil || MongoCli == nil {
+		Cli, err = mongo.Connect(ctx, clientOptions)
+		if err != nil || Cli == nil {
 			util.LogFatalf("MongoDB initiate error : %+v\n", err)
 		}
 
@@ -47,7 +50,6 @@ func parseMongoConf() string {
 	if env == "dev" {
 		confFile := "config/biz-test.yaml"
 		protocol = "mongodb+srv"
-		suffix = "/"
 		conf := util.Parse(confFile)["mongodb"].(map[interface{}]interface{})
 		user = util.InterfaceToStr(conf["user"])
 		password = util.InterfaceToStr(conf["password"])
@@ -60,6 +62,14 @@ func parseMongoConf() string {
 		url = os.Getenv("MONGO_ADDR")
 	}
 
+	//conf := util.Parse(confFile)["mongodb"].(map[interface{}]interface{})
+	//log.Printf("%+v\n", conf)
+	//uri := mongoUriConfig{
+	//	protocol: protocol,
+	//	user:     util.InterfaceToStr(conf["user"]),
+	//	password: util.InterfaceToStr(conf["password"]),
+	//	url:      util.InterfaceToStr(conf["url"]),
+	//}
 	uri := mongoUriConfig{
 		protocol: protocol,
 		user:     user,
@@ -69,5 +79,7 @@ func parseMongoConf() string {
 
 	//URI := fmt.Sprintf("%s://%s:%s@%s/?connect=direct", uri.protocol, uri.user, uri.password, uri.url)
 	URI := fmt.Sprintf("%s://%s:%s@%s%s", uri.protocol, uri.user, uri.password, uri.url, suffix)
+	// URI := "mongodb://127.0.0.1:27017"
+	log.Printf("%s\n", URI)
 	return URI
 }

@@ -2,8 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/bytedance2022/minimal_tiktok/cmd/biz/rpc"
-	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
+	"errors"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -21,16 +20,11 @@ type favoriteActionServiceImpl struct {
 	Req  *biz.FavoriteActionRequest
 	Resp *biz.FavoriteActionResponse
 	Ctx  context.Context
-
-	userId int64
 }
 
 func (s *favoriteActionServiceImpl) DoService() *biz.FavoriteActionResponse {
 	var err error
 	for i := 0; i < 1; i++ {
-		if err = s.authenticate(); err != nil {
-			break
-		}
 
 		if err = s.validateParams(); err != nil {
 			break
@@ -44,33 +38,21 @@ func (s *favoriteActionServiceImpl) DoService() *biz.FavoriteActionResponse {
 	return s.Resp
 }
 
-func (s *favoriteActionServiceImpl) authenticate() error {
-	authReq := &auth.AuthenticateRequest{
-		Token: s.Req.Token,
-	}
-	resp, err := rpc.AuthClient.Authenticate(s.Ctx, authReq)
-	if err != nil {
-		// todo
-	}
-	s.userId = resp.UserId
-	return nil
-}
-
 func (s *favoriteActionServiceImpl) validateParams() error {
+	req := s.Req
+	if req == nil {
+		return errors.New("params: request could not be nil")
+	}
+	if req.VideoId < 0 {
+		return errors.New("illegal video id")
+	} else if req.ActionType != 1 && req.ActionType != 2 {
+		return errors.New("illegal favorite action type")
+	}
 	return nil
 }
 
 func (s *favoriteActionServiceImpl) doFavoriteAction() error {
-	//获取用户的ID
-	//user, err := dal.QueryUserByToken(s.Ctx, s.userId)
-	//if err != nil {
-	//	log.Printf("获取不到用户信息：%v", err)
-	//	return err
-	//}
-	//userId := s.Req.UserId
-	//点赞或取消点赞
-	err := dal.FavoriteAction(s.Ctx, s.userId, s.Req.VideoId, s.Req.ActionType)
-	return err
+	return dal.FavoriteAction(s.Ctx, s.Req.UserIdFromToken, s.Req.VideoId, s.Req.ActionType)
 }
 
 func (s *favoriteActionServiceImpl) buildResponse(err error) {

@@ -39,6 +39,7 @@ message Video {
 message FeedRequest {
     int64 latest_time = 1;
     string token = 2;
+    int64 user_id_from_token = 3;
 }
 
 message FeedResponse {
@@ -51,6 +52,7 @@ message FeedResponse {
 message QueryUserInfoRequest {
     int64 user_id = 1;
     string token = 2;
+    int64 user_id_from_token = 3;
 }
 
 message QueryUserInfoResponse {
@@ -63,6 +65,7 @@ message PublishActionRequest {
     string token = 1;
     bytes data = 2;
     string title = 3;
+    int64 user_id_from_token = 4;
 }
 
 message PublishActionResponse {
@@ -73,6 +76,7 @@ message PublishActionResponse {
 message QueryPublishListRequest {
     int64 user_id = 1;
     string token = 2;
+    int64 user_id_from_token = 3;
 }
 
 message QueryPublishListResponse {
@@ -85,6 +89,7 @@ message FavoriteActionRequest {
     string token = 1;
     int64 video_id = 2;
     int32 action_type = 3;
+    int64 user_id_from_token = 4;
 }
 
 message FavoriteActionResponse {
@@ -95,6 +100,7 @@ message FavoriteActionResponse {
 message QueryFavoriteListRequest {
     int64 user_id = 1;
     string token = 2;
+    int64 user_id_from_token = 3;
 }
 
 message QueryFavoriteListResponse {
@@ -109,6 +115,7 @@ message CommentActionRequest {
     int32 action_type = 3;
     optional string comment_text = 4;
     optional int64 comment_id = 5;
+    int64 user_id_from_token = 6;
 }
 
 message CommentActionResponse {
@@ -127,6 +134,7 @@ message Comment {
 message QueryCommentListRequest {
     string token = 1;
     int64 video_id = 2;
+    int64 user_id_from_token = 3;
 }
 
 message QueryCommentListResponse {
@@ -139,6 +147,7 @@ message RelationActionRequest {
     string token = 1;
     int64 to_user_id = 2;
     int32 action_type = 3;
+    int64 user_id_from_token = 4;
 }
 
 message RelationActionResponse {
@@ -149,6 +158,7 @@ message RelationActionResponse {
 message QueryFollowListRequest {
     int64 user_id = 1;
     string token = 2;
+    int64 user_id_from_token = 3;
 }
 
 message QueryFollowListResponse {
@@ -160,6 +170,7 @@ message QueryFollowListResponse {
 message QueryFollowerListRequest {
     int64 user_id = 1;
     string token = 2;
+    int64 user_id_from_token = 3;
 }
 
 message QueryFollowerListResponse {
