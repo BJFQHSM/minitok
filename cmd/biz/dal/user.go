@@ -246,10 +246,6 @@ func QueryIsFollow(ctx context.Context, followeeId int64, followerId int64) (boo
 	var follower *User
 	err := coll.FindOne(ctx, bson.D{{"user_id", followerId}}).Decode(&follower)
 	if err != nil {
-		if err == mongo.ErrNoDocuments {
-			return false, errors.New("no such user")
-		}
-		log.Printf("%+v", err)
 		return false, err
 	}
 	isFollow := false

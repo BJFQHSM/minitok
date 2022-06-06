@@ -2,9 +2,10 @@ package handler
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
-	"net/http"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -54,12 +55,22 @@ func QueryCommentList(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
 		util.LogInfof("QueryCommentList response: %+v\n", &req)
-		resp, err = rpc.BizClient.QueryCommentList(context.Background(), &req)
-		if err != nil || resp == nil {
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if authResp == nil || err != nil {
 			c.JSON(http.StatusInternalServerError, resp)
-		} else {
-			util.LogInfof("QueryCommentList response: %+v\n", resp)
-			c.JSON(http.StatusOK, resp)
+			return
 		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp.StatusMsg = &msg
+		} else {
+			resp, err = rpc.BizClient.QueryCommentList(context.Background(), &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+		}
+		util.LogInfof("QueryCommentList response: %+v\n", resp)
+		c.JSON(http.StatusOK, resp)
 	}
 }

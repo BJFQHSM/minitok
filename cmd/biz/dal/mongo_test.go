@@ -17,12 +17,10 @@ func TestQuery(t *testing.T) {
 	os.Setenv("WORK_DIR", pwd+"/../../../")
 	InitMongoDB()
 	//QueryVideoById(context.Background(), 1)
-	videos, err := QueryVideosByUserId(context.Background(), 1)
+	user, err := QueryUserById(context.Background(), 2335433565)
 	if err != nil {
 		log.Printf("error to query %v\n", err)
 		return
 	}
-	for _, video := range videos {
-		fmt.Printf("%+v\n", *video)
-	}
+	fmt.Printf("%+v\n", user)
 }

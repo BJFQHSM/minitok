@@ -2,8 +2,9 @@ package handler
 
 import (
 	"context"
-	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"net/http"
+
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
@@ -64,12 +65,24 @@ func QueryUserInfo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
 		util.LogInfof("QueryUserInfo request: %+v\n", &req)
-		resp, err = rpc.BizClient.QueryUserInfo(context.Background(), &req)
-		if err != nil || resp == nil {
+
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if authResp == nil || err != nil {
 			c.JSON(http.StatusInternalServerError, resp)
-		} else {
-			util.LogInfof("QueryUserInfo response: %+v\n", resp)
-			c.JSON(http.StatusOK, resp)
+			return
 		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp.StatusMsg = &msg
+		} else {
+			req.UserId = authResp.UserId
+			resp, err = rpc.BizClient.QueryUserInfo(c, &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+		}
+		util.LogInfof("QueryUserInfo response: %+v\n", resp)
+		c.JSON(http.StatusOK, resp)
 	}
 }

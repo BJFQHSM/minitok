@@ -1,9 +1,10 @@
 package handler
 
 import (
+	"net/http"
+
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/auth"
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
-	"net/http"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/rpc"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
@@ -52,11 +53,22 @@ func QueryFollowList(c *gin.Context) {
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
-		util.LogInfof("QueryFollowList response: %+v\n", &req)
-		resp, err = rpc.BizClient.QueryFollowList(c, &req)
-		if err != nil || resp == nil {
+		util.LogInfof("QueryFollowList request: %+v\n", &req)
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if authResp == nil || err != nil {
 			c.JSON(http.StatusInternalServerError, resp)
 			return
+		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp.StatusMsg = &msg
+		} else {
+			req.UserId = authResp.UserId
+			resp, err = rpc.BizClient.QueryFollowList(c, &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
 		}
 		util.LogInfof("QueryFollowList response: %+v\n", resp)
 		c.JSON(http.StatusOK, resp)
@@ -73,11 +85,22 @@ func QueryFollowerList(c *gin.Context) {
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
-		util.LogInfof("QueryFollowerList response: %+v\n", &req)
-		resp, err = rpc.BizClient.QueryFollowerList(c, &req)
-		if err != nil || resp == nil {
+		util.LogInfof("QueryFollowerList request: %+v\n", &req)
+		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+		if authResp == nil || err != nil {
 			c.JSON(http.StatusInternalServerError, resp)
 			return
+		}
+		if !authResp.IsAuthed {
+			msg := "token invalid"
+			resp.StatusMsg = &msg
+		} else {
+			req.UserId = authResp.UserId
+			resp, err = rpc.BizClient.QueryFollowerList(c, &req)
+			if err != nil || resp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
 		}
 		util.LogInfof("QueryFollowerList response: %+v\n", resp)
 		c.JSON(http.StatusOK, resp)
