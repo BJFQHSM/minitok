@@ -7,32 +7,28 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"os"
-	"sync"
 	"time"
 )
 
 var MongoCli *mongo.Client
-var once sync.Once
 
-func InitMongoDB() {
-	once.Do(func() {
-		util.LogInfo("MongoDB initiation starting...")
+func initMongoDB() {
+	util.LogInfo("MongoDB initiation starting...")
 
-		serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
-		clientOptions := options.Client().
-			ApplyURI(parseMongoConf()).
-			SetServerAPIOptions(serverAPIOptions)
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
+	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
+	clientOptions := options.Client().
+		ApplyURI(parseMongoConf()).
+		SetServerAPIOptions(serverAPIOptions)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-		var err error
-		MongoCli, err = mongo.Connect(ctx, clientOptions)
-		if err != nil || MongoCli == nil {
-			util.LogFatalf("MongoDB initiate error : %+v\n", err)
-		}
+	var err error
+	MongoCli, err = mongo.Connect(ctx, clientOptions)
+	if err != nil || MongoCli == nil {
+		util.LogFatalf("MongoDB initiate error : %+v\n", err)
+	}
 
-		util.LogInfo("MongoDB initiate success!")
-	})
+	util.LogInfo("MongoDB initiate success!")
 }
 
 type mongoUriConfig struct {

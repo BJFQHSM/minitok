@@ -1,12 +1,17 @@
 package dal
 
-import "sync"
+import (
+	"os"
+	"sync"
+)
 
 var once sync.Once
 
 func Init() {
 	once.Do(func() {
 		initMongoDB()
-		initOSS()
+		if os.Getenv("PUBLISH_TYPE") == "OSS" {
+			initOSS()
+		}
 	})
 }

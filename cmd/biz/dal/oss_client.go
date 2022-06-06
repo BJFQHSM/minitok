@@ -16,9 +16,9 @@ func initOSS() {
 	ossClient, err = oss.New(endPoint, secretKeyId, accessKeySecret)
 	util.LogInfo("Initiating OSSClient...")
 	if err != nil {
-		util.LogPanic(err.Error())
+		util.LogFatal(err.Error())
 	} else if ossClient == nil {
-		util.LogPanic("fail to init OSSClient")
+		util.LogFatal("fail to init OSSClient")
 	}
 	util.LogInfo("Initiating OSSClient success!")
 }

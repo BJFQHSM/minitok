@@ -2,6 +2,8 @@ package dal
 
 import (
 	"context"
+	"errors"
+	"github.com/bytedance2022/minimal_tiktok/pkg/util"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"time"
@@ -11,16 +13,16 @@ import (
 )
 
 type Video struct {
-	VideoId       int64     `bson:"video_id"`
-	UserId        int64     `bson:"user_id"`
-	PlayUrl       string    `bson:"play_url"`
-	CoverUrl      string    `bson:"cover_url"`
-	FavoriteCount int64     `bson:"favorite_count"`
-	Favorites     []int64   `bson:"favorites"`
-	CommentCount  int64     `bson:"comment_count"`
+	VideoId       int64      `bson:"video_id"`
+	UserId        int64      `bson:"user_id"`
+	PlayUrl       string     `bson:"play_url"`
+	CoverUrl      string     `bson:"cover_url"`
+	FavoriteCount int64      `bson:"favorite_count"`
+	Favorites     []int64    `bson:"favorites"`
+	CommentCount  int64      `bson:"comment_count"`
 	Comments      []*Comment `bson:"comments, inline"`
-	PublishDate   time.Time `bson:"publish_date"`
-	Title         string    `bson:"title"`
+	PublishDate   time.Time  `bson:"publish_date"`
+	Title         string     `bson:"title"`
 }
 
 type Comment struct {
@@ -166,4 +168,55 @@ func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
 		videos = append(videos, &video)
 	}
 	return videos, nil
+}
+
+func QueryCommentLists(ctx context.Context, videoId int64) ([]*Comment, error) {
+	videoColl := MongoCli.Database("tiktok").Collection("video")
+	var result bson.D
+	filter := bson.D{{"video_id", videoId}}
+	pro := bson.D{{"comments", 1}}
+	opts := options.FindOne().SetProjection(pro)
+	err := videoColl.FindOne(ctx, filter, opts).Decode(&result)
+	if err != nil {
+		util.LogError(err)
+		return nil, err
+	}
+	marshal, err := bson.Marshal(result)
+	if err != nil {
+		log.Printf("error to marshal from result %v\n", err)
+		return []*Comment{}, err
+	}
+	var video Video
+	err = bson.Unmarshal(marshal, &video)
+	if err != nil {
+		log.Printf("error to unmarshal from result %v\n", err)
+		return []*Comment{}, err
+	}
+	return video.Comments, nil
+}
+
+func PublishCommentAction(ctx context.Context, videoId int64, comment *Comment) error {
+	videoColl := MongoCli.Database("tiktok").Collection("video")
+	filter := bson.D{{"video_id", videoId}}
+	update := bson.M{"$addToSet": bson.M{"comments": comment}}
+	updateRes, err := videoColl.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	} else if updateRes.MatchedCount == 0 {
+		return errors.New("cannot find target video")
+	}
+	return nil
+}
+
+func DeleteCommentAction(ctx context.Context, videoId int64, commentId int64) error {
+	videoColl := MongoCli.Database("tiktok").Collection("video")
+	filter := bson.M{"video_id": videoId}
+	update := bson.M{"$pull": bson.M{"comments": bson.M{"comment_id": commentId}}}
+	updateRes, err := videoColl.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	} else if updateRes.MatchedCount == 0 {
+		return errors.New("cannot find target video")
+	}
+	return nil
 }
