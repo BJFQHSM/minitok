@@ -395,10 +395,9 @@ func PublishVideo(ctx context.Context, userId int64, video *Video) error {
 
 	// 定义事务
 	callback := func(sessCtx mongo.SessionContext) (interface{}, error) {
-		// 是否关注
 		filter := bson.D{{"user_id", userId}}
 		update := bson.D{
-			{"$pull", bson.M{"publish_list": video.VideoId}},
+			{"$push", bson.M{"publish_list": video.VideoId}},
 		}
 		if updateResult, err := userColl.UpdateOne(sessCtx, filter, update); err != nil {
 			return nil, err
@@ -406,7 +405,7 @@ func PublishVideo(ctx context.Context, userId int64, video *Video) error {
 			return nil, errors.New("no user was found")
 		}
 
-		if _, err := videoColl.InsertOne(sessCtx, videoColl); err != nil {
+		if _, err := videoColl.InsertOne(sessCtx, video); err != nil {
 			return nil, err
 		}
 		return nil, nil

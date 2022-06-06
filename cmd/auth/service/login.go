@@ -31,14 +31,6 @@ type loginServiceImpl struct {
 }
 
 func (s *loginServiceImpl) DoService() *auth.LoginResponse {
-	// mock
-	msg := "success"
-	s.Resp = &auth.LoginResponse{
-		UserId:     2,
-		Token:      "fsjflsjdf",
-		StatusCode: 0,
-		StatusMsg:  &msg,
-	}
 
 	var err error
 	for i := 0; i < 1; i++ {
