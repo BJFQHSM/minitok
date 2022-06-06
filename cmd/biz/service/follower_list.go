@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
@@ -19,8 +20,6 @@ type followerListServiceImpl struct {
 	Req  *biz.QueryFollowerListRequest
 	Resp *biz.QueryFollowerListResponse
 	Ctx  context.Context
-
-	userID int64
 }
 
 func (s *followerListServiceImpl) DoService() *biz.QueryFollowerListResponse {
@@ -57,7 +56,7 @@ func (s *followerListServiceImpl) queryFollowerList() error {
 		return nil
 	}
 
-	userList, err := DalUserToBizUser(s.Ctx, users, s.userID)
+	userList, err := DalUserToBizUser(s.Ctx, users, s.Req.UserIdFromToken)
 	if err != nil {
 		return err
 	}

@@ -79,3 +79,18 @@ func TestPublishVideo(t *testing.T) {
 		return
 	}
 }
+func TestQueryIsFollow(t *testing.T) {
+	pwd, err := os.Getwd()
+	if err != nil {
+		log.Printf("ERROR: fail to get current dir %v\n", err)
+		return
+	}
+	os.Setenv("WORK_DIR", pwd+"/../../../")
+	InitMongoDB()
+	f, err := QueryIsFollow(context.TODO(), 1252117233, 1362738155)
+	if err != nil {
+		log.Printf("%v\n", err)
+		return
+	}
+	log.Println(f)
+}

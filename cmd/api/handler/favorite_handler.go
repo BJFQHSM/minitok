@@ -21,7 +21,7 @@ func FavoriteAction(c *gin.Context) {
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
-		util.LogInfof("FavoriteAction response: %+v\n", &req)
+		util.LogInfof("FavoriteAction request: %+v\n", &req)
 
 		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
 		if authResp == nil || err != nil {
@@ -54,7 +54,7 @@ func QueryFavoriteList(c *gin.Context) {
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
-		util.LogInfof("QueryFavoriteList response: %+v\n", &req)
+		util.LogInfof("QueryFavoriteList request: %+v\n", &req)
 		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
 		if err != nil || authResp == nil {
 			c.JSON(http.StatusInternalServerError, resp)

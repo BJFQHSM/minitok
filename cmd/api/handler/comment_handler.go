@@ -22,7 +22,7 @@ func CommentAction(c *gin.Context) {
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
-		util.LogInfof("CommentAction response: %+v\n", &req)
+		util.LogInfof("CommentAction request: %+v\n", &req)
 		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
 		if authResp == nil || err != nil {
 			c.JSON(http.StatusInternalServerError, resp)
@@ -54,7 +54,7 @@ func QueryCommentList(c *gin.Context) {
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
-		util.LogInfof("QueryCommentList response: %+v\n", &req)
+		util.LogInfof("QueryCommentList request: %+v\n", &req)
 		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
 		if authResp == nil || err != nil {
 			c.JSON(http.StatusInternalServerError, resp)

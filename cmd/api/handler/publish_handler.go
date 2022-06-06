@@ -15,26 +15,19 @@ import (
 )
 
 func PublishAction(c *gin.Context) {
-	// var req biz.PublishActionRequest
 	resp := &biz.PublishActionResponse{StatusCode: 1}
 	// err := c.ShouldBindQuery(&req)
 	file, _, err := c.Request.FormFile("data")
 	token := c.Request.FormValue("token")
 	title := c.Request.FormValue("title")
 	defer file.Close()
-	if err != nil {
-		log.Printf("获取文件错误%+v", err)
-	}
 	buf := bytes.NewBuffer(nil)
-	if _, err := io.Copy(buf, file); err != nil {
-		log.Printf("错误%+v", err)
-	}
+	_, err = io.Copy(buf, file)
 	req := &biz.PublishActionRequest{
 		Token: token,
 		Title: title,
 		Data:  buf.Bytes(),
 	}
-	// log.Printf("视频发布的参数信息：------%+v", req)
 	if err != nil {
 		log.Printf("%+v", err)
 		msg := "invalid request"
@@ -52,7 +45,6 @@ func PublishAction(c *gin.Context) {
 			resp.StatusMsg = &msg
 		} else {
 			req.UserIdFromToken = authResp.UserId
-			log.Printf("视频发布的参数信息：------%v", req.UserIdFromToken)
 			resp, err = rpc.BizClient.PublishAction(c, req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)
