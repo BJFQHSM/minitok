@@ -1,0 +1,4 @@
+mongodb:
+  url: cluster0.rkgtb.mongodb.net
+  user: public
+  password: mxt123456
