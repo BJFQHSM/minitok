@@ -7,7 +7,7 @@ import (
 )
 
 func TestFavoriteAction(t *testing.T) {
-	InitMongoDB()
+	initMongoDB()
 	err := FavoriteAction(context.TODO(), 1001, 1, 1)
 	if err != nil {
 		log.Printf("%v\n", err)

@@ -15,7 +15,7 @@ func TestFollowRelation(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	InitMongoDB()
+	initMongoDB()
 	err = FollowRelation(context.Background(), 1, 2)
 	if err != nil {
 		log.Printf("%v\n", err)
@@ -30,7 +30,7 @@ func TestUnFollowRelation(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	InitMongoDB()
+	initMongoDB()
 	err = UnFollowRelation(context.Background(), 1, 2)
 	if err != nil {
 		log.Printf("%v\n", err)
@@ -45,7 +45,7 @@ func TestQueryFollowsByUserId(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	InitMongoDB()
+	initMongoDB()
 	users, err := QueryFollowsByUserId(context.Background(), 1252117233)
 	if err != nil {
 		log.Printf("%v\n", err)
@@ -63,7 +63,7 @@ func TestPublishVideo(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	InitMongoDB()
+	initMongoDB()
 	video := &Video{
 		VideoId:       3597527201278699950,
 		UserId:        1675229147,
@@ -86,7 +86,7 @@ func TestQueryIsFollow(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	InitMongoDB()
+	initMongoDB()
 	f, err := QueryIsFollow(context.TODO(), 1252117233, 1362738155)
 	if err != nil {
 		log.Printf("%v\n", err)
@@ -102,7 +102,7 @@ func TestQueryUserByID(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	InitMongoDB()
+	initMongoDB()
 	u, err := QueryUserById(context.TODO(), 1)
 	if err != nil {
 		log.Printf("%+v\n", err)

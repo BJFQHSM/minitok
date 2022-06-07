@@ -56,7 +56,7 @@ func (s *queryFavoriteListServiceImpl) queryFavoriteList() error {
 	}
 
 	for i := 0; i < len(list); i++ {
-		s.Resp.VideoList = append(s.Resp.VideoList, MongoVdoToBizVdo(list[i], s.Req.UserIdFromToken))
+		s.Resp.VideoList = append(s.Resp.VideoList, MongoVdoToBizVdo(s.Ctx, list[i], s.Req.UserIdFromToken))
 	}
 	return nil
 }

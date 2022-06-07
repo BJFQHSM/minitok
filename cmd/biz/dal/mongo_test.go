@@ -15,7 +15,7 @@ func TestQuery(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	InitMongoDB()
+	initMongoDB()
 	//QueryVideoById(context.Background(), 1)
 	user, err := QueryUserById(context.Background(), 2335433565)
 	if err != nil {
