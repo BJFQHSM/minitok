@@ -21,8 +21,6 @@ type followListServiceImpl struct {
 	Req  *biz.QueryFollowListRequest
 	Resp *biz.QueryFollowListResponse
 	Ctx  context.Context
-
-	userId int64
 }
 
 func (s *followListServiceImpl) DoService() *biz.QueryFollowListResponse {
@@ -58,10 +56,10 @@ func (s *followListServiceImpl) queryFollowList() error {
 	users, err := dal.QueryFollowsByUserId(s.Ctx, s.Req.UserId)
 
 	if err != nil {
-		return nil
+		log.Printf("%+v", err)
+		return err
 	}
-
-	userList, err := DalUserToBizUser(s.Ctx, users, s.userId)
+	userList, err := DalUserToBizUser(s.Ctx, users, s.Req.UserIdFromToken)
 	if err != nil {
 		return err
 	}

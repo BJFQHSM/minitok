@@ -20,7 +20,7 @@ func RelationAction(c *gin.Context) {
 		resp.StatusMsg = &msg
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
-		util.LogInfof("RelationAction response: %+v\n", &req)
+		util.LogInfof("RelationAction request: %+v\n", &req)
 		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
 		if err != nil || authResp == nil {
 			c.JSON(http.StatusInternalServerError, resp)
