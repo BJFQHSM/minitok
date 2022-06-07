@@ -1,4 +1,4 @@
 mongodb:
-  url: cluster0.rkgtb.mongodb.net
-  user: public
-  password: mxt123456
+  url: MONGO_ADDR
+  user: MONGO_INITDB_ROOT_USERNAME
+  password: MONGO_INITDB_ROOT_PASSWORD

@@ -1,5 +1,5 @@
 mysql:
-  url: 82.156.193.217:3306
-  username: public
-  password: _Tiktok0
-  database: test
+  url: MYSQL_ADDR
+  username: MYSQL_USERNAME
+  password: MYSQL_PASSWORD
+  database: MYSQL_DATABASE
