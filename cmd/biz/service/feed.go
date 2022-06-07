@@ -98,7 +98,7 @@ func MongoVdoToBizVdo(vdo *dal.Video, tokenId int64) *biz.Video {
 	res := &biz.Video{}
 	res.Id = vdo.VideoId
 	//查询当前登录用户信息
-	user, err := dal.QueryUserByID(context.TODO(), tokenId)
+	user, err := dal.QueryUserById(context.TODO(), tokenId)
 	if err != nil {
 		log.Println(err)
 		return nil

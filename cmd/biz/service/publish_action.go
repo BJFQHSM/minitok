@@ -65,15 +65,13 @@ func (s *publishActionServiceImpl) doPublish() error {
 	videoId := req.UserIdFromToken<<31 + int64(util.GenerateRandomInt32())
 	url := "http:127.0.0.1:8080/douyin/static/" + filename
 	video := &dal.Video{
-		VideoId:       videoId,
-		UserId:        req.UserIdFromToken,
-		PlayUrl:       url,
-		Favorites:     []int64{},
-		FavoriteCount: 0,
-		Comments:      []*dal.Comment{},
-		CommentCount:  0,
-		PublishDate:   time.Now(),
-		Title:         req.Title,
+		VideoId:     videoId,
+		UserId:      req.UserIdFromToken,
+		PlayUrl:     url,
+		Favorites:   []int64{},
+		Comments:    []*dal.Comment{},
+		PublishDate: time.Now(),
+		Title:       req.Title,
 	}
 	return dal.PublishVideo(s.Ctx, s.Req.UserIdFromToken, video)
 }

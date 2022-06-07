@@ -98,14 +98,12 @@ func (s *registerServiceImpl) doRegister() error {
 		return err
 	}
 	bizUser := &mongo.User{
-		UserId:        int64(userId),
-		Username:      user.Username,
-		FollowCount:   0,
-		Follows:       []int64{},
-		FollowerCount: 0,
-		Followers:     []int64{},
-		PublishList:   []int64{},
-		FavoriteList:  []int64{},
+		UserId:       int64(userId),
+		Username:     user.Username,
+		Follows:      []int64{},
+		Followers:    []int64{},
+		PublishList:  []int64{},
+		FavoriteList: []int64{},
 	}
 	if err = mongo.InsertUser(s.Ctx, bizUser); err != nil {
 		return err
