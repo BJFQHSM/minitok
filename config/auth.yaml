@@ -1,5 +1,0 @@
-mysql:
-  url: tiktok-mysql:3306
-  username: public
-  password: mxt123456
-  database: test
