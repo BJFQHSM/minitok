@@ -20,7 +20,14 @@ func PublishAction(c *gin.Context) {
 	file, _, err := c.Request.FormFile("data")
 	token := c.Request.FormValue("token")
 	title := c.Request.FormValue("title")
-	defer file.Close()
+	defer func() {
+		if file != nil {
+			file.Close()
+		}
+	}()
+	if err != nil {
+		log.Printf("获取文件错误%+v", err)
+	}
 	buf := bytes.NewBuffer(nil)
 	_, err = io.Copy(buf, file)
 	req := &biz.PublishActionRequest{

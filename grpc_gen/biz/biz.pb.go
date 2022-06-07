@@ -990,7 +990,7 @@ type CommentActionRequest struct {
 	Token           string  `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty" form:"token"`
 	VideoId         int64   `protobuf:"varint,2,opt,name=video_id,json=videoId,proto3" json:"video_id,omitempty" form:"video_id"`
 	ActionType      int32   `protobuf:"varint,3,opt,name=action_type,json=actionType,proto3" json:"action_type,omitempty" form:"action_type"`
-	CommentText     *string `protobuf:"bytes,4,opt,name=comment_text,json=commentText,proto3,oneof" json:"comment_text,omitempty" form:"comment_type"`
+	CommentText     *string `protobuf:"bytes,4,opt,name=comment_text,json=commentText,proto3,oneof" json:"comment_text,omitempty" form:"comment_text"`
 	CommentId       *int64  `protobuf:"varint,5,opt,name=comment_id,json=commentId,proto3,oneof" json:"comment_id,omitempty" form:"comment_id"`
 	UserIdFromToken int64   `protobuf:"varint,6,opt,name=user_id_from_token,json=userIdFromToken,proto3" json:"user_id_from_token,omitempty"`
 }

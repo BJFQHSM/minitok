@@ -71,7 +71,7 @@ func (s *feedServiceImpl) feed() error {
 
 	videos := []*biz.Video{}
 	for i := 0; i < len(vdos); i++ {
-		videos = append(videos, MongoVdoToBizVdo(vdos[i], s.Req.UserIdFromToken))
+		videos = append(videos, MongoVdoToBizVdo(s.Ctx, vdos[i], s.Req.UserIdFromToken))
 	}
 
 	s.Resp.VideoList = videos
@@ -93,17 +93,17 @@ func (s *feedServiceImpl) buildResponse(err error) {
 }
 
 //将video.go中的Video转化为biz.pb.go中的video类型
-func MongoVdoToBizVdo(vdo *dal.Video, tokenId int64) *biz.Video {
+func MongoVdoToBizVdo(ctx context.Context, vdo *dal.Video, tokenId int64) *biz.Video {
 	var err error
 	res := &biz.Video{}
 	res.Id = vdo.VideoId
 	//查询当前登录用户信息
-	user, err := dal.QueryUserById(context.TODO(), tokenId)
+	user, err := dal.QueryUserByID(ctx, tokenId)
 	if err != nil {
 		log.Println(err)
 		return nil
 	}
-	res.Author, err = QueryUserInfoByUID(context.TODO(), vdo.UserId, tokenId)
+	res.Author, err = QueryUserInfoByUID(ctx, vdo.UserId, tokenId)
 	if err != nil {
 		log.Printf("%+v", err)
 		return nil

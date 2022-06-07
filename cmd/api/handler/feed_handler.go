@@ -22,26 +22,37 @@ func Feed(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, resp)
 	} else {
 		util.LogInfof("Feed request: %+v\n", &req)
-		authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
-		if err != nil || authResp == nil {
-			c.JSON(http.StatusInternalServerError, resp)
-			return
-		}
-		if !authResp.IsAuthed {
-			msg := "token invalid"
-			resp = &biz.FeedResponse{
-				StatusCode: 1,
-				StatusMsg:  &msg,
-			}
-		} else {
-			req.UserIdFromToken = authResp.UserId
+		if req.Token == "" {
+			req.UserIdFromToken = -1
 			resp, err = rpc.BizClient.Feed(c, &req)
 			if err != nil || resp == nil {
 				c.JSON(http.StatusInternalServerError, resp)
 				return
 			}
+			util.LogInfof("Feed response: %+v\n", resp)
+			c.JSON(http.StatusOK, &resp)
+		} else {
+			authResp, err := rpc.AuthClient.Authenticate(c, &auth.AuthenticateRequest{Token: req.Token})
+			if err != nil || authResp == nil {
+				c.JSON(http.StatusInternalServerError, resp)
+				return
+			}
+			if !authResp.IsAuthed {
+				msg := "token invalid"
+				resp = &biz.FeedResponse{
+					StatusCode: 1,
+					StatusMsg:  &msg,
+				}
+			} else {
+				req.UserIdFromToken = authResp.UserId
+				resp, err = rpc.BizClient.Feed(c, &req)
+				if err != nil || resp == nil {
+					c.JSON(http.StatusInternalServerError, resp)
+					return
+				}
+			}
+			util.LogInfof("Feed response: %+v\n", resp)
+			c.JSON(http.StatusOK, &resp)
 		}
-		util.LogInfof("Feed response: %+v\n", resp)
-		c.JSON(http.StatusOK, &resp)
 	}
 }

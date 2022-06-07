@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"errors"
+	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
 
@@ -26,14 +28,46 @@ func (s *queryCommentListServiceImpl) DoService() *biz.QueryCommentListResponse 
 			break
 		}
 
-		// todo
+		if err = s.queryCommentList(); err != nil {
+			break
+		}
 	}
 	s.buildResponse(err)
 	return s.Resp
 }
 
 func (s *queryCommentListServiceImpl) validateParams() error {
+	req := s.Req
+	if req == nil {
+		return errors.New("request could not be nil")
+	}
+	if req.VideoId < 0 {
+		return errors.New("illegal params: video_id could not be negative")
+	}
 	return nil
+}
+
+func (s *queryCommentListServiceImpl) queryCommentList() error {
+	videoId := s.Req.VideoId
+	comments, err := dal.QueryCommentLists(s.Ctx, videoId)
+	if err != nil {
+		return err
+	}
+	for _, comment := range comments {
+		s.Resp.CommentList = append(s.Resp.CommentList, transDalCommentToDTO(comment))
+	}
+	return nil
+}
+
+func transDalCommentToDTO(comment *dal.Comment) *biz.Comment {
+	return &biz.Comment{
+		Id: comment.CommentId,
+		User: &biz.User{
+			Id: comment.UserId,
+		},
+		Content:    comment.Content,
+		CreateDate: comment.CreateDate.String(),
+	}
 }
 
 func (s *queryCommentListServiceImpl) buildResponse(err error) {

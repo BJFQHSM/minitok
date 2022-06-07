@@ -69,11 +69,13 @@ func QueryUserInfoByUID(ctx context.Context, uid int64, tokenUserId int64) (*biz
 		log.Printf("%+v", err)
 		return nil, err
 	}
-
-	isFollow, err := dal.QueryIsFollow(ctx, uid, tokenUserId)
-	if err != nil {
-		log.Printf("%+v", err)
-		return nil, err
+	isFollow := false
+	if tokenUserId > 0 {
+		isFollow, err = dal.QueryIsFollow(ctx, uid, tokenUserId)
+		if err != nil {
+			log.Printf("%+v", err)
+			return nil, err
+		}
 	}
 	respUser := biz.User{
 		Id:            user.UserId,

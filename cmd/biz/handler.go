@@ -27,7 +27,7 @@ func (s *BizServerImpl) QueryUserInfo(ctx context.Context, req *biz.QueryUserInf
 }
 
 func (s *BizServerImpl) PublishAction(ctx context.Context, req *biz.PublishActionRequest) (*biz.PublishActionResponse, error) {
-	util.LogInfof("PublishAction request: %+v\n", req)
+	//util.LogInfof("PublishAction request: %+v\n", req)
 	resp := service.NewPublishActionService(ctx, req).DoService()
 	util.LogInfof("PublishAction response: %+v\n", resp)
 	return resp, nil

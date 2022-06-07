@@ -16,7 +16,7 @@ func TestDalUserToBizUser(t *testing.T) {
 		return
 	}
 	os.Setenv("WORK_DIR", pwd+"/../../../")
-	dal.InitMongoDB()
+	dal.Init()
 	user := &dal.User{
 		UserId:        1252117233,
 		Username:      "user1",

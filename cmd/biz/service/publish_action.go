@@ -54,7 +54,7 @@ func (s *publishActionServiceImpl) validateParams() error {
 func (s *publishActionServiceImpl) doPublish() error {
 	req := s.Req
 	var err error
-	path, err := os.Getwd()
+	path := os.Getenv("FILEPATH")
 	if err != nil {
 		return err
 	}
@@ -63,7 +63,9 @@ func (s *publishActionServiceImpl) doPublish() error {
 		return err
 	}
 	videoId := req.UserIdFromToken<<31 + int64(util.GenerateRandomInt32())
-	url := "http:127.0.0.1:8080/douyin/static/" + filename
+	// todo
+	serviceAddr := os.Getenv("SERVICE_ADDR")
+	url := serviceAddr + "/douyin/static/?path=" + filename
 	video := &dal.Video{
 		VideoId:     videoId,
 		UserId:      req.UserIdFromToken,
