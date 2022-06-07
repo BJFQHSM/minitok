@@ -397,7 +397,7 @@ func PublishVideo(ctx context.Context, userId int64, video *Video) error {
 	callback := func(sessCtx mongo.SessionContext) (interface{}, error) {
 		filter := bson.D{{"user_id", userId}}
 		update := bson.D{
-			{"$push", bson.M{"publish_list": video.VideoId}},
+			{"$addToSet", bson.M{"publish_list": video.VideoId}},
 		}
 		if updateResult, err := userColl.UpdateOne(sessCtx, filter, update); err != nil {
 			return nil, err

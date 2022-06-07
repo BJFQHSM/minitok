@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/bytedance2022/minimal_tiktok/pkg/util"
+	"log"
 	"net/http"
 
 	"github.com/bytedance2022/minimal_tiktok/cmd/api/handler"
@@ -14,7 +15,7 @@ func main() {
 	rpc.Init()
 	r := gin.New()
 
-	//r.Use(logger())
+	r.Use(logger())
 
 	douyin := r.Group("/douyin")
 	user1 := douyin.Group("/user")
@@ -50,10 +51,11 @@ func main() {
 	}
 }
 
-//func logger() gin.HandlerFunc {
-//	return func(c *gin.Context) {
-//		//请求处理
-//		c.Next()
-//
-//	}
-//}
+func logger() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		//请求处理
+		path := c.Request.URL.RequestURI()
+		log.Println(path)
+		c.Next()
+	}
+}

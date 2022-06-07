@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 type req struct {
@@ -16,7 +17,8 @@ func Video(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 	}
 
-	file, err := ioutil.ReadFile(r.Filename)
+	fileName := os.Getenv("FILEPATH") + r.Filename
+	file, err := ioutil.ReadFile(fileName)
 	if err != nil {
 		c.Status(http.StatusNotFound)
 	}

@@ -118,7 +118,7 @@ func QueryVideoByVideoId(ctx context.Context, videoId int64) (*Video, error) {
 // QueryVideosByUserId
 // favorite_list(favorites filed) only show login userId
 // if not favor favorites is empty
-func QueryVideosByUserId(ctx context.Context, userId int64) ([]*Video, error) {
+func QueryVideosByUserId(ctx context.Context, userId int64, tokenUserId int64) ([]*Video, error) {
 	videoColl := MongoCli.Database("tiktok").Collection("video")
 
 	matchStage := bson.D{{"$match", bson.D{{"user_id", userId}}}}

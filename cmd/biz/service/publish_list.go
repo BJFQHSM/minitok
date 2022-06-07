@@ -3,8 +3,6 @@ package service
 import (
 	"context"
 	"errors"
-	"log"
-
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
@@ -21,8 +19,6 @@ type queryPublishListServiceImpl struct {
 	Req  *biz.QueryPublishListRequest
 	Resp *biz.QueryPublishListResponse
 	Ctx  context.Context
-
-	userId int64
 }
 
 func (s *queryPublishListServiceImpl) DoService() *biz.QueryPublishListResponse {
@@ -52,14 +48,13 @@ func (s *queryPublishListServiceImpl) validateParams() error {
 }
 
 func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
-	uid := s.Req.UserId
-	videos, err := dal.QueryVideosByUserId(s.Ctx, uid)
+	videos, err := dal.QueryVideosByUserId(s.Ctx, s.Req.UserId, s.Req.UserIdFromToken)
 	if err != nil {
 		return err
 	}
 	videoList := s.Resp.GetVideoList()
 	for _, video := range videos {
-		v := transDoToDto(video, s.userId)
+		v := transDoToDto(video)
 		videoList = append(videoList, v)
 	}
 	s.Resp.VideoList = videoList
@@ -67,16 +62,10 @@ func (s *queryPublishListServiceImpl) queryPublishListByUID() error {
 }
 
 // todo extract to be a public method in other pkg
-func transDoToDto(video *dal.Video, tokenId int64) *biz.Video {
-	author, err := QueryUserInfoByUID(context.TODO(), video.UserId, tokenId)
-	if err != nil {
-		log.Println(err)
-		return nil
-	}
-
+func transDoToDto(video *dal.Video) *biz.Video {
 	ret := biz.Video{
 		Id:            video.VideoId,
-		Author:        author,
+		Author:        &biz.User{Id: video.UserId},
 		PlayUrl:       video.PlayUrl,
 		CoverUrl:      video.CoverUrl,
 		FavoriteCount: video.FavoriteCount,
