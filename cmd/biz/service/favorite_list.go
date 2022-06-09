@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+
 	"github.com/bytedance2022/minimal_tiktok/cmd/biz/dal"
 	"github.com/bytedance2022/minimal_tiktok/grpc_gen/biz"
 )
@@ -19,8 +20,6 @@ type queryFavoriteListServiceImpl struct {
 	Req  *biz.QueryFavoriteListRequest
 	Resp *biz.QueryFavoriteListResponse
 	Ctx  context.Context
-
-	userId int64
 }
 
 func (s *queryFavoriteListServiceImpl) DoService() *biz.QueryFavoriteListResponse {
@@ -57,7 +56,7 @@ func (s *queryFavoriteListServiceImpl) queryFavoriteList() error {
 	}
 
 	for i := 0; i < len(list); i++ {
-		s.Resp.VideoList = append(s.Resp.VideoList, MongoVdoToBizVdo(s.Ctx, list[i], s.userId))
+		s.Resp.VideoList = append(s.Resp.VideoList, MongoVdoToBizVdo(s.Ctx, list[i], s.Req.UserIdFromToken))
 	}
 	return nil
 }

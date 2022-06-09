@@ -67,15 +67,13 @@ func (s *publishActionServiceImpl) doPublish() error {
 	serviceAddr := os.Getenv("SERVICE_ADDR")
 	url := serviceAddr + "/douyin/static/?path=" + filename
 	video := &dal.Video{
-		VideoId:       videoId,
-		UserId:        req.UserIdFromToken,
-		PlayUrl:       url,
-		Favorites:     []int64{},
-		FavoriteCount: 0,
-		Comments:      []*dal.Comment{},
-		CommentCount:  0,
-		PublishDate:   time.Now(),
-		Title:         req.Title,
+		VideoId:     videoId,
+		UserId:      req.UserIdFromToken,
+		PlayUrl:     url,
+		Favorites:   []int64{},
+		Comments:    []*dal.Comment{},
+		PublishDate: time.Now(),
+		Title:       req.Title,
 	}
 	return dal.PublishVideo(s.Ctx, s.Req.UserIdFromToken, video)
 }

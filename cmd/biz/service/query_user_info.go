@@ -21,8 +21,6 @@ type queryUserInfoServiceImpl struct {
 	Req  *biz.QueryUserInfoRequest
 	Resp *biz.QueryUserInfoResponse
 	Ctx  context.Context
-
-	userId int64
 }
 
 func (s *queryUserInfoServiceImpl) DoService() *biz.QueryUserInfoResponse {
