@@ -3,7 +3,7 @@
 ## 字节跳动青训营项目-极简抖音开发
 
 ### 开发团队：2022
-### 开发成员：毛兴台 尹航 李清波 孟港 李聪燕
+### 开发成员：毛兴台  李聪燕 孟港 尹航
 
 # 演示文档
 ## 用户注册
@@ -16,13 +16,22 @@
 ## 用户信息
 ![Screenshot_20220607_025024_com.sytm.great.jpg](https://s2.loli.net/2022/06/07/KjYlEzX8AqwTeZ2.jpg)
 ## 视频流接口
-
+![image.png](https://s2.loli.net/2022/06/09/xrvb4PeAL13gzuh.png)
 ## 投稿接口
+![image.png](https://s2.loli.net/2022/06/09/PznwgF6OBQSaUZX.png)
+![1654756571757.png](https://s2.loli.net/2022/06/09/WE2OYsdQAnmTLyo.png)
+![image.png](https://s2.loli.net/2022/06/09/wYOlT4Bb5kXatsq.png)
 ## 发布列表
+![image.png](https://s2.loli.net/2022/06/09/wEl3NeIXuLBikhR.png)
 ## 点赞操作
+![image.png](https://s2.loli.net/2022/06/09/RekyanIsQjomDgu.png)
 ## 点赞列表
+![image.png](https://s2.loli.net/2022/06/09/84xZibcklRayTsY.png)
 ## 评论操作
+![1654758419616.png](https://s2.loli.net/2022/06/09/S8RTunHNFGeBMt4.png)
+![1654758428891.png](https://s2.loli.net/2022/06/09/iu3v7GfnDCcZdFa.png)
 ## 评论列表
+![1654758428891.png](https://s2.loli.net/2022/06/09/iu3v7GfnDCcZdFa.png)
 ## 关注操作
 对`lcy` 用户进行关注和取关操作
 ## 关注
