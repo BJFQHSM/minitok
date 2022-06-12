@@ -37,11 +37,11 @@ func QueryVideosByTime(t time.Time) ([]*Video, error) {
 	// 指定获取要操作的数据集
 	collection := MongoCli.Database("tiktok").Collection("video")
 	findOptions := options.Find()
-	findOptions.SetLimit(30) //设置一次获取的最大视频数
-	sort := bson.D{{"publish_date", 1}}
+	sort := bson.D{{"publish_date", -1}}
 	findOptions.SetSort(sort)
+	findOptions.SetLimit(30) //设置一次获取的最大视频数
 	results := []*Video{}
-	cur, err := collection.Find(context.TODO(), bson.M{"publish_date": bson.M{"$gte": t}}, findOptions)
+	cur, err := collection.Find(context.TODO(), bson.M{"publish_date": bson.M{"$lte": t}}, findOptions)
 
 	// 完成后关闭游标
 	defer cur.Close(context.TODO())
