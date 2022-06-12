@@ -97,12 +97,7 @@ func MongoVdoToBizVdo(ctx context.Context, vdo *dal.Video, tokenId int64) *biz.V
 	var err error
 	res := &biz.Video{}
 	res.Id = vdo.VideoId
-	//查询当前登录用户信息
-	user, err := dal.QueryUserById(ctx, tokenId)
-	if err != nil {
-		log.Println(err)
-		return nil
-	}
+
 	res.Author, err = QueryUserInfoByUID(ctx, vdo.UserId, tokenId)
 	if err != nil {
 		log.Printf("%+v", err)
@@ -110,15 +105,23 @@ func MongoVdoToBizVdo(ctx context.Context, vdo *dal.Video, tokenId int64) *biz.V
 	}
 	res.PlayUrl = vdo.PlayUrl
 	res.CoverUrl = vdo.CoverUrl
-	res.FavoriteCount = vdo.FavoriteCount
+	res.FavoriteCount = int64(len(vdo.Favorites))
 	res.CommentCount = int64(len(vdo.Comments))
 	res.Title = vdo.Title
 	//判断当前用户是否点赞
 	f1 := false
-	for i := 0; i < len(user.FavoriteList); i++ {
-		if vdo.VideoId == user.FavoriteList[i] {
-			f1 = true
-			break
+	if tokenId > 0 {
+		//查询当前登录用户信息
+		user, err := dal.QueryUserById(ctx, tokenId)
+		if err != nil {
+			log.Println(err)
+			return nil
+		}
+		for i := 0; i < len(user.FavoriteList); i++ {
+			if vdo.VideoId == user.FavoriteList[i] {
+				f1 = true
+				break
+			}
 		}
 	}
 	res.IsFavorite = f1
